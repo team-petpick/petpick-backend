@@ -1,5 +1,6 @@
 package com.petpick.config;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.oauth2.client.InMemoryOAuth2AuthorizedClientService;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 import java.util.HashMap;
 import java.util.Map;
 
+@RequiredArgsConstructor
 @Service
 public class OAuth2CustomConfig implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
 
