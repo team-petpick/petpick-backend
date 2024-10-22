@@ -2,7 +2,7 @@ package com.petpick.controller;
 
 import com.petpick.global.response.ErrorResponse;
 import com.petpick.global.response.SuccessResponse;
-import com.petpick.model.TokenResponse;
+import com.petpick.model.GoogleTokenResponse;
 import com.petpick.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.*;
@@ -27,8 +27,8 @@ public class AuthController {
         }
 
         try {
-            TokenResponse tokenResponse = authService.exchangeCodeForToken(authorizationCode);
-            return ResponseEntity.ok(SuccessResponse.success(tokenResponse));
+            GoogleTokenResponse googleTokenResponse = authService.exchangeCodeForToken(authorizationCode);
+            return ResponseEntity.ok(SuccessResponse.success(googleTokenResponse));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
                     ErrorResponse.error("500", e.getMessage())

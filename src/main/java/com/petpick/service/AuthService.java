@@ -1,6 +1,6 @@
 package com.petpick.service;
 
-import com.petpick.model.TokenResponse;
+import com.petpick.model.GoogleTokenResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
@@ -20,7 +20,7 @@ public class AuthService {
     @Value("${spring.security.oauth2.client.registration.google.redirect-uri}")
     private String redirectUri;
 
-    public TokenResponse exchangeCodeForToken(String authorizationCode) {
+    public GoogleTokenResponse exchangeCodeForToken(String authorizationCode) {
         String tokenUrl = "https://oauth2.googleapis.com/token";
 
         RestTemplate restTemplate = new RestTemplate();
@@ -38,11 +38,11 @@ public class AuthService {
 
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(params, headers);
 
-        ResponseEntity<TokenResponse> response = restTemplate.exchange(
+        ResponseEntity<GoogleTokenResponse> response = restTemplate.exchange(
                 tokenUrl,
                 HttpMethod.POST,
                 request,
-                TokenResponse.class
+                GoogleTokenResponse.class // 응답 매핑할 클래스
         );
 
         return response.getBody();
