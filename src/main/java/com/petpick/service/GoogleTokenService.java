@@ -11,7 +11,7 @@ import org.springframework.web.client.RestTemplate;
 
 @Service
 @RequiredArgsConstructor
-public class AuthService {
+public class GoogleTokenService {
 
     @Value("${spring.security.oauth2.client.registration.google.client-id}")
     private String clientId;

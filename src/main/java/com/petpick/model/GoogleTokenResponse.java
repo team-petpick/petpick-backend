@@ -3,6 +3,8 @@ package com.petpick.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
+import java.time.LocalDateTime;
+
 @Data
 public class GoogleTokenResponse {
 
@@ -10,7 +12,7 @@ public class GoogleTokenResponse {
     private String accessToken;
 
     @JsonProperty("expires_in")
-    private int expiresIn;
+    private Long expiresIn;
 
     @JsonProperty("refresh_token")
     private String refreshToken;
