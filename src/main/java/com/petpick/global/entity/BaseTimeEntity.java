@@ -1,4 +1,4 @@
-package com.petpick.global;
+package com.petpick.global.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;

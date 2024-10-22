@@ -1,64 +1,38 @@
 package com.petpick.controller;
 
-import com.nimbusds.oauth2.sdk.TokenResponse;
-import org.checkerframework.checker.units.qual.C;
-import org.springframework.beans.factory.annotation.Value;
+import com.petpick.global.response.ErrorResponse;
+import com.petpick.global.response.SuccessResponse;
+import com.petpick.model.TokenResponse;
+import com.petpick.service.AuthService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.*;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/v1/auth")
 public class AuthController {
 
-    @Value("${spring.security.oauth2.client.registration.google.client-id}")
-    private String clientId;
-    @Value("${spring.security.oauth2.client.registration.google.client-secret}")
-    private String clientSecret;
-    @Value("${spring.security.oauth2.client.registration.google.redirect-uri}")
-    private String redirectUri;
+    private final AuthService authService;
 
     @PostMapping("/google")
-    public ResponseEntity<TokenResponse> exchangeCode(@RequestBody String authorizationCode) {
+    public ResponseEntity<?> exchangeCode(@RequestBody String authorizationCode) {
         if (authorizationCode == null || authorizationCode.isEmpty()) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().body(
+                    ErrorResponse.error("400", "Authorization code is missing")
+            );
         }
 
-        String tokenUrl = "https://oauth2.googleapis.com/token";
-
-        RestTemplate restTemplate = new RestTemplate();
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-
-        // 요청 파라미터 설정
-        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-        params.add("code", authorizationCode);
-        params.add("client_id", clientId);
-        params.add("client_secret", clientSecret);
-        params.add("redirect_uri", redirectUri);
-        params.add("grant_type", "authorization_code");
-
-        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(params, headers);
-
         try {
-            ResponseEntity<TokenResponse> response = restTemplate.exchange(
-                    tokenUrl,
-                    HttpMethod.POST,
-                    request,
-                    TokenResponse.class
-            );
-
-            // 액세스 토큰 응답 반환
-            return ResponseEntity.ok(response.getBody());
+            TokenResponse tokenResponse = authService.exchangeCodeForToken(authorizationCode);
+            return ResponseEntity.ok(SuccessResponse.success(tokenResponse));
         } catch (Exception e) {
-            // 오류 발생 시 상태 코드와 메시지 반환
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
+                    ErrorResponse.error("500", e.getMessage())
+            );
         }
     }
 

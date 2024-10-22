@@ -1,6 +1,6 @@
-package com.petpick.domain.user;
+package com.petpick.domain;
 
-import com.petpick.global.BaseTimeEntity;
+import com.petpick.global.entity.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -1,0 +1,50 @@
+package com.petpick.service;
+
+import com.petpick.model.TokenResponse;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.*;
+import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestTemplate;
+
+@Service
+@RequiredArgsConstructor
+public class AuthService {
+
+    @Value("${spring.security.oauth2.client.registration.google.client-id}")
+    private String clientId;
+    @Value("${spring.security.oauth2.client.registration.google.client-secret}")
+    private String clientSecret;
+    @Value("${spring.security.oauth2.client.registration.google.redirect-uri}")
+    private String redirectUri;
+
+    public TokenResponse exchangeCodeForToken(String authorizationCode) {
+        String tokenUrl = "https://oauth2.googleapis.com/token";
+
+        RestTemplate restTemplate = new RestTemplate();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+
+        // 요청 파라미터 설정
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        params.add("code", authorizationCode);
+        params.add("client_id", clientId);
+        params.add("client_secret", clientSecret);
+        params.add("redirect_uri", redirectUri);
+        params.add("grant_type", "authorization_code");
+
+        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(params, headers);
+
+        ResponseEntity<TokenResponse> response = restTemplate.exchange(
+                tokenUrl,
+                HttpMethod.POST,
+                request,
+                TokenResponse.class
+        );
+
+        return response.getBody();
+    }
+}
