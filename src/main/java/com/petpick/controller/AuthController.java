@@ -9,7 +9,10 @@ import com.petpick.service.GoogleTokenService;
 import com.petpick.service.GoogleUserService;
 import com.petpick.service.TokenProvider;
 import com.petpick.service.UserService;
+import com.petpick.util.CookieUtil;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,8 +28,11 @@ public class AuthController {
     private final GoogleUserService googleUserService;
     private final GoogleTokenService googleTokenService;
 
+    @Value("${cookie.cookie-max-age}")
+    private int cookieMaxAge;
+
     @PostMapping("/google")
-    public ResponseEntity<?> exchangeCode(@RequestBody String authorizationCode) {
+    public ResponseEntity<?> exchangeCode(@RequestBody String authorizationCode, HttpServletResponse httpServletResponse) {
         if (authorizationCode == null || authorizationCode.isEmpty()) {
             return ResponseEntity.badRequest().body(
                     ErrorResponse.error("400", "Authorization code is missing")
@@ -40,6 +46,7 @@ public class AuthController {
             // Use the access token to fetch user info from Google
             GoogleUserInfoResponse googleUserInfoResponse = googleUserService.getUserInfo(googleTokenResponse.getAccessToken());
 
+            // find user base on email
             User user = userService.findOrCreateUser(googleUserInfoResponse);
 
             // create own access token and refresh token
@@ -49,10 +56,11 @@ public class AuthController {
             // save the refresh token to DB
             userService.saveRefreshToken(user, refreshToken);
 
+            CookieUtil.addCookie(httpServletResponse, "refreshToken", refreshToken, cookieMaxAge);
+
             // include token in response
             return ResponseEntity.ok(SuccessResponse.success(Map.of(
-                    "accessToken", accessToken,
-                    "refreshToken", refreshToken
+                    "accessToken", accessToken
             )));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
