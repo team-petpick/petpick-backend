@@ -2,15 +2,13 @@ package com.petpick.controller;
 
 import com.petpick.global.response.ErrorResponse;
 import com.petpick.global.response.SuccessResponse;
-import com.petpick.model.ClientTokenResponse;
 import com.petpick.model.GoogleTokenResponse;
+import com.petpick.model.GoogleUserInfoResponse;
 import com.petpick.service.GoogleTokenService;
+import com.petpick.service.GoogleUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.*;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -18,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
 
     private final GoogleTokenService googleTokenService;
-//    private final ClientTokenService clientTokenService;
+    private final GoogleUserService googleUserService;
 
     @PostMapping("/google")
     public ResponseEntity<?> exchangeCode(@RequestBody String authorizationCode) {
@@ -28,16 +26,19 @@ public class AuthController {
             );
         }
 
-        try { // 구글 서버에게 토큰 요청
+        try {
+            // Request access token from Google
             GoogleTokenResponse googleTokenResponse = googleTokenService.exchangeCodeForToken(authorizationCode);
-            return ResponseEntity.ok(SuccessResponse.success(googleTokenResponse));
+
+            // Use the access token to fetch user info from Google
+            GoogleUserInfoResponse googleUserInfoResponse = googleUserService.getUserInfo(googleTokenResponse.getAccessToken());
+
+            return ResponseEntity.ok(SuccessResponse.success(googleUserInfoResponse));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
                     ErrorResponse.error("500", e.getMessage())
             );
         }
     }
-
-    // 클라이언트에게 토큰 전송하는 컨트롤러
 
 }

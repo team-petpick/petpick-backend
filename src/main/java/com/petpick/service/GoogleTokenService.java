@@ -1,12 +1,16 @@
 package com.petpick.service;
 
 import com.petpick.model.GoogleTokenResponse;
+import com.petpick.model.GoogleUserInfoResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.HttpServerErrorException;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 @Service
@@ -20,8 +24,9 @@ public class GoogleTokenService {
     @Value("${spring.security.oauth2.client.registration.google.redirect-uri}")
     private String redirectUri;
 
+    private static String TOKEN_URL = "https://oauth2.googleapis.com/token";
+
     public GoogleTokenResponse exchangeCodeForToken(String authorizationCode) {
-        String tokenUrl = "https://oauth2.googleapis.com/token";
 
         RestTemplate restTemplate = new RestTemplate();
 
@@ -38,13 +43,26 @@ public class GoogleTokenService {
 
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(params, headers);
 
-        ResponseEntity<GoogleTokenResponse> response = restTemplate.exchange(
-                tokenUrl,
-                HttpMethod.POST,
-                request,
-                GoogleTokenResponse.class // 응답 매핑할 클래스
-        );
+        try {
+            ResponseEntity<GoogleTokenResponse> response = restTemplate.exchange(
+                    TOKEN_URL,
+                    HttpMethod.POST,
+                    request,
+                    GoogleTokenResponse.class // 응답 매핑할 클래스
+            );
 
-        return response.getBody();
+            return response.getBody();
+
+        } catch (HttpClientErrorException e) {
+            // 클라이언트 측 오류 (4xx)
+            throw new IllegalStateException("Client error: " + e.getStatusCode() + " " + e.getResponseBodyAsString(), e);
+        } catch (HttpServerErrorException e) {
+            // 서버 측 오류 (5xx)
+            throw new IllegalStateException("Server error: " + e.getStatusCode() + " " + e.getResponseBodyAsString(), e);
+        } catch (RestClientException e) {
+            // 그 외 네트워크 오류
+            throw new IllegalStateException("Error during token exchange with Google", e);
+        }
     }
+
 }

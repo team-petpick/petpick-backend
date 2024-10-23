@@ -1,15 +1,17 @@
 package com.petpick.domain;
 
-import com.petpick.global.entity.BaseTimeEntity;
+import com.petpick.global.entity.BaseTime;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.Date;
 
 @Entity
 @Getter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class User extends BaseTimeEntity {
+public class User extends BaseTime {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
@@ -24,5 +26,9 @@ public class User extends BaseTimeEntity {
 
     private String userImg;
 
-    private String userGoogleid;
+    private String userGoogleId;
+
+    private String userRefreshId;
+
+    private Date userRefreshExpire;
 }
