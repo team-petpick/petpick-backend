@@ -1,14 +1,10 @@
 package com.petpick.cofig;
 
 
-import org.hibernate.jpa.boot.spi.EntityManagerFactoryBuilder;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.secretsmanager.SecretsManagerClient;
 import software.amazon.awssdk.services.secretsmanager.model.GetSecretValueRequest;
@@ -17,7 +13,7 @@ import software.amazon.awssdk.services.secretsmanager.model.GetSecretValueRespon
 import javax.sql.DataSource;
 
 @Configuration
-public class DataSourseConfiguration {
+public class DataSourceConfiguration {
 
 
 
@@ -32,7 +28,7 @@ public class DataSourseConfiguration {
     public DataSource dataSource() {
 
         DataSourceProperties dataSourceProperties = dataSourceProperties();
-        dataSourceProperties.setPassword(getSecret());
+//        dataSourceProperties.setPassword(getSecret());
         return dataSourceProperties
                 .initializeDataSourceBuilder()
                 .build();
@@ -45,7 +41,7 @@ public class DataSourseConfiguration {
      */
     public String getSecret() {
 
-        String secretName = "clusternameghere";
+        String secretName = "rds!cluster-706eccdd-6eb6-42f5-a3dc-6948dd685752";
         Region region = Region.of("ap-northeast-2");
 
         // Create a Secrets Manager client

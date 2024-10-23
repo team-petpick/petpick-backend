@@ -12,21 +12,27 @@ public class User {
     @Column(name = "user_id")
     private Integer userId;
 
-    @Column(name = "user_name", length = 20)
+    @Column(name = "user_name")
     private String userName;
 
-    @Column(name = "user_nickname", length = 20)
+    @Column(name = "user_nickname")
     private String userNickname;
 
-    @Column(name = "user_email", length = 100)
+    @Column(name = "user_email")
     private String userEmail;
 
-    @Column(name = "user_status", length = 20)
+    @Column(name = "user_status")
     private String userStatus;
 
-    @Column(name = "user_img", columnDefinition = "TEXT")
+    @Column(name = "user_img")
     private String userImg;
 
-    @Column(name = "user_googled_id", length = 30)
+    @Column(name = "user_googled_id")
     private String userGoogledId;
+
+    @Column(name = "user_refresh_id")
+    private String userRefreshId;
+
+    @Column(name = "user_refresh_exp")
+    private String userRefreshExp;
 }
