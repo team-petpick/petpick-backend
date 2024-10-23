@@ -1,7 +1,8 @@
 package com.petpick.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.petpick.model.GoogleTokenResponse;
-import com.petpick.model.GoogleUserInfoResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
@@ -13,6 +14,9 @@ import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Base64;
+import java.util.Map;
+
 @Service
 @RequiredArgsConstructor
 public class GoogleTokenService {
@@ -21,8 +25,10 @@ public class GoogleTokenService {
     private String clientId;
     @Value("${spring.security.oauth2.client.registration.google.client-secret}")
     private String clientSecret;
-    @Value("${spring.security.oauth2.client.registration.google.redirect-uri}")
+    @Value("${BACKEND_DEVELOP_URL}")
     private String redirectUri;
+    @Value("${JWT_SECRET_KEY}")
+    private String jwtSecret;
 
     private static String TOKEN_URL = "https://oauth2.googleapis.com/token";
 

@@ -2,7 +2,10 @@ package com.petpick.domain;
 
 import com.petpick.global.entity.BaseTime;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
@@ -22,13 +25,18 @@ public class User extends BaseTime {
 
     private String userEmail;
 
-    private String userStatus;
+    @Enumerated(EnumType.STRING)
+    private UserStatus userStatus;
 
     private String userImg;
 
-    private String userGoogleId;
+    private String userRefreshToken;
 
-    private String userRefreshId;
+    public void changeUserStatus(UserStatus newStatus) {
+        this.userStatus = newStatus;
+    }
 
-    private Date userRefreshExpire;
+    public void updateRefreshToken(String refreshToken) {
+        this.userRefreshToken = refreshToken;
+    }
 }
