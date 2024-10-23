@@ -10,6 +10,7 @@ import com.petpick.service.GoogleUserService;
 import com.petpick.service.TokenProvider;
 import com.petpick.service.UserService;
 import com.petpick.util.CookieUtil;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -67,6 +68,14 @@ public class AuthController {
                     ErrorResponse.error("500", e.getMessage())
             );
         }
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout(HttpServletResponse response, HttpServletRequest request) {
+
+        CookieUtil.deleteCookie(response, "refreshToken");
+
+        return ResponseEntity.ok(SuccessResponse.success("Successfully logged out"));
     }
 
 }
