@@ -46,7 +46,7 @@ public class UserService {
     }
 
     public Optional<User> findByRefreshToken(String refreshToken) {
-        return userRepository.findByRefreshToken(refreshToken);
+        return userRepository.findByUserRefreshToken(refreshToken);
     }
 
     public Optional<User> findByUserEmail(String userEmail) {
