@@ -6,7 +6,6 @@ import com.petpick.global.response.SuccessResponse;
 import com.petpick.model.AuthorizationCode;
 import com.petpick.model.GoogleTokenResponse;
 import com.petpick.model.GoogleUserInfoResponse;
-import com.petpick.repository.UserRepository;
 import com.petpick.service.auth.GoogleTokenService;
 import com.petpick.service.user.GoogleUserService;
 import com.petpick.service.auth.TokenProvider;
@@ -160,6 +159,4 @@ public class AuthController {
             );
         }
     }
-
-
 }
