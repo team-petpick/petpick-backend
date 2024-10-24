@@ -23,8 +23,10 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
-        with:
-          ref: production  # Ensure you're on the production branch
+        # Remove the 'ref' to dynamically checkout the branch that triggered the workflow
+        # If you need to checkout a specific branch, ensure it's correctly referenced
+        # with:
+        #   ref: ${{ github.ref }}
 
       - name: Update System and Install Dependencies
         run: |
@@ -76,7 +78,8 @@ jobs:
           aws --version
 
       - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v1
+        # Update to the latest version of the action
+        uses: aws-actions/configure-aws-credentials@v3
         with:
           aws-region: ${{ env.AWS_REGION }}
           aws-access-key-id: ${{ secrets.CICD_ACCESS_KEY }}
