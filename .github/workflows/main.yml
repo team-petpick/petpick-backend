@@ -16,7 +16,7 @@ jobs:
   build-with-gradle:
     runs-on: ubuntu-latest
     container:
-      image: amazonlinux:2
+      image: amazonlinux:2023
     steps:
       - name: main 브랜치로 이동
         uses: actions/checkout@v3
@@ -25,8 +25,8 @@ jobs:
 
       - name: JDK 21 설치
         run: |
-          yum update -y
-          yum install -y java-21-amazon-corretto-devel
+          dnf update -y
+          dnf install -y java-21-amazon-corretto-devel
 
       - name: gradlew에 실행 권한 부여
         run: chmod +x ./gradlew
