@@ -27,12 +27,12 @@ public class User {
     @Column(name = "user_img")
     private String userImg;
 
-    @Column(name = "user_googled_id")
-    private String userGoogledId;
+    @Column(name = "user_refresh_token")
+    private String userRefreshToken;
 
-    @Column(name = "user_refresh_id")
-    private String userRefreshId;
+    @Column(name = "created_at")
+    private String created_at;
 
-    @Column(name = "user_refresh_exp")
-    private String userRefreshExp;
+    @Column(name = "user_position")
+    private String userPosition;
 }
