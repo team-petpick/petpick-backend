@@ -1,12 +1,16 @@
-package com.petpick.repository.entity;
+package com.petpick.domain;
 
+import com.petpick.global.entity.BaseTime;
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
 @Entity
-@Data
+@Builder
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "user")
-public class User {
+public class User extends BaseTime {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
@@ -21,8 +25,9 @@ public class User {
     @Column(name = "user_email")
     private String userEmail;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "user_status")
-    private String userStatus;
+    private UserStatus userStatus;
 
     @Column(name = "user_img")
     private String userImg;
@@ -30,9 +35,14 @@ public class User {
     @Column(name = "user_refresh_token")
     private String userRefreshToken;
 
-    @Column(name = "created_at")
-    private String created_at;
-
     @Column(name = "user_position")
     private String userPosition;
+
+    public void changeUserStatus(UserStatus newStatus) {
+        this.userStatus = newStatus;
+    }
+
+    public void updateRefreshToken(String refreshToken) {
+        this.userRefreshToken = refreshToken;
+    }
 }
