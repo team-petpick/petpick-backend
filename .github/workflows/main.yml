@@ -33,11 +33,13 @@ jobs:
       - name: Build Project
         run: ./gradlew clean build -x test
 
-      - name: Debug - List Current Directory
+      - name: Prepare Deployment Package
         run: |
-          echo "Current Directory:"
           pwd
-          echo "Listing Files:"
+          ls -la
+          # Ensure we're in the repository root
+          cd $GITHUB_WORKSPACE
+          pwd
           ls -la
 
       - name: AWS Credential Configuration
