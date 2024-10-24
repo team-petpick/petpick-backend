@@ -3,6 +3,7 @@ package com.petpick.controller;
 import com.petpick.domain.User;
 import com.petpick.global.response.ErrorResponse;
 import com.petpick.global.response.SuccessResponse;
+import com.petpick.model.AuthorizationCode;
 import com.petpick.model.GoogleTokenResponse;
 import com.petpick.model.GoogleUserInfoResponse;
 import com.petpick.service.auth.GoogleTokenService;
@@ -16,6 +17,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 @RestController
@@ -32,21 +35,25 @@ public class AuthController {
     private int cookieMaxAge;
 
     @PostMapping("/google")
-    public ResponseEntity<?> exchangeCode(@RequestBody String authorizationCode, HttpServletResponse httpServletResponse) {
-        if (authorizationCode == null || authorizationCode.isEmpty()) {
+    public ResponseEntity<?> exchangeCode(@RequestBody AuthorizationCode authorizationCode, HttpServletResponse httpServletResponse) {
+        String code = authorizationCode.getCode();
+
+        if (code == null || code.isEmpty()) {
             return ResponseEntity.badRequest().body(
                     ErrorResponse.error("400", "Authorization code is missing")
             );
         }
 
+        String decodedCode = URLDecoder.decode(code, StandardCharsets.UTF_8);
+
         try {
             // Request access token from Google
-            GoogleTokenResponse googleTokenResponse = googleTokenService.exchangeCodeForToken(authorizationCode);
+            GoogleTokenResponse googleTokenResponse = googleTokenService.exchangeCodeForToken(decodedCode);
 
             // Use the access token to fetch user info from Google
             GoogleUserInfoResponse googleUserInfoResponse = googleUserService.getUserInfo(googleTokenResponse.getAccessToken());
 
-            // find user base on email
+            // find user based on email
             User user = userService.findOrCreateUser(googleUserInfoResponse);
 
             // create own access token and refresh token
@@ -59,9 +66,7 @@ public class AuthController {
             CookieUtil.addCookie(httpServletResponse, "refreshToken", refreshToken, cookieMaxAge);
 
             // include token in response
-            return ResponseEntity.ok(SuccessResponse.success(Map.of(
-                    "accessToken", accessToken
-            )));
+            return ResponseEntity.ok(Map.of("access_token", accessToken));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
                     ErrorResponse.error("500", e.getMessage())
