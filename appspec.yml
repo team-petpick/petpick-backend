@@ -1,0 +1,31 @@
+version: 0.0
+os: linux
+
+files:
+  - source:  /
+    destination: /home/ec2-user/spring-github-action
+    overwrite: yes
+
+permissions:
+  - object: /home/ec2-user/spring-github-action
+    owner: ec2-user
+    group: ec2-user
+    mode: 755
+
+hooks:
+  BeforeInstall:
+    - location: scripts/before_install.sh
+      timeout: 60
+      runas: ec2-user
+  AfterInstall:
+    - location: scripts/stop.sh
+      timeout: 60
+      runas: ec2-user
+  ApplicationStart:
+    - location: scripts/start.sh
+      timeout: 60
+      runas: ec2-user
+  ValidateService:
+    - location: scripts/validate.sh
+      timeout: 60
+      runas: ec2-user
