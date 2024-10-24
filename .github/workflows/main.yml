@@ -16,7 +16,7 @@ jobs:
   build-with-gradle:
     runs-on: ubuntu-latest
     container:
-      image: your-dockerhub-username/amazonlinux-2023-with-tar:latest
+      image: amazonlinux:2023
     steps:
       - name: main 브랜치로 이동
         uses: actions/checkout@v3
