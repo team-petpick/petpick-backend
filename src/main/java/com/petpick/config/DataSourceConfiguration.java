@@ -1,4 +1,4 @@
-package com.petpick.cofig;
+package com.petpick.config;
 
 
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
