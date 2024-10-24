@@ -39,4 +39,16 @@ public class UserService {
         user.updateRefreshToken(refreshToken);
         userRepository.save(user);
     }
+
+    public void deleteRefreshToken(User user) {
+        user.updateRefreshToken(null);
+        userRepository.save(user);
+    }
+
+    public Optional<User> findByRefreshToken(String refreshToken) {
+        return userRepository.findByRefreshToken(refreshToken);
+    }
+
+    public Optional<User> findByUserEmail(String userEmail) {
+    }
 }
