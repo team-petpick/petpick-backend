@@ -10,13 +10,13 @@ env:
   AWS_REGION: ap-northeast-2
   AWS_S3_BUCKET: app-release-files
   AWS_CODE_DEPLOY_APPLICATION: cicid-test-CD
-  AWS_CODE_DEPLOY_GROUP: cicd-test-CD-group
+  AWS_CODE_DEPLOY_GROUP: cicid-test-CD-group
 
 jobs:
   build-with-gradle:
     runs-on: ubuntu-latest
     container:
-      image: amazonlinux:2023
+      image: amazonlinux:2  # Use amazonlinux:2 instead of amazonlinux:2023, since tar is pre-installed
     steps:
       - name: main 브랜치로 이동
         uses: actions/checkout@v3
@@ -25,8 +25,8 @@ jobs:
 
       - name: JDK 21 설치
         run: |
-          dnf update -y
-          dnf install -y java-21-amazon-corretto-devel
+          yum update -y
+          yum install -y java-21-amazon-corretto-devel
 
       - name: gradlew에 실행 권한 부여
         run: chmod +x ./gradlew
