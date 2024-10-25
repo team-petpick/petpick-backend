@@ -2,7 +2,7 @@ version: 0.0
 os: linux
 
 files:
-  - source:  /
+  - source: /
     destination: /home/ec2-user/spring-github-action
     overwrite: yes
 
@@ -26,6 +26,6 @@ hooks:
       timeout: 60
       runas: ec2-user
   ValidateService:
-    - location: scripts/validate.sh
+    - location: scripts/check_directories.sh   # <-- Added the check_directories script here
       timeout: 60
       runas: ec2-user
