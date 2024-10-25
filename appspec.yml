@@ -14,9 +14,9 @@ permissions:
 
 hooks:
   BeforeInstall:
-    - location: scripts/install_nginx.sh    # Install Nginx before deployment
-      timeout: 60
-      runas: ec2-user
+    # - location: scripts/install_nginx.sh    # Install Nginx before deployment
+    #   timeout: 60
+    #   runas: ec2-user
     - location: scripts/before_install.sh
       timeout: 60
       runas: ec2-user
