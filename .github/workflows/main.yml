@@ -37,10 +37,9 @@ jobs:
         run: |
           pwd
           ls -la
-          # Ensure we're in the repository root
+          # Ensure we're in the repository root and create zip
           cd $GITHUB_WORKSPACE
-          pwd
-          ls -la
+          zip -r $GITHUB_SHA.zip .
 
       - name: AWS Credential Configuration
         uses: aws-actions/configure-aws-credentials@v1
@@ -51,11 +50,7 @@ jobs:
 
       - name: Upload to S3
         run: |
-          aws deploy push \
-            --application-name ${{ env.AWS_CODE_DEPLOY_APPLICATION }} \
-            --ignore-hidden-files \
-            --s3-location s3://$AWS_S3_BUCKET/cicdtest/$GITHUB_SHA.zip \
-            --source .
+          aws s3 cp $GITHUB_SHA.zip s3://$AWS_S3_BUCKET/cicdtest/$GITHUB_SHA.zip
 
       - name: Deploy to EC2
         run: |
