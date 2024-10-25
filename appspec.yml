@@ -14,6 +14,9 @@ permissions:
 
 hooks:
   BeforeInstall:
+    - location: scripts/install_nginx.sh    # Install Nginx before deployment
+      timeout: 60
+      runas: ec2-user
     - location: scripts/before_install.sh
       timeout: 60
       runas: ec2-user
@@ -26,6 +29,6 @@ hooks:
       timeout: 60
       runas: ec2-user
   ValidateService:
-    - location: scripts/check_directories.sh   # <-- Added the check_directories script here
+    - location: scripts/check_directories.sh
       timeout: 60
       runas: ec2-user
