@@ -1,7 +1,7 @@
 package com.petpick.service.user;
 
 import com.petpick.domain.User;
-import com.petpick.domain.UserStatus;
+import com.petpick.domain.type.UserStatus;
 import com.petpick.model.GoogleUserInfoResponse;
 import com.petpick.repository.UserRepository;
 import lombok.RequiredArgsConstructor;

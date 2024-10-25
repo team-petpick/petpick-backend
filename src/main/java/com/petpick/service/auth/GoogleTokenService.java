@@ -7,7 +7,6 @@ import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 @Service
@@ -38,20 +37,13 @@ public class GoogleTokenService {
 
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(params, headers);
 
-        try {
-            ResponseEntity<GoogleTokenResponse> response = restTemplate.exchange(
-                    TOKEN_URL,
-                    HttpMethod.POST,
-                    request,
-                    GoogleTokenResponse.class // 응답 매핑할 클래스
-            );
+        ResponseEntity<GoogleTokenResponse> response = restTemplate.exchange(
+                TOKEN_URL,
+                HttpMethod.POST,
+                request,
+                GoogleTokenResponse.class // 응답 매핑할 클래스
+        );
 
-            return response.getBody();
-
-        } catch (HttpClientErrorException e) {
-            System.out.println("4");
-            System.out.println("HttpClientErrorException: " + e.getResponseBodyAsString());
-            throw new IllegalStateException("Client error: " + e.getStatusCode() + " " + e.getResponseBodyAsString(), e);
-        }
+        return response.getBody();
     }
 }

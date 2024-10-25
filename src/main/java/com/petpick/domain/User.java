@@ -1,5 +1,6 @@
 package com.petpick.domain;
 
+import com.petpick.domain.type.UserStatus;
 import com.petpick.global.entity.BaseTime;
 import jakarta.persistence.*;
 import lombok.*;
