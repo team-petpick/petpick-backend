@@ -1,7 +1,8 @@
 package com.petpick.controller;
 
 import com.petpick.domain.User;
-import com.petpick.global.response.ErrorResponse;
+import com.petpick.global.exception.BaseException;
+import com.petpick.global.exception.errorCode.AuthErrorCode;
 import com.petpick.global.response.SuccessResponse;
 import com.petpick.model.AuthorizationCode;
 import com.petpick.model.GoogleTokenResponse;
@@ -45,39 +46,31 @@ public class AuthController {
         String code = authorizationCode.getCode();
 
         if (code == null || code.isEmpty()) {
-            return ResponseEntity.badRequest().body(
-                    ErrorResponse.error("400", "Authorization code is missing")
-            );
+            throw new BaseException(AuthErrorCode.INVALID_AUTHORIZATION_CODE);
         }
 
         String decodedCode = URLDecoder.decode(code, StandardCharsets.UTF_8);
 
-        try {
-            // Request access token from Google
-            GoogleTokenResponse googleTokenResponse = googleTokenService.exchangeCodeForToken(decodedCode);
+        // Request access token from Google
+        GoogleTokenResponse googleTokenResponse = googleTokenService.exchangeCodeForToken(decodedCode);
 
-            // Use the access token to fetch user info from Google
-            GoogleUserInfoResponse googleUserInfoResponse = googleUserService.getUserInfo(googleTokenResponse.getAccessToken());
+        // Use the access token to fetch user info from Google
+        GoogleUserInfoResponse googleUserInfoResponse = googleUserService.getUserInfo(googleTokenResponse.getAccessToken());
 
-            // find user based on email
-            User user = userService.findOrCreateUser(googleUserInfoResponse);
+        // find user based on email
+        User user = userService.findOrCreateUser(googleUserInfoResponse);
 
-            // create own access token and refresh token
-            String accessToken = tokenProvider.createAccessToken(user);
-            String refreshToken = tokenProvider.createRefreshToken(user);
+        // create own access token and refresh token
+        String accessToken = tokenProvider.createAccessToken(user);
+        String refreshToken = tokenProvider.createRefreshToken(user);
 
-            // save the refresh token to DB
-            userService.saveRefreshToken(user, refreshToken);
+        // save the refresh token to DB
+        userService.saveRefreshToken(user, refreshToken);
 
-            CookieUtil.addCookie(httpServletResponse, "refreshToken", refreshToken, cookieMaxAge);
+        CookieUtil.addCookie(httpServletResponse, "refreshToken", refreshToken, cookieMaxAge);
 
             // include token in response
-            return ResponseEntity.ok(Map.of("access_token", accessToken));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
-                    ErrorResponse.error("500", e.getMessage())
-            );
-        }
+        return ResponseEntity.ok(Map.of("access_token", accessToken));
     }
 
     @PostMapping("/logout")
@@ -98,7 +91,11 @@ public class AuthController {
             if (userOptional.isPresent()) {
                 User user = userOptional.get();
                 userService.deleteRefreshToken(user);
+            } else {
+                throw new BaseException(AuthErrorCode.INVALID_REFRESH_TOKEN);
             }
+        } else {
+            throw new BaseException(AuthErrorCode.REFRESH_TOKEN_NOT_FOUND);
         }
 
         CookieUtil.deleteCookie(response, "refreshToken");
@@ -107,56 +104,41 @@ public class AuthController {
     }
 
     /*
-    * always request when access token expires
+    * request when access token expires
     * */
-    @PostMapping("/refresh")
-    public ResponseEntity<?> refreshToken(HttpServletRequest request, HttpServletResponse response) {
+    @PostMapping("/token")
+    public ResponseEntity<?> regenerateJWT(HttpServletRequest request) {
 
         // get the refresh token from the cookie
         Optional<Cookie> refreshTokenCookie = CookieUtil.getCookie(request, "refreshToken");
 
         if (refreshTokenCookie.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
-                    ErrorResponse.error("401", "Refresh token not found")
-            );
+            throw new BaseException(AuthErrorCode.REFRESH_TOKEN_NOT_FOUND);
         }
 
         String refreshToken = refreshTokenCookie.get().getValue();
 
-        try {
-            // validate refresh token
-            if (!tokenProvider.validateToken(refreshToken)) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
-                        ErrorResponse.error("401", "Invalid or expired refresh token")
-                );
-            }
-
-            String userEmail = tokenProvider.getUserEmailFromToken(refreshToken);
-
-            Optional<User> userOptional = userService.findByUserEmail(userEmail);
-
-            if (userOptional.isEmpty()) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
-                        ErrorResponse.error("401", "Invalid refresh token")
-                );
-            }
-
-            User user = userOptional.get();
-
-            if (!refreshToken.equals(user.getUserRefreshToken())) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
-                        ErrorResponse.error("401", "Refresh token does not match")
-                );
-            }
-
-            String newAccessToken = tokenProvider.createAccessToken(user);
-
-            return ResponseEntity.ok(Map.of("access_token", newAccessToken));
-
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
-                    ErrorResponse.error("500", "An error occurred while refreshing token")
-            );
+        // validate refresh token
+        if (!tokenProvider.validateToken(refreshToken)) {
+            throw new BaseException(AuthErrorCode.INVALID_REFRESH_TOKEN);
         }
+
+        String userEmail = tokenProvider.getUserEmailFromToken(refreshToken);
+
+        Optional<User> userOptional = userService.findByUserEmail(userEmail);
+
+        if (userOptional.isEmpty()) {
+            throw new BaseException(AuthErrorCode.INVALID_USER_EMAIL);
+        }
+
+        User user = userOptional.get();
+
+        if (!refreshToken.equals(user.getUserRefreshToken())) {
+            throw new BaseException(AuthErrorCode.REFRESH_TOKEN_MISMATCH);
+        }
+
+        String newAccessToken = tokenProvider.createAccessToken(user);
+
+        return ResponseEntity.ok(Map.of("access_token", newAccessToken));
     }
 }
