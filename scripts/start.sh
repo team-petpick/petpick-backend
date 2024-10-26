@@ -24,10 +24,7 @@ echo "[$NOW] Copying JAR to $JAR" >> $START_LOG
 #cp "$ROOT_PATH/build/libs/petpick-0.0.1-SNAPSHOT.jar" "$JAR"
 
 # Verify if the copy was successful
-if [ $? -ne 0 ]; then
-    echo "[$NOW] Failed to copy JAR file." >> $START_LOG
-    exit 1
-fi
+
 
 # Log the execution action
 echo "[$NOW] Starting application with $JAR" >> $START_LOG
