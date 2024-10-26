@@ -4,9 +4,8 @@
 
 <table align="center">
   <tr align="center">
-    <td>이효린</td>
-    <td>김윤일</td>
-    <td>고은진</td>
+    <td>윤준수</td>
+    <td>조용주</td>
   </tr>
   <tr>
     <td align="center">
