@@ -30,6 +30,11 @@ jobs:
       - name: Grant Execute Permission for Gradlew
         run: chmod +x ./gradlew
 
+      - name: Add Production properties
+        run: |
+          rm src/main/resources/application.properties
+          echo '${{ secrets.PRD_PROPERTIES }}' &> src/main/resources/application.properties
+
       - name: Build Project
         run: ./gradlew clean build -x test
 
