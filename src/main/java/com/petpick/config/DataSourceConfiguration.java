@@ -41,7 +41,9 @@ public class DataSourceConfiguration {
      */
     public String getSecret() {
 
-        String secretName = "rds!cluster-706eccdd-6eb6-42f5-a3dc-6948dd685752";
+        String secretName = "rds!cluster-706eccdd-6eb6-42f5-a3dc-6948dd685752";//this is for ec2 connected server
+//        String secretName = "rds!cluster-5606769d-8d1f-4a20-a773-4749425aa572";//this is for public access
+
         Region region = Region.of("ap-northeast-2");
 
         // Create a Secrets Manager client
