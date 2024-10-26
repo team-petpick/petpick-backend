@@ -4,7 +4,7 @@ import com.petpick.domain.User;
 import com.petpick.global.exception.BaseException;
 import com.petpick.global.exception.errorCode.AuthErrorCode;
 import com.petpick.global.response.SuccessResponse;
-import com.petpick.model.AuthorizationCode;
+import com.petpick.model.AuthorizationCodeResponse;
 import com.petpick.model.GoogleTokenResponse;
 import com.petpick.model.GoogleUserInfoResponse;
 import com.petpick.service.auth.GoogleTokenService;
@@ -42,8 +42,8 @@ public class AuthController {
     * request for first login or refresh token expires
     * */
     @PostMapping("/google")
-    public ResponseEntity<?> googleCallback(@RequestBody AuthorizationCode authorizationCode, HttpServletResponse httpServletResponse) {
-        String code = authorizationCode.getCode();
+    public ResponseEntity<?> googleCallback(@RequestBody AuthorizationCodeResponse authorizationCodeResponse, HttpServletResponse httpServletResponse) {
+        String code = authorizationCodeResponse.getCode();
 
         if (code == null || code.isEmpty()) {
             throw new BaseException(AuthErrorCode.INVALID_AUTHORIZATION_CODE);
