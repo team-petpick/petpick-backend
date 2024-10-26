@@ -1,5 +1,7 @@
 package com.petpick.domain;
 
+import com.petpick.domain.type.UserPosition;
+import com.petpick.domain.type.UserStatus;
 import com.petpick.global.entity.BaseTime;
 import jakarta.persistence.*;
 import lombok.*;
@@ -35,8 +37,9 @@ public class User extends BaseTime {
     @Column(name = "user_refresh_token")
     private String userRefreshToken;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "user_position")
-    private String userPosition;
+    private UserPosition userPosition;
 
     public void changeUserStatus(UserStatus newStatus) {
         this.userStatus = newStatus;
