@@ -1,7 +1,7 @@
 package com.petpick.service.user;
 
 import com.petpick.domain.User;
-import com.petpick.domain.UserStatus;
+import com.petpick.domain.type.UserStatus;
 import com.petpick.model.GoogleUserInfoResponse;
 import com.petpick.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -38,5 +38,18 @@ public class UserService {
     public void saveRefreshToken(User user, String refreshToken) {
         user.updateRefreshToken(refreshToken);
         userRepository.save(user);
+    }
+
+    public void deleteRefreshToken(User user) {
+        user.updateRefreshToken(null);
+        userRepository.save(user);
+    }
+
+    public Optional<User> findByRefreshToken(String refreshToken) {
+        return userRepository.findByUserRefreshToken(refreshToken);
+    }
+
+    public Optional<User> findByUserEmail(String userEmail) {
+        return userRepository.findByUserEmail(userEmail);
     }
 }
