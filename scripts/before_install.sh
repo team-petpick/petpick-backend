@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Define variables
-ROOT_PATH="/home/ec2-user/spring-github-action"
+ROOT_PATH="/home/ec2-user/petpick-deploy"
 
 # Ensure the deployment directory exists
 if [ ! -d "$ROOT_PATH" ]; then
