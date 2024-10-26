@@ -10,7 +10,6 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api")
 public class TestController {
-
     @GetMapping("/data")
     public Map<String, Object> getDummyData() {
         Map<String, Object> data = new HashMap<>();

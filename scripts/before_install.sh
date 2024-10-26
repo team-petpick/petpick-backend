@@ -1,18 +1,35 @@
 #!/bin/bash
 
-# 압축 파일 경로
-TAR_FILE="/home/ec2-user/app.tgz"
+# Define variables
+ROOT_PATH="/home/ec2-user/spring-github-action"
+ZIP_FILE="$ROOT_PATH/deployment.zip"
 
-# 압축을 해제할 경로
-EXTRACT_TO="/home/ec2-user/extracted-folder"
-
-# 압축 파일이 존재하는지 확인
-if [ -f "$TAR_FILE" ]; then
-  echo "압축 해제 중: $TAR_FILE"
-  mkdir -p "$EXTRACT_TO"  # 압축 해제 경로 생성
-  tar -xzf "$TAR_FILE" -C "$EXTRACT_TO"  # 파일 압축 해제
-  echo "압축 해제 완료"
-else
-  echo "$TAR_FILE 파일을 찾을 수 없습니다."
-  exit 1  # 압축 파일이 없으면 오류로 종료
+# Ensure the deployment directory exists
+if [ ! -d "$ROOT_PATH" ]; then
+    echo "Creating deployment directory: $ROOT_PATH"
+    mkdir -p "$ROOT_PATH"
+    chown ec2-user:ec2-user "$ROOT_PATH"
 fi
+
+# Move to the deployment directory
+cd "$ROOT_PATH" || exit 1
+
+# Unzip the deployment package
+echo "Unzipping deployment package: $ZIP_FILE"
+if [ -f "$ZIP_FILE" ]; then
+    unzip -o "$ZIP_FILE" -d "$ROOT_PATH"
+    if [ $? -ne 0 ]; then
+        echo "Failed to unzip deployment package."
+        exit 1
+    else
+        echo "Deployment package unzipped successfully."
+    fi
+else
+    echo "Deployment package $ZIP_FILE does not exist."
+    exit 1
+fi
+
+# Optional: Clean up the zip file after extraction
+rm -f "$ZIP_FILE"
+
+echo "before_install.sh completed."
