@@ -1,5 +1,7 @@
 package com.petpick.service.auth;
 
+import com.petpick.global.exception.BaseException;
+import com.petpick.global.exception.errorCode.AuthErrorCode;
 import com.petpick.model.GoogleTokenResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -7,7 +9,6 @@ import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 @Service
@@ -43,15 +44,12 @@ public class GoogleTokenService {
                     TOKEN_URL,
                     HttpMethod.POST,
                     request,
-                    GoogleTokenResponse.class // 응답 매핑할 클래스
+                    GoogleTokenResponse.class
             );
-
             return response.getBody();
-
-        } catch (HttpClientErrorException e) {
-            System.out.println("4");
-            System.out.println("HttpClientErrorException: " + e.getResponseBodyAsString());
-            throw new IllegalStateException("Client error: " + e.getStatusCode() + " " + e.getResponseBodyAsString(), e);
+        } catch (Exception ex) {
+            // 유효하지 않은 인가 코드를 사용한 경우 발생하는 예외를 처리
+            throw new BaseException(AuthErrorCode.INVALID_AUTHORIZATION_CODE);
         }
     }
 }
