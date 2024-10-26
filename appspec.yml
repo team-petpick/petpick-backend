@@ -2,15 +2,14 @@ version: 0.0
 os: linux
 
 files:
-  - source: /
+  - source: .
     destination: /home/ec2-user/spring-github-action
-    overwrite: yes
 
 permissions:
   - object: /home/ec2-user/spring-github-action
     owner: ec2-user
     group: ec2-user
-    mode: 755
+    mode: '755'
 
 hooks:
   BeforeInstall:
@@ -29,3 +28,4 @@ hooks:
     - location: scripts/check_directories.sh
       timeout: 60
       runas: ec2-user
+
