@@ -17,22 +17,11 @@ if [ ! -d "$ROOT_PATH" ]; then
     chown ec2-user:ec2-user "$ROOT_PATH"
 fi
 
-# Log the copy action
-echo "[$NOW] Copying JAR to $JAR" >> $START_LOG
+# Log the start action
+echo "[$NOW] Starting application $JAR" >> $START_LOG
 
-# Copy the latest JAR file
-#cp "$ROOT_PATH/build/libs/petpick-0.0.1-SNAPSHOT.jar" "$JAR"
+# Start the application using nohup, redirect output, and background the process
+nohup java -jar "$JAR" >> $APP_LOG 2>> $ERROR_LOG &
 
-# Verify if the copy was successful
-
-
-# Log the execution action
-
-# Start the application using nohup
-nohup java -jar "$JAR"
-
-# Capture the PID of the newly started process
-
-
-# Verify if the application started successfully
-
+# Log that start.sh completed
+echo "[$NOW] start.sh completed." >> $START_LOG
