@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # Variables
-ROOT_PATH="/home/ec2-user/spring-github-action"
-JAR="$ROOT_PATH/application.jar"
+ROOT_PATH="/home/ec2-user/petpick-deploy"
+JAR="$ROOT_PATH/petpick-0.0.1-SNAPSHOT.jar"
 STOP_LOG="$ROOT_PATH/stop.log"
 NOW=$(date +"%Y-%m-%d %H:%M:%S")  # Standardized date format
 
