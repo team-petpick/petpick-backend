@@ -2,7 +2,7 @@
 
 # Variables
 ROOT_PATH="/home/ec2-user/petpick-deploy"
-JAR="$ROOT_PATH/application.jar"
+JAR="$ROOT_PATH/petpick-0.0.1-SNAPSHOT.jar"
 
 APP_LOG="$ROOT_PATH/application.log"
 ERROR_LOG="$ROOT_PATH/error.log"
@@ -21,7 +21,7 @@ fi
 echo "[$NOW] Copying JAR to $JAR" >> $START_LOG
 
 # Copy the latest JAR file
-cp "$ROOT_PATH/build/libs/petpick-0.0.1-SNAPSHOT.jar" "$JAR"
+#cp "$ROOT_PATH/build/libs/petpick-0.0.1-SNAPSHOT.jar" "$JAR"
 
 # Verify if the copy was successful
 if [ $? -ne 0 ]; then
