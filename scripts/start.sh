@@ -27,18 +27,12 @@ echo "[$NOW] Copying JAR to $JAR" >> $START_LOG
 
 
 # Log the execution action
-echo "[$NOW] Starting application with $JAR" >> $START_LOG
 
 # Start the application using nohup
-nohup java -jar "$JAR" > "$APP_LOG" 2> "$ERROR_LOG" &
+nohup java -jar "$JAR"
 
 # Capture the PID of the newly started process
-SERVICE_PID=$(pgrep -f "$JAR")
+
 
 # Verify if the application started successfully
-if [ -z "$SERVICE_PID" ]; then
-    echo "[$NOW] Failed to start the application." >> $START_LOG
-    exit 1
-else
-    echo "[$NOW] Application started successfully with PID: $SERVICE_PID" >> $START_LOG
-fi
+
