@@ -9,10 +9,10 @@
   </tr>
   <tr>
     <td align="center">
-        <a href="https://github.com/jueunseuk"><img src="https://avatars.githubusercontent.com/u/108210492?v=4" width="150px" alt="윤준수"/><br /></a>
+        <a href="https://github.com/jueunseuk"><img src="https://avatars.githubusercontent.com/u/174159935?v=4" width="150px" alt="윤준수"/><br /></a>
      </td>
      <td align="center">
-        <a href="https://github.com/fishman1123"><img src="https://avatars.githubusercontent.com/u/98331998?v=4" width="150px" alt="조용주"/><br /></a>
+        <a href="https://github.com/fishman1123"><img src="https://avatars.githubusercontent.com/u/88637228?v=4" width="150px" alt="조용주"/><br /></a>
      </td>
 
   <tr>
