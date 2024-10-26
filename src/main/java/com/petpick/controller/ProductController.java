@@ -2,6 +2,7 @@ package com.petpick.controller;
 
 import com.petpick.domain.Product;
 import com.petpick.model.ProductDetailResponse;
+import com.petpick.model.ProductListResponse;
 import com.petpick.service.product.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -20,9 +21,9 @@ public class ProductController {
     * Total Product List
     * */
     @GetMapping("/products")
-    public List<Product> getAllProducts() {
-        List<Product> products = productService.getAllProducts();
-        return products;
+    public ResponseEntity<List<ProductListResponse>> getAllProducts() {
+        List<ProductListResponse> productsListResponse = productService.getAllProducts();
+        return ResponseEntity.ok(productsListResponse);
     }
 
     /*
