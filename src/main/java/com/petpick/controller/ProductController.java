@@ -30,6 +30,20 @@ public class ProductController {
     }
 
     /*
+     * Filtered Product List
+     * */
+    @GetMapping("/{productType}/products")
+    public ResponseEntity<Page<ProductListResponse>> getProductListByProductType(
+            @PathVariable String productType,
+            @RequestParam(defaultValue = "0") Integer page,
+            @RequestParam(defaultValue = "12") Integer size,
+            @RequestParam(defaultValue = "createAt_desc") String sort
+    ) {
+        Page<ProductListResponse> productsListResponse = productService.getProductsListByProductType(productType, page, size, sort);
+        return ResponseEntity.ok(productsListResponse);
+    }
+
+    /*
     * Detail Product Page
     * */
     @GetMapping("/products/{productId}")

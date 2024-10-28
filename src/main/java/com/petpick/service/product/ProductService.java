@@ -1,6 +1,7 @@
 package com.petpick.service.product;
 
 import com.petpick.domain.Product;
+import com.petpick.domain.type.PetKind;
 import com.petpick.global.exception.BaseException;
 import com.petpick.global.exception.errorCode.ProductErrorCode;
 import com.petpick.model.ProductDetailResponse;
@@ -36,6 +37,26 @@ public class ProductService {
 
         Pageable pageable = PageRequest.of(page, size, sortOrder);
         Page<Product> productsPage = productRepository.findAll(pageable);
+
+        return productsPage.map(ProductListResponse::new);
+    }
+
+    public Page<ProductListResponse> getProductsListByProductType(String productType, Integer page, Integer size, String sort) {
+        Sort sortOrder = Sort.by("createAt").descending(); // 기본 정렬 설정
+
+        if (sort != null && !sort.isEmpty()) {
+            String[] sortParams = sort.split("_");
+            String sortBy = sortParams[0];
+            String direction = sortParams.length > 1 ? sortParams[1] : "desc";
+
+            sortOrder = direction.equalsIgnoreCase("desc")
+                    ? Sort.by(sortBy).descending()
+                    : Sort.by(sortBy).ascending();
+        }
+
+        Pageable pageable = PageRequest.of(page, size, sortOrder);
+        PetKind petKind = PetKind.valueOf(productType.toUpperCase());
+        Page<Product> productsPage = productRepository.findByPetKind(petKind, pageable);
 
         return productsPage.map(ProductListResponse::new);
     }
