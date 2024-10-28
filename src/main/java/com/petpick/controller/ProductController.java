@@ -21,25 +21,13 @@ public class ProductController {
     * */
     @GetMapping("/products")
     public ResponseEntity<Page<ProductListResponse>> getProductsList(
+            @RequestParam(required = false) String type,
+            @RequestParam(name = "category", required = false) Integer categoryId,
             @RequestParam(defaultValue = "0") Integer page,
             @RequestParam(defaultValue = "12") Integer size,
             @RequestParam(defaultValue = "createAt_desc") String sort
     ) {
-        Page<ProductListResponse> productsListResponse = productService.getProductsList(page, size, sort);
-        return ResponseEntity.ok(productsListResponse);
-    }
-
-    /*
-     * Filtered Product List
-     * */
-    @GetMapping("/{productType}/products")
-    public ResponseEntity<Page<ProductListResponse>> getProductListByProductType(
-            @PathVariable String productType,
-            @RequestParam(defaultValue = "0") Integer page,
-            @RequestParam(defaultValue = "12") Integer size,
-            @RequestParam(defaultValue = "createAt_desc") String sort
-    ) {
-        Page<ProductListResponse> productsListResponse = productService.getProductsListByProductType(productType, page, size, sort);
+        Page<ProductListResponse> productsListResponse = productService.getProductsList(type, categoryId, page, size, sort);
         return ResponseEntity.ok(productsListResponse);
     }
 
