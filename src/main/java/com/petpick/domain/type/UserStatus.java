@@ -1,4 +1,4 @@
-package com.petpick.domain;
+package com.petpick.domain.type;
 
 public enum UserStatus {
     ACTIVE,
