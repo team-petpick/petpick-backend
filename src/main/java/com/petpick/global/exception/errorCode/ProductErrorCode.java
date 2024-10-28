@@ -15,8 +15,10 @@ public enum ProductErrorCode implements ErrorCode {
     PRODUCT_ACCESS_DENIED("PRODUCT_005", "해당 상품에 대한 접근 권한이 없습니다.", HttpStatus.FORBIDDEN),
     INVALID_PRODUCT_STATUS("PRODUCT_006", "유효하지 않은 상품 상태입니다.", HttpStatus.BAD_REQUEST),
     INVALID_SORT_PARAMETER("PRODUCT_007", "유효하지 않은 정렬 조건입니다.", HttpStatus.BAD_REQUEST),
-    INVALID_PAGE_PARAMETER("PRODUCT_008", "페이지 정보가 올바르지 않습니다.", HttpStatus.BAD_REQUEST),
-    NO_PRODUCTS_AVAILABLE("PRODUCT_009", "조회 가능한 상품이 없습니다.", HttpStatus.NOT_FOUND);
+    INVALID_PAGE_PARAMETER("PRODUCT_008", "페이지를 생성하는데 실패했습니다.", HttpStatus.BAD_REQUEST),
+    NO_PRODUCTS_AVAILABLE("PRODUCT_009", "조회 가능한 상품이 없습니다.", HttpStatus.NOT_FOUND),
+    INVALID_TYPE_VALUE("PRODUCT_010", "상품의 타입이 존재하지 않습니다.", HttpStatus.BAD_REQUEST),
+    INVALID_CATEGORY_VALUE("PRODUCT_011", "해당 카테고리가 존재하지 않습니다.", HttpStatus.BAD_REQUEST);
 
     private final String errorCode;
     private final String message;
