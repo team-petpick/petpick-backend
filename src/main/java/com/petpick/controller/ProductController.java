@@ -5,10 +5,9 @@ import com.petpick.model.ProductDetailResponse;
 import com.petpick.model.ProductListResponse;
 import com.petpick.service.product.ProductService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -18,11 +17,15 @@ public class ProductController {
     private final ProductService productService;
 
     /*
-    * Total Product List
+    * Filtered Product List
     * */
-    @GetMapping("/products")
-    public ResponseEntity<List<ProductListResponse>> getAllProducts() {
-        List<ProductListResponse> productsListResponse = productService.getAllProducts();
+    @GetMapping
+    public ResponseEntity<Page<ProductListResponse>> getProductsList(
+            @RequestParam(defaultValue = "0") Integer page,
+            @RequestParam(defaultValue = "16") Integer size,
+            @RequestParam(defaultValue = "createAt_desc") String sort
+    ) {
+        Page<ProductListResponse> productsListResponse = productService.getProductsList(page, size, sort);
         return ResponseEntity.ok(productsListResponse);
     }
 
@@ -30,8 +33,8 @@ public class ProductController {
     * Detail Product Page
     * */
     @GetMapping("/products/{productId}")
-    public ResponseEntity<ProductDetailResponse> getProductById(@PathVariable Integer id) {
-        ProductDetailResponse productDetailResponse = productService.getProductById(id);
+    public ResponseEntity<ProductDetailResponse> getProductById(@PathVariable Integer productId) {
+        ProductDetailResponse productDetailResponse = productService.getProductById(productId);
         return ResponseEntity.ok(productDetailResponse);
     }
 
