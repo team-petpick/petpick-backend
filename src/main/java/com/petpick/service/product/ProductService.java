@@ -46,10 +46,18 @@ public class ProductService {
 
         Pageable pageable = PageRequest.of(page, size, sortOrder);
 
+        if(pageable.isPaged()){
+            throw new BaseException(ProductErrorCode.INVALID_PAGE_PARAMETER);
+        }
+
         // 필터링 조건 설정
         PetKind petKind = null;
         if (productType != null && !productType.isEmpty()) {
             petKind = PetKind.valueOf(productType.toUpperCase());
+        }
+
+        if(petKind == null){
+            throw new BaseException(ProductErrorCode.INVALID_TYPE_VALUE);
         }
 
         /*
@@ -58,6 +66,9 @@ public class ProductService {
         Page<Product> productsPage;
         if (petKind != null && categoryId != null) {
             Category category = categoryRepository.findByCategoryId(categoryId);
+            if(category == null){
+                throw new BaseException(ProductErrorCode.INVALID_CATEGORY_VALUE);
+            }
             productsPage = productRepository.findByPetKindAndCategory(petKind, category, pageable);
         } else if (petKind != null) {
             productsPage = productRepository.findByPetKind(petKind, pageable);
