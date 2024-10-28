@@ -53,27 +53,30 @@ public class ProductService {
         // 필터링 조건 설정
         PetKind petKind = null;
         if (productType != null && !productType.isEmpty()) {
-            petKind = PetKind.valueOf(productType.toUpperCase());
-        }
-
-        if(petKind == null){
-            throw new BaseException(ProductErrorCode.INVALID_TYPE_VALUE);
+            try {
+                petKind = PetKind.valueOf(productType.toUpperCase());
+            } catch (IllegalArgumentException e) {
+                throw new BaseException(ProductErrorCode.INVALID_TYPE_VALUE);
+            }
         }
 
         /*
         * 전체 -> 상품 타입 -> 카테고리 순이기 때문에 카테고리만으로 필터링하는 로직은 X
         * */
         Page<Product> productsPage;
-        if (petKind != null && categoryId != null) {
-            Category category = categoryRepository.findByCategoryId(categoryId);
-            if(category == null){
-                throw new BaseException(ProductErrorCode.INVALID_CATEGORY_VALUE);
-            }
-            productsPage = productRepository.findByPetKindAndCategory(petKind, category, pageable);
-        } else if (petKind != null) {
-            productsPage = productRepository.findByPetKind(petKind, pageable);
-        } else {
+        if(petKind == null){
             productsPage = productRepository.findAll(pageable);
+        } else {
+
+            if(categoryId == null){
+                productsPage = productRepository.findByPetKind(petKind, pageable);
+            } else{
+                Category category = categoryRepository.findByCategoryId(categoryId);
+                productsPage = productRepository.findByPetKindAndCategory(petKind, category, pageable);
+                if(category == null){
+                    throw new BaseException(ProductErrorCode.INVALID_CATEGORY_VALUE);
+                }
+            }
         }
 
         return productsPage.map(ProductListResponse::new);
