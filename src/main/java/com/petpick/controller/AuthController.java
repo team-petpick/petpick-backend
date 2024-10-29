@@ -39,8 +39,8 @@ public class AuthController {
     private int cookieMaxAge;
 
     /*
-    * request for first login or refresh token expires
-    * */
+     * request for first login or refresh token expires
+     * */
     @PostMapping("/google")
     public ResponseEntity<?> googleCallback(@RequestBody AuthorizationCodeResponse authorizationCodeResponse, HttpServletResponse httpServletResponse) {
         String code = authorizationCodeResponse.getCode();
@@ -69,7 +69,7 @@ public class AuthController {
 
         CookieUtil.addCookie(httpServletResponse, "refreshToken", refreshToken, cookieMaxAge);
 
-            // include token in response
+        // include token in response
         return ResponseEntity.ok(Map.of("access_token", accessToken));
     }
 
@@ -104,8 +104,8 @@ public class AuthController {
     }
 
     /*
-    * request when access token expires
-    * */
+     * request when access token expires
+     * */
     @PostMapping("/token")
     public ResponseEntity<?> regenerateJWT(HttpServletRequest request) {
 
