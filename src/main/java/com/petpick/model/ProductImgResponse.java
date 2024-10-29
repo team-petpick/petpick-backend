@@ -14,4 +14,8 @@ public class ProductImgResponse {
         this.productImgUrl = productImg.getProductImgUrl();
         this.productImgName = productImg.getProductImgUrl();
     }
+    private String extractFileNameFromUrl(String url) {
+        return url.substring(url.lastIndexOf("/") + 1);
+    }
+
 }

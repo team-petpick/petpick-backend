@@ -28,6 +28,7 @@ dependencies {
     runtimeOnly 'com.mysql:mysql-connector-j'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     implementation("org.springframework.boot:spring-boot-starter-actuator")
+    implementation 'io.awspring.cloud:spring-cloud-aws-starter-s3:3.0.0'
 
     // jjwt
     implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
