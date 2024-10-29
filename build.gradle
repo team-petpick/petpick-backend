@@ -35,8 +35,8 @@ dependencies {
 
     // OAuth2 클라이언트 (구글 로그인)
 
-//    implementation 'com.google.oauth-client:google-oauth-client:1.33.1'
-//    implementation 'com.google.api-client:google-api-client:1.33.0'
+    implementation 'com.google.oauth-client:google-oauth-client:1.33.1'
+    implementation 'com.google.api-client:google-api-client:1.33.0'
 
     // 스프링 시큐리티 추가
 }
