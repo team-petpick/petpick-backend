@@ -4,14 +4,17 @@ import com.petpick.domain.Likes;
 import com.petpick.domain.Product;
 import com.petpick.domain.User;
 import com.petpick.global.exception.BaseException;
+import com.petpick.global.exception.errorCode.LikesErrorCode;
 import com.petpick.global.exception.errorCode.ProductErrorCode;
 import com.petpick.global.exception.errorCode.UserErrorCode;
 import com.petpick.repository.LikesRepository;
 import com.petpick.repository.ProductRepository;
 import com.petpick.repository.UserRepository;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -25,8 +28,13 @@ public class LikesService {
         User user = getUserByEmail(userEmail);
         Product product = getProductById(productId);
 
-        Likes likes = new Likes(user, product);
-        likesRepository.save(likes);
+        Optional<Likes> likes = likesRepository.findByUserAndProduct(user, product);
+        if (likes.isPresent()) {
+            throw new BaseException(LikesErrorCode.ALREADY_LIKE_PRODUCT);
+        }
+
+        Likes likesEntity = new Likes(user, product);
+        likesRepository.save(likesEntity);
     }
 
     @Transactional
@@ -34,7 +42,12 @@ public class LikesService {
         User user = getUserByEmail(userEmail);
         Product product = getProductById(productId);
 
-        likesRepository.deleteByUserAndProduct(user, product);
+        Optional<Likes> likes = likesRepository.findByUserAndProduct(user, product);
+        if (!likes.isPresent()) {
+            throw new BaseException(LikesErrorCode.ALREADY_UNLIKE_PRODUCT);
+        }
+
+        likesRepository.delete(likes.get());
     }
 
     private User getUserByEmail(String userEmail) {
