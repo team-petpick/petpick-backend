@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.Optional;
+
 @Entity
 @Builder
 @Getter
@@ -25,4 +27,9 @@ public class Likes {
     @ManyToOne
     @JoinColumn(name = "product_id")
     private Product product;
+
+    public Likes(User user, Product product) {
+        this.user = user;
+        this.product = product;
+    }
 }
