@@ -39,6 +39,7 @@ dependencies {
     implementation 'com.google.api-client:google-api-client:1.33.0'
 
     // 스프링 시큐리티 추가
+
 }
 
 tasks.named('test') {
