@@ -6,6 +6,7 @@ import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -52,12 +53,20 @@ public class TokenProvider {
                 .compact();
     }
 
+    public String resolveAccessToken(HttpServletRequest request) {
+        String bearerToken = request.getHeader("Authorization");
+        if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
+            return bearerToken.substring(7);
+        }
+        return null;
+    }
+
     public boolean validateToken(String token) {
         try {
             Jwts.parserBuilder()
-                    .setSigningKey(jwtSecretKey)
+                    .setSigningKey(getSigningKey())
                     .build()
-                    .parseClaimsJws(token);
+                    .parseClaimsJws(token); // 서명 및 만료 검증
             return true;
         } catch (JwtException | IllegalArgumentException e) {
             return false;
@@ -67,7 +76,7 @@ public class TokenProvider {
     public String getUserEmailFromToken(String token) {
         try {
             Claims claims = Jwts.parserBuilder()
-                    .setSigningKey(jwtSecretKey)
+                    .setSigningKey(getSigningKey())
                     .build()
                     .parseClaimsJws(token)
                     .getBody();
