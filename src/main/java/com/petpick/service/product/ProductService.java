@@ -1,37 +1,101 @@
 package com.petpick.service.product;
 
+import com.petpick.domain.Category;
 import com.petpick.domain.Product;
+import com.petpick.domain.ProductImg;
+import com.petpick.domain.type.PetKind;
 import com.petpick.global.exception.BaseException;
 import com.petpick.global.exception.errorCode.ProductErrorCode;
 import com.petpick.model.ProductDetailResponse;
 import com.petpick.model.ProductListResponse;
+import com.petpick.repository.CategoryRepository;
 import com.petpick.repository.LikesRepository;
+import com.petpick.repository.ProductImgRepository;
 import com.petpick.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class ProductService {
 
     private final ProductRepository productRepository;
+    private final ProductImgRepository productImgRepository;
     private final LikesRepository likesRepository;
+    private final CategoryRepository categoryRepository;
 
-    public List<ProductListResponse> getAllProducts() {
-        List<Product> products = productRepository.findAll();
-        return products.stream()
-                .map(ProductListResponse::new)
-                .collect(Collectors.toList());
+    public Page<ProductListResponse> getProductsList(
+            String productType,
+            Integer categoryId,
+            Integer page,
+            Integer size,
+            String sort
+    ) {
+        Sort sortOrder = Sort.by("createAt").descending(); // 기본 정렬
+
+        if (sort != null && !sort.isEmpty()) {
+            String[] sortParams = sort.split("_");
+            String sortBy = sortParams[0];
+            String direction = sortParams.length > 1 ? sortParams[1] : "desc";
+
+            sortOrder = direction.equalsIgnoreCase("desc")
+                    ? Sort.by(sortBy).descending()
+                    : Sort.by(sortBy).ascending();
+        }
+
+        Pageable pageable = PageRequest.of(page, size, sortOrder);
+
+        if(pageable.isUnpaged()){
+            throw new BaseException(ProductErrorCode.INVALID_PAGE_PARAMETER);
+        }
+
+        // 필터링 조건 설정
+        PetKind petKind = null;
+        if (productType != null && !productType.isEmpty()) {
+            try {
+                petKind = PetKind.valueOf(productType.toUpperCase());
+            } catch (IllegalArgumentException e) {
+                throw new BaseException(ProductErrorCode.INVALID_TYPE_VALUE);
+            }
+        }
+
+        /*
+        * 전체 -> 상품 타입 -> 카테고리 순이기 때문에 카테고리만으로 필터링하는 로직은 X
+        * */
+        Page<Product> productsPage;
+        if(petKind == null){
+            productsPage = productRepository.findAll(pageable);
+        } else {
+            if(categoryId == null){
+                productsPage = productRepository.findByPetKind(petKind, pageable);
+            } else{
+                Category category = categoryRepository.findByCategoryId(categoryId);
+                productsPage = productRepository.findByPetKindAndCategory(petKind, category, pageable);
+                if(category == null){
+                    throw new BaseException(ProductErrorCode.INVALID_CATEGORY_VALUE);
+                }
+            }
+        }
+
+        return productsPage.map(product -> {
+            List<ProductImg> productImgs = productImgRepository.findAllByProduct_productId(product.getProductId());
+            return new ProductListResponse(product, productImgs);
+        });
     }
 
-    public ProductDetailResponse getProductById(Integer id) { // = product id
+    public ProductDetailResponse getProductById(Integer id) { // =product id
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new BaseException(ProductErrorCode.PRODUCT_NOT_FOUND));
         int likesCount = likesRepository.countByProduct_ProductId(id);
 
-        return new ProductDetailResponse(product, likesCount);
-    }
+        List<ProductImg> productImgs = productImgRepository.findAllByProduct_productId(id);
 
+        return new ProductDetailResponse(product, productImgs, likesCount);
+    }
 }

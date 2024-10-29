@@ -5,10 +5,9 @@ import com.petpick.model.ProductDetailResponse;
 import com.petpick.model.ProductListResponse;
 import com.petpick.service.product.ProductService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -18,20 +17,42 @@ public class ProductController {
     private final ProductService productService;
 
     /*
-    * Total Product List
+    * Filtered Product List
     * */
     @GetMapping("/products")
-    public ResponseEntity<List<ProductListResponse>> getAllProducts() {
-        List<ProductListResponse> productsListResponse = productService.getAllProducts();
+    public ResponseEntity<Page<ProductListResponse>> getProductsList(
+            @RequestParam(required = false) String type,
+            @RequestParam(name = "category", required = false) Integer categoryId,
+            @RequestParam(defaultValue = "0") Integer page,
+            @RequestParam(defaultValue = "12") Integer size,
+            @RequestParam(defaultValue = "createAt_desc") String sort
+    ) {
+        Page<ProductListResponse> productsListResponse = productService.getProductsList(type, categoryId, page, size, sort);
         return ResponseEntity.ok(productsListResponse);
     }
 
     /*
     * Detail Product Page
     * */
-    @GetMapping("/products/{id}")
-    public ResponseEntity<ProductDetailResponse> getProductById(@PathVariable Integer id) {
-        ProductDetailResponse productDetailResponse = productService.getProductById(id);
+    @GetMapping("/products/{productId}")
+    public ResponseEntity<ProductDetailResponse> getProductById(@PathVariable Integer productId) {
+        ProductDetailResponse productDetailResponse = productService.getProductById(productId);
         return ResponseEntity.ok(productDetailResponse);
+    }
+
+    /*
+    * Press Like button
+    * */
+    @PostMapping("/products/{productId}/like")
+    public ResponseEntity<ProductDetailResponse> addProductLike(@PathVariable Integer productId, @RequestBody Product product) {
+        return null;
+    }
+
+    /*
+    * Cancel Like button
+    * */
+    @DeleteMapping("/products/{productId}/like")
+    public ResponseEntity<ProductDetailResponse> deleteProductLike(@PathVariable Integer productId, @RequestBody Product product) {
+        return null;
     }
 }
