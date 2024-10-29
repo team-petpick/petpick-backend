@@ -106,6 +106,10 @@ public class ProductService {
             }
         }
 
+        if(!productsPage.hasContent()){
+            throw new BaseException(ProductErrorCode.NO_PRODUCTS_AVAILABLE);
+        }
+
         return productsPage.map(product -> {
             List<ProductImg> productImgs = productImgRepository.findAllByProduct_productId(product.getProductId());
             return new ProductListResponse(product, productImgs);
@@ -121,4 +125,6 @@ public class ProductService {
 
         return new ProductDetailResponse(product, productImgs, likesCount);
     }
+
+
 }
