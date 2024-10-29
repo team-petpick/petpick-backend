@@ -25,9 +25,10 @@ public class ProductController {
             @RequestParam(name = "category", required = false) Integer categoryId,
             @RequestParam(defaultValue = "0") Integer page,
             @RequestParam(defaultValue = "12") Integer size,
-            @RequestParam(defaultValue = "createAt_desc") String sort
+            @RequestParam(defaultValue = "createAt_desc") String sort,
+            @RequestParam(required = false) String search
     ) {
-        Page<ProductListResponse> productsListResponse = productService.getProductsList(type, categoryId, page, size, sort);
+        Page<ProductListResponse> productsListResponse = productService.getProductsList(type, categoryId, page, size, sort, search);
         return ResponseEntity.ok(productsListResponse);
     }
 
