@@ -1,0 +1,75 @@
+name: CICD Test
+run-name: Running
+on:
+  push:
+    branches:
+      - main
+      - 'releases/**'
+
+env:
+  AWS_REGION: ap-northeast-2
+  AWS_S3_BUCKET: petpick-bucket
+  AWS_CODE_DEPLOY_APPLICATION: cicd-testserver-CD
+  AWS_CODE_DEPLOY_GROUP: cicd-testserver-CD-group
+
+jobs:
+  build-with-gradle:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+        with:
+          ref: main
+
+      - name: Install JDK 21
+        uses: actions/setup-java@v3
+        with:
+          java-version: '21'
+          distribution: 'corretto'
+
+      - name: Grant Execute Permission for Gradlew
+        run: chmod +x ./gradlew
+
+      - name: Add Production properties
+        run: |
+          rm src/main/resources/application.properties
+          echo '${{ secrets.PRD_PROPERTIES }}' &> src/main/resources/application.properties
+
+      - name: Build Project
+        run: ./gradlew clean build -x test
+
+      - name: Prepare Deployment Package
+        run: |
+          mkdir deployment
+          ls -la
+          cp build/libs/*.jar deployment/
+          cp appspec.yml deployment/
+          cp -r scripts/ deployment/
+          ls -la deployment/
+          # Ensure we're in the repository root
+          # cd $GITHUB_WORKSPACE
+          # pwd
+          # ls -la
+
+      - name: AWS Credential Configuration
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-region: ${{ env.AWS_REGION }}
+          aws-access-key-id: ${{ secrets.CICD_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.CICD_SECRET_KEY }}
+
+      - name: Upload to S3
+        run: |
+          aws deploy push \
+            --application-name ${{ env.AWS_CODE_DEPLOY_APPLICATION }} \
+            --ignore-hidden-files \
+            --s3-location s3://$AWS_S3_BUCKET/cicdtest/$GITHUB_SHA.zip \
+            --source deployment
+
+      - name: Deploy to EC2
+        run: |
+          aws deploy create-deployment \
+            --application-name ${{ env.AWS_CODE_DEPLOY_APPLICATION }} \
+            --deployment-config-name CodeDeployDefault.AllAtOnce \
+            --deployment-group-name ${{ env.AWS_CODE_DEPLOY_GROUP }} \
+            --s3-location bucket=$AWS_S3_BUCKET,key=cicdtest/$GITHUB_SHA.zip,bundleType=zip
