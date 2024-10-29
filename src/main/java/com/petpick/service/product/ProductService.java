@@ -35,7 +35,8 @@ public class ProductService {
             Integer categoryId,
             Integer page,
             Integer size,
-            String sort
+            String sort,
+            String search
     ) {
         Sort sortOrder = Sort.by("createAt").descending(); // 기본 정렬
 
@@ -69,16 +70,38 @@ public class ProductService {
         * 전체 -> 상품 타입 -> 카테고리 순이기 때문에 카테고리만으로 필터링하는 로직은 X
         * */
         Page<Product> productsPage;
-        if(petKind == null){
-            productsPage = productRepository.findAll(pageable);
+        if(search.isEmpty()) {
+            System.out.println("Empty is Entered");
+            if (petKind == null) {
+                productsPage = productRepository.findAll(pageable);
+            } else {
+                if (categoryId == null) {
+                    productsPage = productRepository.findByPetKind(petKind, pageable);
+                } else {
+                    Category category = categoryRepository.findByCategoryId(categoryId);
+                    if (category == null) {
+                        throw new BaseException(ProductErrorCode.INVALID_CATEGORY_VALUE);
+                    }
+                    productsPage = productRepository.findByPetKindAndCategory(petKind, category, pageable);
+                }
+            }
         } else {
-            if(categoryId == null){
-                productsPage = productRepository.findByPetKind(petKind, pageable);
-            } else{
-                Category category = categoryRepository.findByCategoryId(categoryId);
-                productsPage = productRepository.findByPetKindAndCategory(petKind, category, pageable);
-                if(category == null){
+            if (petKind == null) {
+                if (categoryId == null) {
+                    productsPage = productRepository.findByProductNameContaining(search, pageable);
+                } else {
+                    // 카테고리만으로 필터링하지 않으므로 예외 처리
                     throw new BaseException(ProductErrorCode.INVALID_CATEGORY_VALUE);
+                }
+            } else {
+                if (categoryId == null) {
+                    productsPage = productRepository.findByPetKindAndProductNameContaining(petKind, search, pageable);
+                } else {
+                    Category category = categoryRepository.findByCategoryId(categoryId);
+                    if (category == null) {
+                        throw new BaseException(ProductErrorCode.INVALID_CATEGORY_VALUE);
+                    }
+                    productsPage = productRepository.findByPetKindAndCategoryAndProductNameContaining(petKind, category, search, pageable);
                 }
             }
         }
