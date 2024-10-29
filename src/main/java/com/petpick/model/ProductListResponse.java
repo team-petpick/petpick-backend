@@ -1,8 +1,12 @@
 package com.petpick.model;
 
 import com.petpick.domain.Product;
+import com.petpick.domain.ProductImg;
 import com.petpick.domain.type.ProductStatus;
 import lombok.Data;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 public class ProductListResponse {
@@ -14,9 +18,9 @@ public class ProductListResponse {
     private Integer productPrice;
     private Integer productSale;
     private Integer productCnt;
-    // private ProductImgResponse productImg; // Product Image
+    private List<ProductImgResponse> productImg; // Product Image
 
-    public ProductListResponse(Product product) {
+    public ProductListResponse(Product product, List<ProductImg> productImg) {
         this.productId = product.getProductId();
         this.category = new CategoryResponse(product.getCategory());
         this.productName = product.getProductName();
@@ -25,5 +29,6 @@ public class ProductListResponse {
         this.productPrice = product.getProductPrice();
         this.productSale = product.getProductSale();
         this.productCnt = product.getProductCnt();
+        this.productImg = productImg.stream().map(ProductImgResponse::new).collect(Collectors.toList());
     }
 }
