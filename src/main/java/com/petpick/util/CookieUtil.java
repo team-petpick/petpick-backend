@@ -12,7 +12,7 @@ public class CookieUtil {
         Cookie cookie = new Cookie(name, value);
         cookie.setPath("/");
         cookie.setHttpOnly(false); // https 등록 시 true로 변경
-        cookie.setSecure(true);
+        cookie.setSecure(false);
         cookie.setMaxAge(maxAge);
 
         response.addCookie(cookie);
