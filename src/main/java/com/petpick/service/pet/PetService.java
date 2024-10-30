@@ -42,7 +42,7 @@ public class PetService {
     private String regionName;
 
     // Create a new pet
-    public PetInfoResponse createPet(Integer userId, String petName, PetKind petKind,
+    public PetInfoResponse createPet(Integer userId, String petName, String petSpecies, PetKind petKind,
                                      Integer petAge, PetGender petGender, MultipartFile petImg) throws IOException {
 
         // Retrieve the User
@@ -73,6 +73,7 @@ public class PetService {
         Pet pet = Pet.builder()
                 .user(user)
                 .petName(petName)
+                .petSpecies(petSpecies)
                 .petKind(petKind)
                 .petAge(petAge)
                 .petGender(petGender)
@@ -101,13 +102,14 @@ public class PetService {
     }
 
     // Update pet
-    public PetInfoResponse updatePet(Integer petId, String petName, PetKind petKind,
+    public PetInfoResponse updatePet(Integer petId, String petName,String petSpecies, PetKind petKind,
                                      Integer petAge, PetGender petGender, MultipartFile petImg) throws IOException {
 
         Pet pet = petRepository.findById(petId)
                 .orElseThrow(() -> new RuntimeException("Pet not found"));
 
         String newPetName = (petName != null) ? petName : pet.getPetName();
+        String newPetSpecies = (petSpecies != null) ? petSpecies : pet.getPetSpecies();
         PetKind newPetKind = (petKind != null) ? petKind : pet.getPetKind();
         Integer newPetAge = (petAge != null) ? petAge : pet.getPetAge();
         PetGender newPetGender = (petGender != null) ? petGender : pet.getPetGender();
@@ -137,7 +139,7 @@ public class PetService {
         }
 
         // Update pet
-        Pet updatedPet = pet.withUpdatedFields(newPetName, newPetKind, newPetAge, newPetGender, petImgUrl);
+        Pet updatedPet = pet.withUpdatedFields(newPetName, newPetSpecies, newPetKind, newPetAge, newPetGender, petImgUrl);
         updatedPet = petRepository.save(updatedPet);
 
         return new PetInfoResponse(updatedPet);
@@ -183,7 +185,7 @@ public class PetService {
         String petImgUrl = getFileUrl(bucketName, s3Key);
 
         // Update pet with new image
-        Pet updatedPet = pet.withUpdatedFields(pet.getPetName(), pet.getPetKind(), pet.getPetAge(), pet.getPetGender(), petImgUrl);
+        Pet updatedPet = pet.withUpdatedFields(pet.getPetName(), pet.getPetSpecies(), pet.getPetKind(), pet.getPetAge(), pet.getPetGender(), petImgUrl);
         updatedPet = petRepository.save(updatedPet);
 
         return new PetInfoResponse(updatedPet);
@@ -198,7 +200,7 @@ public class PetService {
             deleteImageFromS3(pet.getPetImg());
 
             // Update petImg to null
-            Pet updatedPet = pet.withUpdatedFields(pet.getPetName(), pet.getPetKind(), pet.getPetAge(), pet.getPetGender(), null);
+            Pet updatedPet = pet.withUpdatedFields(pet.getPetName(), pet.getPetSpecies(), pet.getPetKind(), pet.getPetAge(), pet.getPetGender(), null);
             petRepository.save(updatedPet);
         }
     }

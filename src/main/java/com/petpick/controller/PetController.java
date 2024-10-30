@@ -24,12 +24,13 @@ public class PetController {
     public PetInfoResponse createPet(
             @RequestParam("userId") Integer userId,
             @RequestParam("petName") String petName,
+            @RequestParam("petSpecies") String petSpecies,
             @RequestParam("petKind") PetKind petKind,
             @RequestParam(value = "petAge", required = false) Integer petAge,
             @RequestParam(value = "petGender", required = false) PetGender petGender,
             @RequestParam(value = "petImg", required = false) MultipartFile petImg) throws IOException {
 
-        return petService.createPet(userId, petName, petKind, petAge, petGender, petImg);
+        return petService.createPet(userId, petName, petSpecies, petKind, petAge, petGender, petImg);
     }
 
     // Get pet by ID
@@ -49,12 +50,13 @@ public class PetController {
     public PetInfoResponse updatePet(
             @PathVariable Integer petId,
             @RequestParam(value = "petName", required = false) String petName,
+            @RequestParam(value = "petSpecies", required = false) String petSpecies,
             @RequestParam(value = "petKind", required = false) PetKind petKind,
             @RequestParam(value = "petAge", required = false) Integer petAge,
             @RequestParam(value = "petGender", required = false) PetGender petGender,
             @RequestParam(value = "petImg", required = false) MultipartFile petImg) throws IOException {
 
-        return petService.updatePet(petId, petName, petKind, petAge, petGender, petImg);
+        return petService.updatePet(petId, petName, petSpecies, petKind, petAge, petGender, petImg);
     }
 
     // Delete pet
