@@ -1,5 +1,6 @@
 package com.petpick.controller;
 
+import com.nimbusds.oauth2.sdk.token.AccessToken;
 import com.petpick.domain.User;
 import com.petpick.global.exception.BaseException;
 import com.petpick.global.exception.errorCode.AuthErrorCode;
@@ -64,6 +65,10 @@ public class AuthController {
         String accessToken = tokenProvider.createAccessToken(user);
         String refreshToken = tokenProvider.createRefreshToken(user);
 
+        if (accessToken == null || refreshToken == null) {
+            throw new BaseException(AuthErrorCode.FAILED_TO_GENERATE_JWT);
+        }
+
         // save the refresh token to DB
         userService.saveRefreshToken(user, refreshToken);
 
@@ -119,7 +124,7 @@ public class AuthController {
         String refreshToken = refreshTokenCookie.get().getValue();
 
         // validate refresh token
-        if (!tokenProvider.validateToken(refreshToken)) {
+        if (tokenProvider.validateToken(refreshToken) == null) {
             throw new BaseException(AuthErrorCode.INVALID_REFRESH_TOKEN);
         }
 
@@ -134,10 +139,14 @@ public class AuthController {
         User user = userOptional.get();
 
         if (!refreshToken.equals(user.getUserRefreshToken())) {
-            throw new BaseException(AuthErrorCode.REFRESH_TOKEN_MISMATCH);
+            throw new BaseException(AuthErrorCode.REFRESH_TOKEN_NOT_FOUND);
         }
 
         String newAccessToken = tokenProvider.createAccessToken(user);
+
+        if(newAccessToken == null || newAccessToken.isEmpty()){
+            throw new BaseException(AuthErrorCode.FAILED_TO_GENERATE_JWT);
+        }
 
         return ResponseEntity.ok(Map.of("access_token", newAccessToken));
     }
