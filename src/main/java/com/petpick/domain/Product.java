@@ -26,6 +26,9 @@ public class Product extends BaseTime {
     @JoinColumn(name = "category_id")
     private Category category;
 
+    @Column(name = "product_likes_total")
+    private Integer productLikesTotal;
+
     @Column(name = "product_name")
     private String productName;
 
@@ -48,4 +51,14 @@ public class Product extends BaseTime {
     @Enumerated(EnumType.STRING)
     @Column(name = "product_status")
     private ProductStatus productStatus;
+
+    public void increaseLikes(){
+        this.productLikesTotal++;
+    }
+
+    public void decreaseLikes(){
+        if(this.productLikesTotal > 0){
+            this.productLikesTotal--;
+        }
+    }
 }

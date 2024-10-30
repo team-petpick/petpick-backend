@@ -40,6 +40,8 @@ public class ProductService {
     ) {
         Sort sortOrder = Sort.by("createAt").descending(); // 기본 정렬
 
+        System.out.println(search);
+
         if (sort != null && !sort.isEmpty()) {
             String[] sortParams = sort.split("_");
             String sortBy = sortParams[0];
@@ -70,7 +72,7 @@ public class ProductService {
         * 전체 -> 상품 타입 -> 카테고리 순이기 때문에 카테고리만으로 필터링하는 로직은 X
         * */
         Page<Product> productsPage;
-        if(search.isEmpty()) {
+        if(search == null || search.isEmpty()) {
             System.out.println("Empty is Entered");
             if (petKind == null) {
                 productsPage = productRepository.findAll(pageable);
