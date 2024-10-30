@@ -41,4 +41,9 @@ public class Pet extends BaseTime {
     @Enumerated(EnumType.STRING)
     @Column(name = "pet_gender")
     private PetGender petGender;
+
+    public Pet withUpdatedFields(String petName, PetKind petKind, Integer petAge,
+                                 PetGender petGender, String petImg) {
+        return new Pet(this.petId, this.user, petName, petKind, petImg, petAge, petGender);
+    }
 }
