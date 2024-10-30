@@ -28,6 +28,10 @@ public class Pet extends BaseTime {
     @Column(name = "pet_name")
     private String petName;
 
+    @Column(name = "pet_species")
+    private String petSpecies;
+
+
     @Enumerated(EnumType.STRING)
     @Column(name = "pet_kind")
     private PetKind petKind;
@@ -45,8 +49,8 @@ public class Pet extends BaseTime {
     @Column(name = "pet_gender")
     private PetGender petGender;
 
-    public Pet withUpdatedFields(String petName, PetKind petKind, Integer petAge,
+    public Pet withUpdatedFields(String petName, String petSpecies, PetKind petKind, Integer petAge,
                                  PetGender petGender, String petImg) {
-        return new Pet(this.petId, this.user, petName, petKind, petImg, petAge, petGender);
+        return new Pet(this.petId, this.user, petName, petSpecies, petKind, petImg, petAge, petGender);
     }
 }
