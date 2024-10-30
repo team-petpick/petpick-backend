@@ -61,29 +61,23 @@ public class TokenProvider {
         return null;
     }
 
-    public boolean validateToken(String token) {
+    public Claims validateToken(String token) {
         try {
-            Jwts.parserBuilder()
+            return Jwts.parserBuilder()
                     .setSigningKey(getSigningKey())
                     .build()
-                    .parseClaimsJws(token); // 서명 및 만료 검증
-            return true;
+                    .parseClaimsJws(token) // 서명 및 만료 검증
+                    .getBody();
         } catch (JwtException | IllegalArgumentException e) {
-            return false;
+            return null;
         }
     }
 
     public String getUserEmailFromToken(String token) {
-        try {
-            Claims claims = Jwts.parserBuilder()
-                    .setSigningKey(getSigningKey())
-                    .build()
-                    .parseClaimsJws(token)
-                    .getBody();
-
-            return claims.getSubject();
-        } catch (JwtException | IllegalArgumentException e) {
+        Claims claims = validateToken(token);
+        if(claims == null) {
             throw new IllegalStateException("Invalid token");
         }
+        return claims.getSubject();
     }
 }
