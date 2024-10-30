@@ -56,6 +56,7 @@ public class ProductController {
 
         likesService.addLike(productId, userEmail);
 
+
         return ResponseEntity.ok("Successfully added like to the product");
     }
 

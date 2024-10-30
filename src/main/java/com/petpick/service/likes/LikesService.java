@@ -35,6 +35,9 @@ public class LikesService {
 
         Likes likesEntity = new Likes(user, product);
         likesRepository.save(likesEntity);
+
+        product.increaseLikes();
+        productRepository.save(product);
     }
 
     @Transactional
@@ -48,6 +51,9 @@ public class LikesService {
         }
 
         likesRepository.delete(likes.get());
+
+        product.decreaseLikes();
+        productRepository.save(product);
     }
 
     private User getUserByEmail(String userEmail) {
