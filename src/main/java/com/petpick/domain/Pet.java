@@ -32,6 +32,9 @@ public class Pet extends BaseTime {
     @Column(name = "pet_kind")
     private PetKind petKind;
 
+    @Column(name = "pet_species")
+    private String petSpecies;
+
     @Column(name = "pet_img")
     private String petImg;
 
