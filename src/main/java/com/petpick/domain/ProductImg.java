@@ -19,11 +19,14 @@ public class ProductImg {
     @JoinColumn(name = "product_id")
     private Product product;
 
+    @Column(name = "product_image_thumbnail")
+    private Integer productImgThumb;
+
     @Column(name = "product_img_url")
     private String productImgUrl;
 
     // Business method to create a new instance with updated URL
-    public ProductImg withUpdatedUrl(String newUrl) {
-        return new ProductImg(this.productImgId, this.product, newUrl);
+    public ProductImg withUpdatedFields(String newUrl, Integer newThumb) {
+        return new ProductImg(this.productImgId, this.product, newThumb, newUrl);
     }
 }
