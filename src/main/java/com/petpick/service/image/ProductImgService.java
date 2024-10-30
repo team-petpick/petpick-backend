@@ -34,7 +34,7 @@ public class ProductImgService {
     @Autowired
     private S3Client s3Client;
 
-    @Value("${spring.cloud.aws.s3.bucket}")
+    @Value("${cloud.aws.s3.bucket}")
     private String bucketName;
 
     public ProductImgResponse uploadImage(Integer productId, MultipartFile file) throws IOException {
