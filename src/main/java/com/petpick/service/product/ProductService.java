@@ -40,8 +40,6 @@ public class ProductService {
     ) {
         Sort sortOrder = Sort.by("createAt").descending(); // 기본 정렬
 
-        System.out.println(search);
-
         if (sort != null && !sort.isEmpty()) {
             String[] sortParams = sort.split("_");
             String sortBy = sortParams[0];
