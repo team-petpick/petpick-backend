@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,9 +23,15 @@ public class OrderService {
     private final OrderDetailRepository orderDetailRepository;
     private final ProductImgRepository productImgRepository;
 
-    public Page<OrderResponse> getOrderHistory(Integer userId, int page, int size) {
+    public Page<OrderResponse> getOrderHistory(Integer userId, Integer page, Integer size, Integer month) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createAt"));
-        Page<Orders> ordersPage = ordersRepository.findByUserUserId(userId, pageable);
+
+        // 현재 날짜로부터 month 개월 전의 날짜를 계산
+        LocalDateTime endDate = LocalDateTime.now();
+        LocalDateTime startDate = endDate.minusMonths(month);
+
+        // 수정된 리포지토리 메서드를 사용하여 주문 조회
+        Page<Orders> ordersPage = ordersRepository.findByUserUserIdAndCreateAtBetween(userId, startDate, endDate, pageable);
 
         List<OrderResponse> orderResponses = new ArrayList<>();
         for (Orders order : ordersPage.getContent()) {
