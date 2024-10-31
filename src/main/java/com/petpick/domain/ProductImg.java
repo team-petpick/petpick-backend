@@ -24,4 +24,7 @@ public class ProductImg {
 
     @Column(name = "product_img_url")
     private String productImgUrl;
+
+    @Column(name = "product_image_thumbnail")
+    private Integer productImgThumb;
 }
