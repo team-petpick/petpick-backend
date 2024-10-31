@@ -24,7 +24,7 @@ public class Orders extends BaseTime {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "address_id")
     private Address address;
 
