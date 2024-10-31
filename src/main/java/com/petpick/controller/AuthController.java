@@ -3,6 +3,7 @@ package com.petpick.controller;
 import com.petpick.domain.User;
 import com.petpick.global.exception.BaseException;
 import com.petpick.global.exception.errorCode.AuthErrorCode;
+import com.petpick.global.exception.errorCode.UserErrorCode;
 import com.petpick.global.response.SuccessResponse;
 import com.petpick.model.AuthorizationCodeResponse;
 import com.petpick.model.GoogleTokenResponse;
@@ -18,8 +19,11 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.MulticastSocket;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
@@ -64,13 +68,22 @@ public class AuthController {
         String accessToken = tokenProvider.createAccessToken(user);
         String refreshToken = tokenProvider.createRefreshToken(user);
 
+        if (accessToken == null || refreshToken == null) {
+            throw new BaseException(AuthErrorCode.FAILED_TO_GENERATE_JWT);
+        }
+
         // save the refresh token to DB
         userService.saveRefreshToken(user, refreshToken);
 
         CookieUtil.addCookie(httpServletResponse, "refreshToken", refreshToken, cookieMaxAge);
 
+        MultiValueMap<String, String> dataForLocalStorage = new LinkedMultiValueMap<>();
+        dataForLocalStorage.add("access_token", accessToken);
+        dataForLocalStorage.add("user_name", user.getUserName());
+        dataForLocalStorage.add("user_profile", user.getUserImg());
+
         // include token in response
-        return ResponseEntity.ok(Map.of("access_token", accessToken));
+        return ResponseEntity.ok(dataForLocalStorage);
     }
 
     @PostMapping("/logout")
@@ -119,7 +132,7 @@ public class AuthController {
         String refreshToken = refreshTokenCookie.get().getValue();
 
         // validate refresh token
-        if (!tokenProvider.validateToken(refreshToken)) {
+        if (tokenProvider.validateToken(refreshToken) == null) {
             throw new BaseException(AuthErrorCode.INVALID_REFRESH_TOKEN);
         }
 
@@ -128,16 +141,20 @@ public class AuthController {
         Optional<User> userOptional = userService.findByUserEmail(userEmail);
 
         if (userOptional.isEmpty()) {
-            throw new BaseException(AuthErrorCode.INVALID_USER_EMAIL);
+            throw new BaseException(UserErrorCode.EMPTY_MEMBER);
         }
 
         User user = userOptional.get();
 
         if (!refreshToken.equals(user.getUserRefreshToken())) {
-            throw new BaseException(AuthErrorCode.REFRESH_TOKEN_MISMATCH);
+            throw new BaseException(AuthErrorCode.REFRESH_TOKEN_NOT_FOUND);
         }
 
         String newAccessToken = tokenProvider.createAccessToken(user);
+
+        if(newAccessToken == null || newAccessToken.isEmpty()){
+            throw new BaseException(AuthErrorCode.FAILED_TO_GENERATE_JWT);
+        }
 
         return ResponseEntity.ok(Map.of("access_token", newAccessToken));
     }

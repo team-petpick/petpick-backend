@@ -31,5 +31,24 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
 
     @EntityGraph(attributePaths = {"seller", "category"})
     Page<Product> findByPetKindAndCategoryAndProductNameContaining(PetKind petKind, Category category, String productName, Pageable pageable);
-    
+
+//    @Query("SELECT p FROM Product p " +
+//            "LEFT JOIN p.likes l " +
+//            "GROUP BY p " +
+//            "ORDER BY COUNT(l) DESC")
+//    Page<Product> findAllOrderByLikesCountDesc(Pageable pageable);
+
+//    // 필터 조건이 있는 경우를 위한 메서드들...
+//    @Query("SELECT p FROM Product p " +
+//            "LEFT JOIN p.likes l " +
+//            "WHERE (:petKind IS NULL OR p.petKind = :petKind) " +
+//            "AND (:category IS NULL OR p.category = :category) " +
+//            "AND (:search IS NULL OR p.productName LIKE %:search%) " +
+//            "GROUP BY p " +
+//            "ORDER BY COUNT(l) DESC")
+//    Page<Product> findByFilterOrderByLikesCountDesc(
+//            @Param("petKind") PetKind petKind,
+//            @Param("category") Category category,
+//            @Param("search") String search,
+//            Pageable pageable);
 }
