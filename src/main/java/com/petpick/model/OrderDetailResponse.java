@@ -8,7 +8,7 @@ public class OrderDetailResponse {
     private Integer orderDetailId;
     private Integer productId;
     private String productName;
-    private String sellerName;
+    private String sellerStoreName;
     private Double orderDetailPrice;
     private Integer orderDetailCnt;
     private String productThumbnail;
@@ -17,7 +17,7 @@ public class OrderDetailResponse {
         this.orderDetailId = orderDetail.getOrderDetailId();
         this.productId = orderDetail.getProduct().getProductId();
         this.productName = orderDetail.getProduct().getProductName();
-        this.sellerName = orderDetail.getProduct().getSeller().getSellerStoreName();
+        this.sellerStoreName = orderDetail.getProduct().getSeller().getSellerStoreName();
         this.orderDetailPrice = orderDetail.getOrderDetailPrice();
         this.orderDetailCnt = orderDetail.getOrderDetailCnt();
         this.productThumbnail = productThumbnail;
