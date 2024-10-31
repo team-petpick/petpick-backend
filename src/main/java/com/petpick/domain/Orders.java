@@ -18,7 +18,7 @@ public class Orders extends BaseTime {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "orders_id")
-    private Integer orderId;
+    private Integer ordersId;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -29,15 +29,15 @@ public class Orders extends BaseTime {
     private Address address;
 
     @Column(name = "orders_price")
-    private Integer orderPrice;
+    private Integer ordersPrice;
 
-    @Column(name = "orders_card")
-    private String orderCard;
+    @Column(name = "payment_key")
+    private String paymentKey;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "orders_status")
-    private OrderStatus orderStatus;
+    private OrderStatus ordersStatus;
 
     @Column(name = "orders_request")
-    private String orderRequest;
+    private String ordersRequest;
 }
