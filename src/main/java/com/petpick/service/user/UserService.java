@@ -4,6 +4,7 @@ import com.petpick.domain.Likes;
 import com.petpick.domain.Product;
 import com.petpick.domain.ProductImg;
 import com.petpick.domain.User;
+import com.petpick.domain.type.UserPosition;
 import com.petpick.domain.type.UserStatus;
 import com.petpick.global.exception.BaseException;
 import com.petpick.global.exception.errorCode.ProductErrorCode;
@@ -45,6 +46,7 @@ public class UserService {
                 .userEmail(googleUserInfoResponse.getEmail())
                 .userImg(googleUserInfoResponse.getPicture())
                 .userStatus(UserStatus.ACTIVE)
+                .userPosition(UserPosition.DEFAULT)
                 .build();
 
         // return new user
