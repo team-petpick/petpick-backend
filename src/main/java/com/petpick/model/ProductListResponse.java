@@ -18,9 +18,9 @@ public class ProductListResponse {
     private Integer productPrice;
     private Integer productSale;
     private Integer productCnt;
-    private List<ProductImgResponse> productImg; // Product Image
+    private String productThumbnail; // Product Thumbnail
 
-    public ProductListResponse(Product product, List<ProductImg> productImg) {
+    public ProductListResponse(Product product, String productThumbnail) {
         this.productId = product.getProductId();
         this.category = new CategoryResponse(product.getCategory());
         this.productName = product.getProductName();
@@ -29,6 +29,6 @@ public class ProductListResponse {
         this.productPrice = product.getProductPrice();
         this.productSale = product.getProductSale();
         this.productCnt = product.getProductCnt();
-        this.productImg = productImg.stream().map(ProductImgResponse::new).collect(Collectors.toList());
+        this.productThumbnail = productThumbnail;
     }
 }

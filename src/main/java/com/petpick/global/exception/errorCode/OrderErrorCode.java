@@ -15,8 +15,7 @@ public enum OrderErrorCode implements ErrorCode {
     INSUFFICIENT_FUNDS("ORDER_005", "잔액이 부족합니다.", HttpStatus.PAYMENT_REQUIRED),
     INVALID_PAYMENT_METHOD("ORDER_006", "유효하지 않은 결제 수단입니다.", HttpStatus.BAD_REQUEST),
     ADDRESS_NOT_FOUND("ORDER_007", "배송 주소를 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
-    USER_NOT_AUTHORIZED("ORDER_008", "주문에 대한 권한이 없습니다.", HttpStatus.FORBIDDEN),
-    INVALID_MONTH_PARAMETER("ORDER_009", "유효하지 않은 개월 요청입니다.", HttpStatus.BAD_REQUEST),
+    INVALID_MONTH_PARAMETER("ORDER_008", "유효하지 않은 개월 요청입니다.", HttpStatus.BAD_REQUEST),
     ;
 
     private final String errorCode;

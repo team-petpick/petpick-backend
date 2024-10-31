@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,11 +36,14 @@ public class OrderService {
         Pageable pageable = PageRequest.of(page, 5, Sort.by(Sort.Direction.DESC, "createAt"));
 
         // 현재 날짜로부터 month 개월 전의 날짜를 계산
-        ZoneId zoneId = ZoneId.systemDefault();
-        LocalDateTime endDate = LocalDateTime.now(zoneId).with(LocalTime.MAX);
+        LocalDateTime endDate = LocalDateTime.now().with(LocalTime.MAX);
         LocalDateTime startDate = endDate.minusMonths(month).with(LocalTime.MIN);
 
         Page<Orders> ordersPage = ordersRepository.findByUserUserIdAndCreateAtBetween(userId, startDate, endDate, pageable);
+
+        if(ordersPage.isEmpty()){
+            throw new BaseException(ProductErrorCode.INVALID_PAGE_PARAMETER);
+        }
 
         List<OrderResponse> orderResponses = new ArrayList<>();
         for (Orders order : ordersPage.getContent()) {

@@ -110,10 +110,13 @@ public class ProductService {
             throw new BaseException(ProductErrorCode.NO_PRODUCTS_AVAILABLE);
         }
 
-        return productsPage.map(product -> {
-            List<ProductImg> productImgs = productImgRepository.findAllByProduct_productId(product.getProductId());
-            return new ProductListResponse(product, productImgs);
+        Page<ProductListResponse> productListResponses = productsPage.map(product -> {
+            Integer productId = product.getProductId();
+            String thumbnailUrl = productImgRepository.findThumbnailByProductId(productId);
+            return new ProductListResponse(product, thumbnailUrl);
         });
+
+        return productListResponses;
     }
 
     public ProductDetailResponse getProductById(Integer id) { // =product id
