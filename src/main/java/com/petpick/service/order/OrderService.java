@@ -2,6 +2,9 @@ package com.petpick.service.order;
 
 import com.petpick.domain.OrderDetail;
 import com.petpick.domain.Orders;
+import com.petpick.global.exception.BaseException;
+import com.petpick.global.exception.errorCode.OrderErrorCode;
+import com.petpick.global.exception.errorCode.ProductErrorCode;
 import com.petpick.model.OrderDetailResponse;
 import com.petpick.model.OrderResponse;
 import com.petpick.repository.OrderDetailRepository;
@@ -12,6 +15,8 @@ import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,14 +28,19 @@ public class OrderService {
     private final OrderDetailRepository orderDetailRepository;
     private final ProductImgRepository productImgRepository;
 
-    public Page<OrderResponse> getOrderHistory(Integer userId, Integer page, Integer size, Integer month) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createAt"));
+    public Page<OrderResponse> getOrderHistory(Integer userId, Integer page, Integer month) {
+        // month 파라미터 검증
+        if (month != 3 && month != 6 && month != 12 && month != 36) {
+            throw new BaseException(OrderErrorCode.INVALID_MONTH_PARAMETER);
+        }
+
+        Pageable pageable = PageRequest.of(page, 5, Sort.by(Sort.Direction.DESC, "createAt"));
 
         // 현재 날짜로부터 month 개월 전의 날짜를 계산
-        LocalDateTime endDate = LocalDateTime.now();
-        LocalDateTime startDate = endDate.minusMonths(month);
+        ZoneId zoneId = ZoneId.systemDefault();
+        LocalDateTime endDate = LocalDateTime.now(zoneId).with(LocalTime.MAX);
+        LocalDateTime startDate = endDate.minusMonths(month).with(LocalTime.MIN);
 
-        // 수정된 리포지토리 메서드를 사용하여 주문 조회
         Page<Orders> ordersPage = ordersRepository.findByUserUserIdAndCreateAtBetween(userId, startDate, endDate, pageable);
 
         List<OrderResponse> orderResponses = new ArrayList<>();
@@ -47,6 +57,10 @@ public class OrderService {
 
             OrderResponse orderResponse = new OrderResponse(order, orderDetailResponses);
             orderResponses.add(orderResponse);
+        }
+
+        if(!ordersPage.hasContent()){
+            throw new BaseException(ProductErrorCode.NO_PRODUCTS_AVAILABLE);
         }
 
         return new PageImpl<>(orderResponses, pageable, ordersPage.getTotalElements());
