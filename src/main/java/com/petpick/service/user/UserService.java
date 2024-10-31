@@ -71,13 +71,13 @@ public class UserService {
         return userRepository.findByUserEmail(userEmail);
     }
 
-    public Page<UserLikesProductListResponse> getUserLikesProductList(Integer userId) {
+    public Page<UserLikesProductListResponse> getUserLikesProductList(Integer userId, Integer page) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new BaseException(UserErrorCode.EMPTY_MEMBER));
 
         Sort sort = Sort.by("createAt").descending();
 
-        Pageable pageable = PageRequest.of(0, 10, sort);
+        Pageable pageable = PageRequest.of(page, 10, sort);
         Page<Likes> likesPage = likesRepository.findByUser(user, pageable);
 
         if (!likesPage.hasContent()){

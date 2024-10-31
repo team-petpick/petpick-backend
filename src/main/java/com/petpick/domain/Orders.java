@@ -31,8 +31,8 @@ public class Orders extends BaseTime {
     @Column(name = "orders_price")
     private Integer ordersPrice;
 
-    @Column(name = "orders_card")
-    private String ordersCard;
+    @Column(name = "payment_key")
+    private String paymentKey;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "orders_status")
