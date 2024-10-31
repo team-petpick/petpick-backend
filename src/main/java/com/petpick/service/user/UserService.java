@@ -4,6 +4,7 @@ import com.petpick.domain.Likes;
 import com.petpick.domain.Product;
 import com.petpick.domain.ProductImg;
 import com.petpick.domain.User;
+import com.petpick.domain.type.UserPosition;
 import com.petpick.domain.type.UserStatus;
 import com.petpick.global.exception.BaseException;
 import com.petpick.global.exception.errorCode.ProductErrorCode;
@@ -45,6 +46,7 @@ public class UserService {
                 .userEmail(googleUserInfoResponse.getEmail())
                 .userImg(googleUserInfoResponse.getPicture())
                 .userStatus(UserStatus.ACTIVE)
+                .userPosition(UserPosition.DEFAULT)
                 .build();
 
         // return new user
@@ -69,13 +71,13 @@ public class UserService {
         return userRepository.findByUserEmail(userEmail);
     }
 
-    public Page<UserLikesProductListResponse> getUserLikesProductList(Integer userId) {
+    public Page<UserLikesProductListResponse> getUserLikesProductList(Integer userId, Integer page) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new BaseException(UserErrorCode.EMPTY_MEMBER));
 
         Sort sort = Sort.by("createAt").descending();
 
-        Pageable pageable = PageRequest.of(0, 10, sort);
+        Pageable pageable = PageRequest.of(page, 10, sort);
         Page<Likes> likesPage = likesRepository.findByUser(user, pageable);
 
         if (!likesPage.hasContent()){
