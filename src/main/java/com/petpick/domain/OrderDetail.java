@@ -18,11 +18,11 @@ public class OrderDetail {
     @Column(name = "order_detail_id")
     private Integer orderDetailId;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "order_id")
     private Orders orders;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "product_id")
     private Product product;
 
