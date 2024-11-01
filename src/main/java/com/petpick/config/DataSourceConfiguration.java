@@ -1,4 +1,4 @@
-package com.petpick.cofig;
+package com.petpick.config;
 
 
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
@@ -41,7 +41,8 @@ public class DataSourceConfiguration {
      */
     public String getSecret() {
 
-        String secretName = "rds!cluster-706eccdd-6eb6-42f5-a3dc-6948dd685752";
+        String secretName = "rds!cluster-706eccdd-6eb6-42f5-a3dc-6948dd685752";//this is for ec2 connected server
+
         Region region = Region.of("ap-northeast-2");
 
         // Create a Secrets Manager client
