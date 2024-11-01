@@ -4,7 +4,7 @@ package com.petpick.model;
 import lombok.Data;
 
 @Data
-public class OrderResponse {
+public class PaymentOrderResponse {
     private Long orderId;
     private Integer userId;
     private Integer addressId;
