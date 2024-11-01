@@ -2,18 +2,17 @@ package com.petpick.service.tossPayment;
 
 import com.petpick.domain.Orders;
 import com.petpick.domain.User;
+import com.petpick.model.PaymentSuccessRequest;
 import com.petpick.repository.OrderRepository;
-import com.petpick.repository.UserRepository;
-import org.apache.coyote.BadRequestException;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
+import java.util.Date;
 
 @Service
 public class TossService {
@@ -21,52 +20,58 @@ public class TossService {
     @Value("${payment.toss.test_secret_api_key}")
     private String tossSecretKey;
 
-    public static final String URL = "https://api.tosspayments.com/v1/payments/confirm";
+    private static final String CONFIRM_URL = "https://api.tosspayments.com/v1/payments/confirm";
 
-    @Autowired
-    private UserRepository userRepository;
+    private final OrderRepository ordersRepository;
 
-    @Autowired
-    private OrderRepository orderRepository;
+    public TossService(OrderRepository ordersRepository) {
+        this.ordersRepository = ordersRepository;
+    }
 
     @Transactional
-    public void confirmPayment(String orderId, String paymentKey, int amount, int userId, String orderRequest) throws Exception {
-        // Get user by userId
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new Exception("User not found"));
-
-        // Prepare authorization header
-        String secretKeyWithColon = tossSecretKey + ":";
-        String encodedAuth = Base64.getEncoder()
-                .encodeToString(secretKeyWithColon.getBytes(StandardCharsets.UTF_8));
-
-        // Prepare headers
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Authorization", "Basic " + encodedAuth);
-        headers.setContentType(MediaType.APPLICATION_JSON);
-
-        // Prepare request body
-        TossPaymentRequest tossPaymentRequest = new TossPaymentRequest(paymentKey, amount, orderId);
-
-        HttpEntity<TossPaymentRequest> requestEntity = new HttpEntity<>(tossPaymentRequest, headers);
-
+    public boolean confirmPayment(PaymentSuccessRequest request) {
         RestTemplate restTemplate = new RestTemplate();
 
-        // Make the POST request to Toss
-        ResponseEntity<String> responseEntity = restTemplate.postForEntity(URL, requestEntity, String.class);
+        // Encode the secret key to Base64
+        String encodedSecretKey = Base64.getEncoder()
+                .encodeToString(tossSecretKey.getBytes(StandardCharsets.UTF_8));
 
-        if (responseEntity.getStatusCode().is2xxSuccessful()) {
-            // Save data into 'order' table
-            Orders order = Orders.builder()
-                    .user(user)
-                    .ordersPrice(amount)
-                    .paymentKey(paymentKey)
-                    .ordersRequest(orderRequest)
-                    .build();
-            orderRepository.save(order);
-        } else {
-            // Handle error response
-            throw new Exception("Failed to confirm payment with Toss");
+        // Set up headers
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Basic " + encodedSecretKey);
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        // Prepare the JSON payload
+        String jsonPayload = String.format(
+                "{\"paymentKey\":\"%s\",\"amount\":%d,\"orderId\":\"%s\"}",
+                request.getPaymentKey(),
+                request.getAmount(),
+                request.getOrderId()
+        );
+
+        HttpEntity<String> entity = new HttpEntity<>(jsonPayload, headers);
+
+        try {
+            ResponseEntity<String> response = restTemplate.postForEntity(CONFIRM_URL, entity, String.class);
+
+            if (response.getStatusCode() == HttpStatus.OK) {
+                // Payment confirmed, save to the database
+                Orders order = Orders.builder()
+                        .user(User.builder().userId(request.getUserId()).build()) // Assuming User has a builder and id
+                        .ordersPrice(request.getAmount())
+                        .paymentKey(request.getPaymentKey())
+                        .ordersRequest(request.getOrderRequest())
+                        .build();
+
+                ordersRepository.save(order);
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception e) {
+            // Handle exceptions such as RestClientException
+            e.printStackTrace();
+            return false;
         }
     }
 }
