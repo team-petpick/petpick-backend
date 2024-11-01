@@ -8,5 +8,9 @@ import java.util.List;
 
 public interface ProductImgRepository extends JpaRepository<ProductImg, Integer> {
     List<ProductImg> findAllByProduct_productId(Integer productId);
+
+    @Query("SELECT pi.productImgUrl FROM ProductImg pi WHERE pi.product.productId = :productId AND pi.productImgThumb = 1")
+    String findThumbnailByProductId(Integer productId);
+
     List<ProductImg> findByProductAndProductImgThumb(Product product, Integer productImgThumb);
 }
