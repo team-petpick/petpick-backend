@@ -1,10 +1,7 @@
 package com.petpick.domain;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Builder
@@ -22,9 +19,14 @@ public class ProductImg {
     @JoinColumn(name = "product_id")
     private Product product;
 
+    @Column(name = "product_image_thumbnail")
+    private Integer productImgThumb;
+
     @Column(name = "product_img_url")
     private String productImgUrl;
 
-    @Column(name = "product_image_thumbnail")
-    private Integer productImgThumb;
+    // Business method to create a new instance with updated URL
+    public ProductImg withUpdatedFields(String newUrl, Integer newThumb) {
+        return new ProductImg(this.productImgId, this.product, newThumb, newUrl);
+    }
 }
