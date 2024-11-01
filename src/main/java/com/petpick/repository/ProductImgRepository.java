@@ -14,4 +14,6 @@ public interface ProductImgRepository extends JpaRepository<ProductImg, Integer>
     String findThumbnailByProductId(Integer productId);
 
     List<ProductImg> findByProductAndProductImgThumb(Product product, Integer productImgThumb);
+
+    List<ProductImg> findByProductAndDescImgStatus(Product product, Integer descImgStatus);
 }
