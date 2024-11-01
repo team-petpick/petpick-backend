@@ -18,52 +18,31 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class LikesService {
     private final LikesRepository likesRepository;
     private final UserRepository userRepository;
     private final ProductRepository productRepository;
 
-    @Transactional
-    public void addLike(Integer productId, String userEmail) {
-        User user = getUserByEmail(userEmail);
-        Product product = getProductById(productId);
+    public boolean toggleLike(Integer productId, String userEmail) {
+        User user = userRepository.findByUserEmail(userEmail)
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
 
-        Optional<Likes> likes = likesRepository.findByUserAndProduct(user, product);
-        if (likes.isPresent()) {
-            throw new BaseException(LikesErrorCode.ALREADY_LIKE_PRODUCT);
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new IllegalArgumentException("Product not found"));
+
+        Optional<Likes> existingLike = likesRepository.findByUserAndProduct(user, product);
+
+        if (existingLike.isPresent()) {
+            // 좋아요가 이미 존재하면 삭제
+            likesRepository.delete(existingLike.get());
+            return false;
+        } else {
+            // 좋아요가 없으면 추가
+            Likes like = new Likes(user, product);
+            likesRepository.save(like);
+            return true;
         }
-
-        Likes likesEntity = new Likes(user, product);
-        likesRepository.save(likesEntity);
-
-        product.increaseLikes();
-        productRepository.save(product);
-    }
-
-    @Transactional
-    public void removeLike(Integer productId, String userEmail) {
-        User user = getUserByEmail(userEmail);
-        Product product = getProductById(productId);
-
-        Optional<Likes> likes = likesRepository.findByUserAndProduct(user, product);
-        if (!likes.isPresent()) {
-            throw new BaseException(LikesErrorCode.ALREADY_UNLIKE_PRODUCT);
-        }
-
-        likesRepository.delete(likes.get());
-
-        product.decreaseLikes();
-        productRepository.save(product);
-    }
-
-    private User getUserByEmail(String userEmail) {
-        return userRepository.findByUserEmail(userEmail)
-                .orElseThrow(() -> new BaseException(UserErrorCode.EMPTY_MEMBER));
-    }
-
-    private Product getProductById(Integer productId) {
-        return productRepository.findById(productId)
-                .orElseThrow(() -> new BaseException(ProductErrorCode.PRODUCT_NOT_FOUND));
     }
 
 }
