@@ -29,4 +29,8 @@ public class Cart extends BaseTime {
 
     @Column(name = "cart_cnt")
     private Integer cartCnt;
+
+    public void setCartCnt(Integer cartCnt) {
+        this.cartCnt = cartCnt;
+    }
 }
