@@ -1,12 +1,8 @@
 package com.petpick.model;
 
 import com.petpick.domain.Product;
-import com.petpick.domain.ProductImg;
 import com.petpick.domain.type.ProductStatus;
 import lombok.Data;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Data
 public class ProductListResponse {
