@@ -20,9 +20,7 @@ public class ProductController {
     private final TokenProvider tokenProvider;
     private final LikesService likesService;
 
-    /*
-    * Filtered Product List
-    * */
+
     @GetMapping("/products")
     public ResponseEntity<Page<ProductListResponse>> getProductsList(
             @RequestParam(required = false) String type,
@@ -36,18 +34,14 @@ public class ProductController {
         return ResponseEntity.ok(productsListResponse);
     }
 
-    /*
-    * Detail Product Page
-    * */
+
     @GetMapping("/products/{productId}")
     public ResponseEntity<ProductDetailResponse> getProductById(@PathVariable Integer productId) {
         ProductDetailResponse productDetailResponse = productService.getProductById(productId);
         return ResponseEntity.ok(productDetailResponse);
     }
 
-    /*
-    * Press Like button
-    * */
+
     @PostMapping("/products/{productId}/like")
     public ResponseEntity<String> addProductLike(@PathVariable Integer productId, HttpServletRequest request) {
 
@@ -60,9 +54,7 @@ public class ProductController {
         return ResponseEntity.ok("Successfully added like to the product");
     }
 
-    /*
-    * Cancel Like button
-    * */
+
     @DeleteMapping("/products/{productId}/like")
     public ResponseEntity<String> deleteProductLike(@PathVariable Integer productId, HttpServletRequest request) {
         String accessToken = tokenProvider.resolveAccessToken(request);
