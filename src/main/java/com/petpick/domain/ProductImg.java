@@ -25,8 +25,11 @@ public class ProductImg {
     @Column(name = "product_img_url")
     private String productImgUrl;
 
-    // Business method to create a new instance with updated URL
-    public ProductImg withUpdatedFields(String newUrl, Integer newThumb) {
-        return new ProductImg(this.productImgId, this.product, newThumb, newUrl);
+    @Column(name = "desc_img_status")
+    private Integer descImgStatus;
+
+    // Corrected method to include both thumbnail and description flags
+    public ProductImg withUpdatedFields(String newUrl, Integer newThumb, Integer newDescImgStatus) {
+        return new ProductImg(this.productImgId, this.product, newThumb, newUrl, newDescImgStatus);
     }
 }
