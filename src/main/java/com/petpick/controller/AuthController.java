@@ -147,7 +147,7 @@ public class AuthController {
         User user = userOptional.get();
 
         if (!refreshToken.equals(user.getUserRefreshToken())) {
-            throw new BaseException(AuthErrorCode.REFRESH_TOKEN_NOT_FOUND);
+            throw new BaseException(AuthErrorCode.REFRESH_TOKEN_NOT_FOUND_FROM_DB);
         }
 
         String newAccessToken = tokenProvider.createAccessToken(user);
