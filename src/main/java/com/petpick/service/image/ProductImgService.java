@@ -44,13 +44,13 @@ public class ProductImgService {
     private String regionName;
 
     public List<ProductImgResponse> uploadImages(
-            Integer productId, List<Integer> thumbNails, MultipartFile[] files) throws IOException {
+            Integer productId, List<Integer> thumbNails, List<Integer> isDesc, MultipartFile[] files) throws IOException {
 
         List<ProductImgResponse> responses = new ArrayList<>();
 
-        // Validate that the number of thumbnail flags matches the number of files
-        if (thumbNails.size() != files.length) {
-            throw new IllegalArgumentException("Number of thumbNails must match number of files");
+        // Validate that the number of thumbnail and description flags matches the number of files
+        if (thumbNails.size() != files.length || isDesc.size() != files.length) {
+            throw new IllegalArgumentException("Number of thumbNails and isDesc flags must match number of files");
         }
 
         // Retrieve the Product
@@ -60,11 +60,13 @@ public class ProductImgService {
         for (int i = 0; i < files.length; i++) {
             MultipartFile file = files[i];
             Integer thumbNailFlag = thumbNails.get(i);
+            Integer isDescFlag = isDesc.get(i);
 
             String fileName = generateFileName(file);
             String s3Key = fileName;
 
             boolean isThumbnail = thumbNailFlag != null && thumbNailFlag == 1;
+            boolean isDescription = isDescFlag != null && isDescFlag == 1;
 
             // Upload file to S3
             PutObjectRequest putObjectRequest = PutObjectRequest.builder()
@@ -83,10 +85,16 @@ public class ProductImgService {
                 unsetExistingThumbnails(product);
             }
 
+            if (isDescription) {
+                // Optionally, unset existing description images if only one is allowed
+                unsetExistingDescriptionImages(product);
+            }
+
             ProductImg productImg = ProductImg.builder()
                     .product(product)
                     .productImgUrl(fileUrl)
                     .productImgThumb(isThumbnail ? 1 : 0)
+                    .descImgStatus(isDescription ? 1 : 0)
                     .build();
 
             ProductImg savedProductImg = productImgRepository.save(productImg);
@@ -102,8 +110,14 @@ public class ProductImgService {
                 .map(ProductImgResponse::new);
     }
 
+    public Optional<ProductImgResponse> getDescImage(Integer id) {
+        return productImgRepository.findById(id)
+                .filter(img -> img.getDescImgStatus() != null && img.getDescImgStatus() == 1)
+                .map(ProductImgResponse::new);
+    }
+
     public ProductImgResponse updateImage(
-            Integer id, Integer thumbNail, MultipartFile file) throws IOException {
+            Integer id, Integer thumbNail, Integer isDesc, MultipartFile file) throws IOException {
 
         ProductImg productImg = productImgRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Image not found"));
@@ -116,6 +130,7 @@ public class ProductImgService {
         String newS3Key = newFileName;
 
         boolean isThumbnail = thumbNail != null && thumbNail == 1;
+        boolean isDescription = isDesc != null && isDesc == 1;
 
         PutObjectRequest putObjectRequest = PutObjectRequest.builder()
                 .bucket(bucketName)
@@ -125,16 +140,22 @@ public class ProductImgService {
 
         s3Client.putObject(putObjectRequest, RequestBody.fromInputStream(file.getInputStream(), file.getSize()));
 
-        // Update any existing thumbnails for the product if the new image is a thumbnail
+        // Update any existing thumbnails or description images if necessary
         if (isThumbnail) {
             unsetExistingThumbnails(productImg.getProduct());
         }
 
-        // Update image URL and thumbnail flag by creating a new instance
+        if (isDescription) {
+            unsetExistingDescriptionImages(productImg.getProduct());
+        }
+
+        // Update image URL and thumbnail/description flags
         String fileUrl = getFileUrl(bucketName, newS3Key);
 
         // Create a new ProductImg instance with updated values
-        ProductImg updatedProductImg = productImg.withUpdatedFields(fileUrl, isThumbnail ? 1 : 0);
+        ProductImg updatedProductImg = productImg.withUpdatedFields(fileUrl,
+                isThumbnail ? 1 : productImg.getProductImgThumb(),
+                isDescription ? 1 : productImg.getDescImgStatus());
 
         ProductImg savedProductImg = productImgRepository.save(updatedProductImg);
 
@@ -168,7 +189,16 @@ public class ProductImgService {
         List<ProductImg> existingThumbnails = productImgRepository.findByProductAndProductImgThumb(product, 1);
         for (ProductImg existingThumbnail : existingThumbnails) {
             // Create a new instance with updated thumbnail flag
-            ProductImg updatedImg = existingThumbnail.withUpdatedFields(existingThumbnail.getProductImgUrl(), 0);
+            ProductImg updatedImg = existingThumbnail.withUpdatedFields(existingThumbnail.getProductImgUrl(), 0, existingThumbnail.getDescImgStatus());
+            productImgRepository.save(updatedImg);
+        }
+    }
+
+    private void unsetExistingDescriptionImages(Product product) {
+        List<ProductImg> existingDescImages = productImgRepository.findByProductAndDescImgStatus(product, 1);
+        for (ProductImg existingDescImg : existingDescImages) {
+            // Create a new instance with updated description flag
+            ProductImg updatedImg = existingDescImg.withUpdatedFields(existingDescImg.getProductImgUrl(), existingDescImg.getProductImgThumb(), 0);
             productImgRepository.save(updatedImg);
         }
     }
