@@ -15,9 +15,6 @@ public class UserController {
 
     private final UserService userService;
 
-    /*
-    * user like list
-    * */
     @GetMapping("/user/{userId}/likes")
     public ResponseEntity<List<UserLikesProductListResponse>> getProductLikes(
             @PathVariable Integer userId

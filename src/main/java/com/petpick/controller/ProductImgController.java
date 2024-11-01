@@ -15,6 +15,7 @@ import java.util.List;
 @RequestMapping("/product-images")
 public class ProductImgController {
 
+    @Autowired
     private ProductImgService productImgService;
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
