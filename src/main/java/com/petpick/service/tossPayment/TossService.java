@@ -20,7 +20,7 @@ public class TossService {
     @Value("${payment.toss.test_secret_api_key}")
     private String tossSecretKey;
 
-    private static final String URL = "https://api.tosspayments.com/v1/payments/confirm";
+    private static final String CONFIRM_URL = "https://api.tosspayments.com/v1/payments/confirm";
 
     private final OrderRepository ordersRepository;
 
@@ -52,7 +52,7 @@ public class TossService {
         HttpEntity<String> entity = new HttpEntity<>(jsonPayload, headers);
 
         try {
-            ResponseEntity<String> response = restTemplate.postForEntity(URL, entity, String.class);
+            ResponseEntity<String> response = restTemplate.postForEntity(CONFIRM_URL, entity, String.class);
 
             if (response.getStatusCode() == HttpStatus.OK) {
                 // Payment confirmed, save to the database
@@ -66,7 +66,6 @@ public class TossService {
                 ordersRepository.save(order);
                 return true;
             } else {
-                // Handle non-200 responses as needed
                 return false;
             }
         } catch (Exception e) {

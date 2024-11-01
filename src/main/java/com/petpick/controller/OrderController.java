@@ -13,7 +13,5 @@ public class OrderController {
 
     private final OrderService orderService;
 
-    /*
-    * Order log by User
-    * */
+
 }
