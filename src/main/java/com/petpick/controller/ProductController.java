@@ -8,7 +8,6 @@ import com.petpick.service.product.ProductService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -44,29 +43,14 @@ public class ProductController {
 
 
     @PostMapping("/products/{productId}/like")
-    public ResponseEntity<String> addProductLike(@PathVariable Integer productId, HttpServletRequest request) {
-
+    public ResponseEntity<String> toggleProductLike(@PathVariable Integer productId, HttpServletRequest request) {
+        // 액세스 토큰에서 사용자 이메일 추출
         String accessToken = tokenProvider.resolveAccessToken(request);
         String userEmail = tokenProvider.getUserEmailFromToken(accessToken);
 
-        if (accessToken == null || !tokenProvider.validatesToken(accessToken)) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid or missing access token");
-        }
+        boolean isLiked = likesService.toggleLike(productId, userEmail);
 
-        likesService.addLike(productId, userEmail);
-
-
-        return ResponseEntity.ok("Successfully added like to the product");
-    }
-
-
-    @DeleteMapping("/products/{productId}/like")
-    public ResponseEntity<String> deleteProductLike(@PathVariable Integer productId, HttpServletRequest request) {
-        String accessToken = tokenProvider.resolveAccessToken(request);
-        String userEmail = tokenProvider.getUserEmailFromToken(accessToken);
-
-        likesService.removeLike(productId, userEmail);
-
-        return ResponseEntity.ok("Successfully deleted like to the product");
+        String message = isLiked ? "Successfully added like to the product" : "Successfully removed like from the product";
+        return ResponseEntity.ok(message);
     }
 }

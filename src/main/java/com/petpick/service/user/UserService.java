@@ -15,14 +15,11 @@ import com.petpick.repository.LikesRepository;
 import com.petpick.repository.ProductImgRepository;
 import com.petpick.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -71,24 +68,24 @@ public class UserService {
         return userRepository.findByUserEmail(userEmail);
     }
 
-    public Page<UserLikesProductListResponse> getUserLikesProductList(Integer userId, Integer page) {
+    public List<UserLikesProductListResponse> getUserLikesProductList(Integer userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new BaseException(UserErrorCode.EMPTY_MEMBER));
 
-        Sort sort = Sort.by("createAt").descending();
+        // 사용자에 대한 전체 좋아요 리스트 조회
+        List<Likes> likesList = likesRepository.findByUser(user);
 
-        Pageable pageable = PageRequest.of(page, 10, sort);
-        Page<Likes> likesPage = likesRepository.findByUser(user, pageable);
-
-        if (!likesPage.hasContent()){
+        if (likesList.isEmpty()) {
             throw new BaseException(ProductErrorCode.NO_PRODUCTS_AVAILABLE);
         }
 
-        return likesPage.map(like -> {
-            Product product = like.getProduct();
-            List<ProductImg> productImgs = productImgRepository.findAllByProduct_productId(product.getProductId());
-            return new UserLikesProductListResponse(product, productImgs);
-        });
+        return likesList.stream()
+                .map(like -> {
+                    Product product = like.getProduct();
+                    List<ProductImg> productImgs = productImgRepository.findAllByProduct_productId(product.getProductId());
+                    return new UserLikesProductListResponse(product, productImgs);
+                })
+                .collect(Collectors.toList());
     }
 
 
