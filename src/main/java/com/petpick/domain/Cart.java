@@ -2,10 +2,7 @@ package com.petpick.domain;
 
 import com.petpick.global.entity.BaseTime;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Builder
@@ -27,10 +24,8 @@ public class Cart extends BaseTime {
     @JoinColumn(name = "product_id")
     private Product product;
 
+    @Setter
     @Column(name = "cart_cnt")
     private Integer cartCnt;
 
-    public void setCartCnt(Integer cartCnt) {
-        this.cartCnt = cartCnt;
-    }
 }

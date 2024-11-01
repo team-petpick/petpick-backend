@@ -8,6 +8,7 @@ import com.petpick.service.product.ProductService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -53,6 +54,10 @@ public class ProductController {
 
         String accessToken = tokenProvider.resolveAccessToken(request);
         String userEmail = tokenProvider.getUserEmailFromToken(accessToken);
+
+        if (accessToken == null || !tokenProvider.validatesToken(accessToken)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid or missing access token");
+        }
 
         likesService.addLike(productId, userEmail);
 

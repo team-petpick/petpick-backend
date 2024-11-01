@@ -6,6 +6,7 @@ import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import io.jsonwebtoken.security.SignatureException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -79,5 +80,25 @@ public class TokenProvider {
             throw new IllegalStateException("Invalid token");
         }
         return claims.getSubject();
+    }
+
+    public boolean validatesToken(String token) {
+        try {
+            Jwts.parser().setSigningKey(jwtSecretKey.getBytes()).parseClaimsJws(token);
+            return true;
+        } catch (SignatureException ex) {
+            // 잘못된 서명
+            System.out.println("Invalid JWT signature");
+        } catch (io.jsonwebtoken.ExpiredJwtException ex) {
+            // 만료된 토큰
+            System.out.println("Expired JWT token");
+        } catch (io.jsonwebtoken.MalformedJwtException ex) {
+            // 잘못된 JWT
+            System.out.println("Invalid JWT token");
+        } catch (Exception ex) {
+            // 기타 예외
+            System.out.println("Invalid JWT token");
+        }
+        return false;
     }
 }

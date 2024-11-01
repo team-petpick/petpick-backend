@@ -4,6 +4,8 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Optional;
 
@@ -22,7 +24,17 @@ public class CookieUtil {
         if (request.getCookies() != null) {
             return Arrays.stream(request.getCookies())
                     .filter(cookie -> cookie.getName().equals(name))
-                    .findFirst();
+                    .findFirst()
+                    .map(cookie -> {
+                        try {
+                            String decodedValue = URLDecoder.decode(cookie.getValue(), StandardCharsets.UTF_8.name());
+                            cookie.setValue(decodedValue);
+                            return cookie;
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            return cookie;
+                        }
+                    });
         }
         return Optional.empty();
     }
@@ -30,8 +42,8 @@ public class CookieUtil {
     public static void deleteCookie(HttpServletResponse response, String name) {
         Cookie cookie = new Cookie(name, null);
         cookie.setPath("/");
-        cookie.setHttpOnly(true);
-        cookie.setSecure(true);
+        cookie.setHttpOnly(false);
+        cookie.setSecure(false);
         cookie.setMaxAge(0);  // To force cookies to expire
 
         response.addCookie(cookie);

@@ -28,6 +28,7 @@ public class CartService {
     private final ProductRepository productRepository;
     private final ProductImgRepository productImgRepository;
 
+    @Transactional(readOnly = true)
     public List<CartItemResponse> getCartItems(Integer userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new BaseException(CartErrorCode.USER_NOT_FOUND));
@@ -43,19 +44,19 @@ public class CartService {
                 .collect(Collectors.toList());
     }
 
-    public void addCartItem(Integer userId, Integer productId, CartItemRequest cartItemRequest) {
+    public void addCartItem(Integer userId, CartItemRequest cartItemRequest) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new BaseException(CartErrorCode.USER_NOT_FOUND));
 
-        Product product = productRepository.findById(productId)
+        Product product = productRepository.findById(cartItemRequest.getProductId())
                 .orElseThrow(() -> new BaseException(CartErrorCode.PRODUCT_NOT_FOUND));
 
         Cart cartItem = cartRepository.findByUserAndProduct(user, product)
                 .orElse(Cart.builder()
-                        .user(user)
-                        .product(product)
-                        .cartCnt(0)
-                        .build());
+                            .user(user)
+                            .product(product)
+                            .cartCnt(0)
+                            .build());
 
         cartItem.setCartCnt(cartItem.getCartCnt() + cartItemRequest.getCartCnt());
 
@@ -70,5 +71,20 @@ public class CartService {
                 .orElseThrow(() -> new BaseException(CartErrorCode.PRODUCT_NOT_FOUND));
 
         cartRepository.deleteByUserAndProduct(user, product);
+    }
+
+    public void updateCartItem(Integer userId, Integer productId, Integer cnt) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new BaseException(CartErrorCode.USER_NOT_FOUND));
+
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new BaseException(CartErrorCode.PRODUCT_NOT_FOUND));
+
+        Cart cart = cartRepository.findByUserAndProduct(user, product)
+                .orElseThrow(() -> new BaseException(CartErrorCode.CART_ITEM_NOT_FOUND));
+
+        cart.setCartCnt(cnt);
+
+        cartRepository.save(cart);
     }
 }

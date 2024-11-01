@@ -28,23 +28,35 @@ public class CartController {
     /*
     * Add Product to cart
     * */
-    @PostMapping("/{userId}/{productId}")
-    public ResponseEntity<Void> addCartItem(
+    @PostMapping("/{userId}")
+    public ResponseEntity<String> addCartItem(
             @PathVariable Integer userId,
-            @PathVariable Integer productId,
-            @RequestBody CartItemRequest cartItemRequest) {
-        cartService.addCartItem(userId, productId, cartItemRequest);
-        return ResponseEntity.ok().build();
+            @RequestBody CartItemRequest cartItemRequest
+    ) {
+        cartService.addCartItem(userId, cartItemRequest);
+        return ResponseEntity.ok("Successfully added cart item");
     }
 
     /*
     * Remove Product to Cart - entirely
     * */
     @DeleteMapping("/{userId}/{productId}")
-    public ResponseEntity<Void> removeCartItem(
+    public ResponseEntity<String> removeCartItem(
             @PathVariable Integer userId,
             @PathVariable Integer productId) {
         cartService.removeCartItem(userId, productId);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok("Successfully removed cart item");
+    }
+
+    /*
+    * Update Product Count
+    * */
+    @PatchMapping("/{userId}")
+    public ResponseEntity<String> updateCartItem(
+            @PathVariable Integer userId,
+            @RequestBody CartItemRequest cartItemRequest
+    ) {
+        cartService.updateCartItem(userId, cartItemRequest.getProductId(), cartItemRequest.getCartCnt());
+        return ResponseEntity.ok("Successfully updated cart item");
     }
 }
