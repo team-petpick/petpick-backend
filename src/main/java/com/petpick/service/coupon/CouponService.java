@@ -23,7 +23,7 @@ public class CouponService {
 
     @Transactional
     public Coupon grantCoupon(User user) {
-        Optional<Coupon> hasCoupon = couponRepository.findByUserAAndCouponId(user, 1);
+        Optional<Coupon> hasCoupon = couponRepository.findByUserAndCouponCategoryId(user, 1);
 
         System.out.println(hasCoupon.isEmpty());
 

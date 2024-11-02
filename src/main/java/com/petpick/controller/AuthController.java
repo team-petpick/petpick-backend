@@ -24,7 +24,6 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
@@ -92,7 +91,7 @@ public class AuthController {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<?> logout(HttpServletResponse response, HttpServletRequest request) throws UnsupportedEncodingException {
+    public ResponseEntity<?> logout(HttpServletResponse response, HttpServletRequest request) {
         /* 쿠키에서 가져오고
             => 쿠키에서 리프레시 토큰 값 뽑고
             => 리프레시 토큰 값으로 사용자 찾고
