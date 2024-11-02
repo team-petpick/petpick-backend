@@ -23,12 +23,11 @@ public class CouponService {
 
     @Transactional
     public Coupon grantCoupon(User user) {
-        Optional<Coupon> hasCoupon = couponRepository.findByUserAndCouponCategoryId(user, 1);
-
-        System.out.println(hasCoupon.isEmpty());
-
         CouponCategory welcomeCategory = couponCategoryRepository.findById(1)
                 .orElseThrow(() -> new BaseException(CouponCategoryErrorCode.COUPON_CATEGORY_NOT_FOUND));
+
+        Optional<Coupon> hasCoupon = couponRepository.findByUserAndCouponCategory(user, welcomeCategory);
+
 
         if(hasCoupon.isEmpty()) {
             Coupon coupon = Coupon.builder()
