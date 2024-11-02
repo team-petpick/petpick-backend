@@ -9,6 +9,7 @@ import com.petpick.model.AuthorizationCodeResponse;
 import com.petpick.model.GoogleTokenResponse;
 import com.petpick.model.GoogleUserInfoResponse;
 import com.petpick.service.auth.GoogleTokenService;
+import com.petpick.service.coupon.CouponService;
 import com.petpick.service.user.GoogleUserService;
 import com.petpick.service.auth.TokenProvider;
 import com.petpick.service.user.UserService;
@@ -23,7 +24,6 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
@@ -38,6 +38,7 @@ public class AuthController {
     private final UserService userService;
     private final GoogleUserService googleUserService;
     private final GoogleTokenService googleTokenService;
+    private final CouponService couponService;
 
     @Value("${cookie.cookie-max-age}")
     private int cookieMaxAge;
@@ -64,6 +65,9 @@ public class AuthController {
         // find user based on email
         User user = userService.findOrCreateUser(googleUserInfoResponse);
 
+        // grant welcome coupon
+        couponService.grantCoupon(user);
+
         // create own access token and refresh token
         String accessToken = tokenProvider.createAccessToken(user);
         String refreshToken = tokenProvider.createRefreshToken(user);
@@ -87,7 +91,7 @@ public class AuthController {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<?> logout(HttpServletResponse response, HttpServletRequest request) throws UnsupportedEncodingException {
+    public ResponseEntity<?> logout(HttpServletResponse response, HttpServletRequest request) {
         /* 쿠키에서 가져오고
             => 쿠키에서 리프레시 토큰 값 뽑고
             => 리프레시 토큰 값으로 사용자 찾고
