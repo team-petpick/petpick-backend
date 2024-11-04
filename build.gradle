@@ -29,7 +29,8 @@ dependencies {
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation 'io.awspring.cloud:spring-cloud-aws-starter-s3:3.0.0'
-    implementation 'software.amazon.awssdk:aws-sdk-java:2.28.17'
+    implementation 'software.amazon.awssdk:s3:2.25.27'
+//    implementation 'software.amazon.awssdk:aws-sdk-java:2.28.17'
 
 
     // jjwt
