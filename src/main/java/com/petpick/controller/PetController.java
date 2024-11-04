@@ -22,7 +22,7 @@ public class PetController {
     // Create a new pet
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public PetInfoResponse createPet(
-            @RequestParam("userId") Integer userId,
+            @RequestAttribute Integer userId,
             @RequestParam("petName") String petName,
             @RequestParam("petSpecies") String petSpecies,
             @RequestParam("petKind") PetKind petKind,

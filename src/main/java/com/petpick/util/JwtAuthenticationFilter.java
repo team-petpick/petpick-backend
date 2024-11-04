@@ -53,7 +53,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
-        // 로그인, 토큰 재발급 등 토큰 검증이 필요 없는 경로를 예외 처리
         String path = request.getRequestURI();
         return path.equals("/api/v1/auth/google") || path.equals("/api/v1/auth/token");
     }

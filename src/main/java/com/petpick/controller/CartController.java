@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/cart")
+@RequestMapping("/api/v1")
 @RequiredArgsConstructor
 public class CartController {
 
@@ -19,8 +19,8 @@ public class CartController {
     /*
     * Cart List
     * */
-    @GetMapping("/{userId}")
-    public ResponseEntity<List<CartItemResponse>> getCartItems(@PathVariable Integer userId) {
+    @GetMapping("/cart")
+    public ResponseEntity<List<CartItemResponse>> getCartItems(@RequestAttribute Integer userId) {
         List<CartItemResponse> cartItems = cartService.getCartItems(userId);
         return ResponseEntity.ok(cartItems);
     }
@@ -28,9 +28,9 @@ public class CartController {
     /*
     * Add Product to cart
     * */
-    @PostMapping("/{userId}")
+    @PostMapping("/cart")
     public ResponseEntity<String> addCartItem(
-            @PathVariable Integer userId,
+            @RequestAttribute Integer userId,
             @RequestBody CartItemRequest cartItemRequest
     ) {
         cartService.addCartItem(userId, cartItemRequest);
@@ -40,9 +40,9 @@ public class CartController {
     /*
     * Remove Product to Cart - entirely
     * */
-    @DeleteMapping("/{userId}/{productId}")
+    @DeleteMapping("/cart/{productId}")
     public ResponseEntity<String> removeCartItem(
-            @PathVariable Integer userId,
+            @RequestAttribute Integer userId,
             @PathVariable Integer productId) {
         cartService.removeCartItem(userId, productId);
         return ResponseEntity.ok("Successfully removed cart item");
@@ -51,9 +51,9 @@ public class CartController {
     /*
     * Update Product Count
     * */
-    @PatchMapping("/{userId}")
+    @PatchMapping("/cart")
     public ResponseEntity<String> updateCartItem(
-            @PathVariable Integer userId,
+            @RequestAttribute Integer userId,
             @RequestBody CartItemRequest cartItemRequest
     ) {
         cartService.updateCartItem(userId, cartItemRequest.getProductId(), cartItemRequest.getCartCnt());
