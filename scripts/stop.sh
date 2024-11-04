@@ -1,5 +1,5 @@
 #!/bin/bash
-set -x
+
 # Variables
 ROOT_PATH="/home/ec2-user/petpick-deploy"
 JAR="$ROOT_PATH/petpick-0.0.1-SNAPSHOT.jar"

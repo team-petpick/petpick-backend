@@ -10,6 +10,15 @@ permissions:
     owner: ec2-user
     group: ec2-user
     mode: '755'
+    type:
+      - directory
+      - file
+  - object: /home/ec2-user/petpick-deploy/scripts/*
+    owner: ec2-user
+    group: ec2-user
+    mode: '755'
+    type:
+      - file
 
 hooks:
   AfterInstall:
