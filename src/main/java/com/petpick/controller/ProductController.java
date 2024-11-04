@@ -43,12 +43,12 @@ public class ProductController {
 
 
     @PostMapping("/products/{productId}/like")
-    public ResponseEntity<String> toggleProductLike(@PathVariable Integer productId, HttpServletRequest request) {
-        // 액세스 토큰에서 사용자 이메일 추출
-        String accessToken = tokenProvider.resolveAccessToken(request);
-        String userEmail = tokenProvider.getUserEmailFromToken(accessToken);
+    public ResponseEntity<String> toggleProductLike(
+            @PathVariable Integer productId,
+            @RequestAttribute Integer userId
+        ) {
 
-        boolean isLiked = likesService.toggleLike(productId, userEmail);
+        boolean isLiked = likesService.toggleLike(productId, userId);
 
         String message = isLiked ? "Successfully added like to the product" : "Successfully removed like from the product";
         return ResponseEntity.ok(message);

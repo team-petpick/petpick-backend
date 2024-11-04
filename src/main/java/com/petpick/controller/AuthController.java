@@ -85,6 +85,7 @@ public class AuthController {
         dataForLocalStorage.add("access_token", accessToken);
         dataForLocalStorage.add("user_name", user.getUserName());
         dataForLocalStorage.add("user_profile", user.getUserImg());
+        dataForLocalStorage.add("user_id", String.valueOf(user.getUserId()));
 
         // include token in response
         return ResponseEntity.ok(dataForLocalStorage);
@@ -136,15 +137,14 @@ public class AuthController {
 
         String refreshToken = refreshTokenCookie.get().getValue();
 
-
         // validate refresh token
         if (tokenProvider.validateToken(refreshToken) == null) {
             throw new BaseException(AuthErrorCode.INVALID_REFRESH_TOKEN);
         }
 
-        String userEmail = tokenProvider.getUserEmailFromToken(refreshToken);
+        Integer userId = tokenProvider.getUserIdFromToken(refreshToken);
 
-        Optional<User> userOptional = userService.findByUserEmail(userEmail);
+        Optional<User> userOptional = userService.findByUserId(userId);
 
         if (userOptional.isEmpty()) {
             throw new BaseException(UserErrorCode.EMPTY_MEMBER);

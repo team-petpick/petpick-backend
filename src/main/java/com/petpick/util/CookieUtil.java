@@ -21,22 +21,19 @@ public class CookieUtil {
     }
 
     public static Optional<Cookie> getCookie(HttpServletRequest request, String name) {
-        if (request.getCookies() != null) {
-            return Arrays.stream(request.getCookies())
-                    .filter(cookie -> cookie.getName().equals(name))
-                    .findFirst()
-                    .map(cookie -> {
-                        try {
-                            String decodedValue = URLDecoder.decode(cookie.getValue(), StandardCharsets.UTF_8.name());
-                            cookie.setValue(decodedValue);
-                            return cookie;
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            return cookie;
-                        }
-                    });
-        }
-        return Optional.empty();
+        return Optional.ofNullable(request.getCookies())
+                .stream()
+                .flatMap(Arrays::stream)
+                .filter(cookie -> cookie.getName().equals(name))
+                .findFirst()
+                .map(cookie -> {
+                    try {
+                        cookie.setValue(URLDecoder.decode(cookie.getValue(), StandardCharsets.UTF_8.name()));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    return cookie;
+                });
     }
 
     public static void deleteCookie(HttpServletResponse response, String name) {

@@ -24,8 +24,8 @@ public class LikesService {
     private final UserRepository userRepository;
     private final ProductRepository productRepository;
 
-    public boolean toggleLike(Integer productId, String userEmail) {
-        User user = userRepository.findByUserEmail(userEmail)
+    public boolean toggleLike(Integer productId, Integer userId) {
+        User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
 
         Product product = productRepository.findById(productId)

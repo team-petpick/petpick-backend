@@ -34,6 +34,9 @@ public class Orders extends BaseTime {
     @Column(name = "payment_key")
     private String paymentKey;
 
+    @Column(name = "orders_serial_code")
+    private String ordersSerialCode;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "orders_status")
     private OrderStatus ordersStatus;
