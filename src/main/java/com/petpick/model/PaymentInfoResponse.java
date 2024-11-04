@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 public class PaymentInfoResponse {
     // Getters and Setters
     private String paymentKey;
-    private String orderId;
+    private int orderId;
     private String status;
     private String method;
     private int totalAmount;
