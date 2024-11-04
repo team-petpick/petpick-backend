@@ -5,43 +5,36 @@ import com.petpick.domain.ProductImg;
 import com.petpick.model.ProductImgResponse;
 import com.petpick.repository.ProductImgRepository;
 import com.petpick.repository.ProductRepository;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-
 import org.springframework.web.multipart.MultipartFile;
-
+import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.S3Utilities;
 import software.amazon.awssdk.services.s3.model.*;
-import software.amazon.awssdk.core.sync.RequestBody;
-import software.amazon.awssdk.regions.Region;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class ProductImgService {
 
-    @Autowired
-    private ProductImgRepository productImgRepository;
-
-    @Autowired
-    private ProductRepository productRepository;
-
-    @Autowired
-    private S3Client s3Client;
+    private final ProductImgRepository productImgRepository;
+    private final ProductRepository productRepository;
+    private final S3Client s3Client;
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucketName;
 
-    @Value("${cloud.aws.region.static}") // Use region from application properties
-    private String regionName;
+    public ProductImgService(
+            ProductImgRepository productImgRepository,
+            ProductRepository productRepository,
+            S3Client s3Client) {
+        this.productImgRepository = productImgRepository;
+        this.productRepository = productRepository;
+        this.s3Client = s3Client;
+    }
 
     public List<ProductImgResponse> uploadImages(
             Integer productId, List<Integer> thumbNails, List<Integer> isDesc, MultipartFile[] files) throws IOException {
@@ -86,7 +79,7 @@ public class ProductImgService {
             }
 
             if (isDescription) {
-                // Optionally, unset existing description images if only one is allowed
+                // Unset existing description images if only one is allowed
                 unsetExistingDescriptionImages(product);
             }
 
@@ -189,7 +182,11 @@ public class ProductImgService {
         List<ProductImg> existingThumbnails = productImgRepository.findByProductAndProductImgThumb(product, 1);
         for (ProductImg existingThumbnail : existingThumbnails) {
             // Create a new instance with updated thumbnail flag
-            ProductImg updatedImg = existingThumbnail.withUpdatedFields(existingThumbnail.getProductImgUrl(), 0, existingThumbnail.getDescImgStatus());
+            ProductImg updatedImg = existingThumbnail.withUpdatedFields(
+                    existingThumbnail.getProductImgUrl(),
+                    0,
+                    existingThumbnail.getDescImgStatus()
+            );
             productImgRepository.save(updatedImg);
         }
     }
@@ -198,14 +195,18 @@ public class ProductImgService {
         List<ProductImg> existingDescImages = productImgRepository.findByProductAndDescImgStatus(product, 1);
         for (ProductImg existingDescImg : existingDescImages) {
             // Create a new instance with updated description flag
-            ProductImg updatedImg = existingDescImg.withUpdatedFields(existingDescImg.getProductImgUrl(), existingDescImg.getProductImgThumb(), 0);
+            ProductImg updatedImg = existingDescImg.withUpdatedFields(
+                    existingDescImg.getProductImgUrl(),
+                    existingDescImg.getProductImgThumb(),
+                    0
+            );
             productImgRepository.save(updatedImg);
         }
     }
 
     private String generateFileName(MultipartFile multiPart) {
         return UUID.randomUUID().toString() + "-" +
-                multiPart.getOriginalFilename().replace(" ", "_");
+                Objects.requireNonNull(multiPart.getOriginalFilename()).replace(" ", "_");
     }
 
     private String extractFileNameFromUrl(String url) {
@@ -213,12 +214,7 @@ public class ProductImgService {
     }
 
     private String getFileUrl(String bucketName, String key) {
-        Region region = Region.of(regionName); // Use the region from properties
-
-        // Build S3Utilities with region
-        S3Utilities utilities = S3Utilities.builder()
-                .region(region)
-                .build();
+        S3Utilities utilities = s3Client.utilities();
 
         GetUrlRequest request = GetUrlRequest.builder()
                 .bucket(bucketName)

@@ -5,6 +5,7 @@ import com.petpick.model.ProductListResponse;
 import com.petpick.service.auth.TokenProvider;
 import com.petpick.service.likes.LikesService;
 import com.petpick.service.product.ProductService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;

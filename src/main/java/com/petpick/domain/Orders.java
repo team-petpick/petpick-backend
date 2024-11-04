@@ -18,7 +18,7 @@ public class Orders extends BaseTime {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "orders_id")
-    private Integer ordersId;
+    private int ordersId;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -43,4 +43,5 @@ public class Orders extends BaseTime {
 
     @Column(name = "orders_request")
     private String ordersRequest;
+
 }
