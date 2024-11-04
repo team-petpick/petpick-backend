@@ -8,7 +8,7 @@ import java.util.List;
 
 @Data
 public class OrderResponse {
-    private Integer ordersId;
+    private int ordersId;
     private Integer ordersPrice;
     private LocalDateTime orderCreateAt;
     private String ordersStatus;

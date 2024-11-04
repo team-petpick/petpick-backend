@@ -61,6 +61,7 @@ public class TossService {
                         .ordersPrice(request.getAmount())
                         .paymentKey(request.getPaymentKey())
                         .ordersRequest(request.getOrderRequest())
+                        .ordersSerialCode(request.getOrderSerialCode())
                         .build();
 
                 ordersRepository.save(order);

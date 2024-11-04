@@ -9,4 +9,5 @@ public class PaymentSuccessRequest {
     private Integer amount;
     private Integer userId;
     private String orderRequest;
+    private String orderSerialCode;
 }
