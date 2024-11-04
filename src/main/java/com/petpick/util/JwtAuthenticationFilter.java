@@ -54,6 +54,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
         String path = request.getRequestURI();
-        return path.equals("/api/v1/auth/google") || path.equals("/api/v1/auth/token");
+        return path.equals("/api/v1/auth/google") ||
+                path.equals("/api/v1/auth/token") ||
+                path.equals("/swagger-ui.html") || // Swagger UI 예외
+                path.startsWith("/swagger-resources") || // Swagger 리소스 예외
+                path.startsWith("/v2/api-docs") || // Swagger 2.0 API Docs 경로 예외
+                path.startsWith("/v3/api-docs") || // Swagger 3.0 API Docs 경로 예외
+                path.startsWith("/webjars");
     }
 }

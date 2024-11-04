@@ -38,7 +38,7 @@ public class SecurityConfig {
                 }))
 //                .requiresChannel(channel -> channel.anyRequest().requiresSecure()) // 모든 요청을 https로 강제하는 코드 => https 등록 시 주석 해제
                 .authorizeHttpRequests(authorizeRequests -> authorizeRequests
-                        .requestMatchers("/api/v1/auth/google", "/api/v1/auth/token").permitAll()
+                        .requestMatchers("/api/v1/auth/google", "/api/v1/auth/token", "/swagger-ui.html", "/swagger-resources/**", "/v2/api-docs/**", "/v3/api-docs/**", "/webjars/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(new JwtAuthenticationFilter(tokenProvider),
