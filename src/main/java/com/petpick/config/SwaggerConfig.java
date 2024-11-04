@@ -30,12 +30,15 @@ public class SwaggerConfig {
         Server server = new Server();
         server.setUrl("https://back.petpick.store"); // Replace with your actual domain
 
+        Server localServer = new Server();
+        localServer.setUrl("http://localhost:8080");
+
         // Build and return OpenAPI object
         return new OpenAPI()
                 .components(components)
                 .info(apiInfo())
                 .addSecurityItem(securityRequirement)
-                .servers(List.of(server)); // Add the server here
+                .servers(List.of(server, localServer)); // Add the server here
     }
 
     private Info apiInfo() {

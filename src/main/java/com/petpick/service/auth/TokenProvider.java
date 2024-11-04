@@ -32,12 +32,8 @@ public class TokenProvider {
 
     // create access token
     public String createAccessToken(User user) {
-        Map<String, Object> claims = new HashMap<>();
-        claims.put("email", user.getUserEmail());
-
         return Jwts.builder()
-                .setClaims(claims)
-                .setSubject(user.getUserEmail())
+                .setSubject(String.valueOf(user.getUserId()))
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + accessTokenExpiration))
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)
@@ -47,7 +43,7 @@ public class TokenProvider {
     // create refresh token
     public String createRefreshToken(User user) {
         return Jwts.builder()
-                .setSubject(user.getUserEmail())
+                .setSubject(String.valueOf(user.getUserId()))
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + refreshTokenExpiration))
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)
@@ -74,31 +70,11 @@ public class TokenProvider {
         }
     }
 
-    public String getUserEmailFromToken(String token) {
-        Claims claims = validateToken(token);
+    public Integer getUserIdFromToken(String refreshToken) {
+        Claims claims = validateToken(refreshToken);
         if(claims == null) {
             throw new IllegalStateException("Invalid token");
         }
-        return claims.getSubject();
-    }
-
-    public boolean validatesToken(String token) {
-        try {
-            Jwts.parser().setSigningKey(jwtSecretKey.getBytes()).parseClaimsJws(token);
-            return true;
-        } catch (SignatureException ex) {
-            // 잘못된 서명
-            System.out.println("Invalid JWT signature");
-        } catch (io.jsonwebtoken.ExpiredJwtException ex) {
-            // 만료된 토큰
-            System.out.println("Expired JWT token");
-        } catch (io.jsonwebtoken.MalformedJwtException ex) {
-            // 잘못된 JWT
-            System.out.println("Invalid JWT token");
-        } catch (Exception ex) {
-            // 기타 예외
-            System.out.println("Invalid JWT token");
-        }
-        return false;
+        return Integer.parseInt(claims.getSubject());
     }
 }

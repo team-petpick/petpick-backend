@@ -15,9 +15,9 @@ public class UserController {
 
     private final UserService userService;
 
-    @GetMapping("/user/{userId}/likes")
+    @GetMapping("/user/likes")
     public ResponseEntity<List<UserLikesProductListResponse>> getProductLikes(
-            @PathVariable Integer userId
+            @RequestAttribute Integer userId
     ) {
         List<UserLikesProductListResponse> userLikesProductListResponse = userService.getUserLikesProductList(userId);
         return ResponseEntity.ok(userLikesProductListResponse);

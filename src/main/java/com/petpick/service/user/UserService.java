@@ -68,6 +68,10 @@ public class UserService {
         return userRepository.findByUserEmail(userEmail);
     }
 
+    public Optional<User> findByUserId(Integer userId) {
+        return userRepository.findById(userId);
+    }
+
     public List<UserLikesProductListResponse> getUserLikesProductList(Integer userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new BaseException(UserErrorCode.EMPTY_MEMBER));

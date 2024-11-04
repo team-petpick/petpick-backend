@@ -17,9 +17,9 @@ public class OrderController {
     /*
     * Order log by User
     * */
-    @GetMapping("/orders/{userId}")
+    @GetMapping("/orders")
     public ResponseEntity<Page<OrderResponse>> getOrderHistory(
-            @PathVariable Integer userId,
+            @RequestAttribute Integer userId,
             @RequestParam(defaultValue = "0") Integer page,
             @RequestParam(defaultValue = "3") Integer month
     ) {
