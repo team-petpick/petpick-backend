@@ -1,5 +1,7 @@
 package com.petpick.domain;
 
+import com.petpick.domain.type.OrderDetailStatus;
+import com.petpick.global.entity.BaseTime;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -28,6 +30,10 @@ public class OrderDetail {
 
     @Column(name = "order_detail_price")
     private Double orderDetailPrice;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "order_detail_status")
+    private OrderDetailStatus orderDetailStatus;
 
     @Column(name = "order_detail_cnt")
     private Integer orderDetailCnt;

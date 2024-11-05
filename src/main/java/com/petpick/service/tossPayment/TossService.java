@@ -1,6 +1,7 @@
 package com.petpick.service.tossPayment;
 
 import com.petpick.domain.*;
+import com.petpick.domain.type.OrderDetailStatus;
 import com.petpick.domain.type.OrderStatus;
 import com.petpick.model.*;
 import com.petpick.repository.*;
@@ -115,6 +116,7 @@ public class TossService {
                             .product(product)
                             .orderDetailPrice(detailResponse.getOrderDetailPrice())
                             .orderDetailCnt(detailResponse.getOrderDetailCnt())
+                            .orderDetailStatus(OrderDetailStatus.PAY_CONFIRM)
                             .build();
 
                     orderDetails.add(orderDetail);
