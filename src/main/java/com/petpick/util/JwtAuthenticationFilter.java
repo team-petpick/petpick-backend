@@ -10,10 +10,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
+@Component
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
@@ -25,6 +27,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                     FilterChain filterChain) throws ServletException, IOException {
 
         String token = tokenProvider.resolveAccessToken(request);
+
+        System.out.println(token);
+        System.out.println(tokenProvider.validateToken(token));
 
         if (token != null && tokenProvider.validateToken(token) != null) {
             // 토큰 디코드하여 클레임 추출
@@ -54,13 +59,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
         String path = request.getRequestURI();
-        return path.equals("/api/v1/auth/google") ||
+        boolean shouldNotFilter = path.equals("/api/v1/auth/google") ||
                 path.equals("/api/v1/auth/token") ||
                 path.equals("/swagger-ui.html") ||
                 path.startsWith("/swagger-ui") ||
                 path.startsWith("/swagger-resources") ||
                 path.startsWith("/v2/api-docs") ||
                 path.startsWith("/v3/api-docs") ||
-                path.startsWith("/webjars");
+                path.startsWith("/webjars") ||
+                path.startsWith("/api/v1/products"); // 수정된 부분
+
+        return shouldNotFilter;
     }
 }

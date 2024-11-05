@@ -80,4 +80,3 @@ public class PetController {
         petService.deletePetImage(petId);
     }
 }
-
