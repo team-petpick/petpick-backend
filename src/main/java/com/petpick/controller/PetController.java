@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.util.List;
 
 @RestController
-@RequestMapping("/pets")
+@RequestMapping("/v1/pets")
 public class PetController {
 
     @Autowired
@@ -34,21 +34,22 @@ public class PetController {
     }
 
     // Get pet by ID
-    @GetMapping("/{petId}")
-    public PetInfoResponse getPet(@PathVariable Integer petId) {
-        return petService.getPet(petId);
+    @GetMapping
+    public PetInfoResponse getPet(
+            @RequestAttribute Integer userId) {
+        return petService.getPetById(userId);
     }
 
-    // Get all pets
-    @GetMapping
-    public List<PetInfoResponse> getAllPets() {
-        return petService.getAllPets();
-    }
+//    // Get all pets
+//    @GetMapping
+//    public List<PetInfoResponse> getAllPets() {
+//        return petService.getAllPets();
+//    }
 
     // Update pet
-    @PutMapping(value = "/{petId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public PetInfoResponse updatePet(
-            @PathVariable Integer petId,
+            @RequestAttribute Integer userId,
             @RequestParam(value = "petName", required = false) String petName,
             @RequestParam(value = "petSpecies", required = false) String petSpecies,
             @RequestParam(value = "petKind", required = false) PetKind petKind,
@@ -56,7 +57,7 @@ public class PetController {
             @RequestParam(value = "petGender", required = false) PetGender petGender,
             @RequestParam(value = "petImg", required = false) MultipartFile petImg) throws IOException {
 
-        return petService.updatePet(petId, petName, petSpecies, petKind, petAge, petGender, petImg);
+        return petService.updatePet(userId, petName, petSpecies, petKind, petAge, petGender, petImg);
     }
 
     // Delete pet

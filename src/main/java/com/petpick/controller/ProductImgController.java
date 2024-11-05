@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.util.List;
 
 @RestController
-@RequestMapping("/product-images")
+@RequestMapping("/v1/product-images")
 public class ProductImgController {
 
     @Autowired

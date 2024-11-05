@@ -29,7 +29,7 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(request -> {
                     CorsConfiguration config = new CorsConfiguration();
-                    config.setAllowedOriginPatterns(List.of("http://localhost:3000","https://back.petpick.store", "https://petpick.netlify.app", "http://localhost:8080")); // 프론트엔드 URL
+                    config.setAllowedOriginPatterns(List.of("http://localhost:3000","https://back.petpick.store", "https://petpick.netlify.app", "http://localhost:8080","https://petpick-dev.netlify.app")); // 프론트엔드 URL
                     config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
                     config.setAllowedHeaders(List.of("Authorization", "Content-Type", "Accept", "Origin"));
                     config.setAllowCredentials(true);
@@ -40,17 +40,17 @@ public class SecurityConfig {
 //                .requiresChannel(channel -> channel.anyRequest().requiresSecure()) // 모든 요청을 https로 강제하는 코드 => https 등록 시 주석 해제
                 .authorizeHttpRequests(authorizeRequests -> authorizeRequests
                         .requestMatchers(
-                                "/api/v1/auth/google",
-                                "/api/v1/auth/token",
-                                "/api/v1/auth/logout",
+                                "/v1/auth/google",
+                                "/v1/auth/token",
+                                "/v1/auth/logout",
                                 "/swagger-ui.html",
                                 "/swagger-ui/**",
                                 "/swagger-resources/**",
                                 "/v2/api-docs/**",
                                 "/v3/api-docs/**",
                                 "/webjars/**",
-                                "/api/v1/products",
-                                "/api/v1/products/**"
+                                "/v1/products",
+                                "/v1/products/**"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )

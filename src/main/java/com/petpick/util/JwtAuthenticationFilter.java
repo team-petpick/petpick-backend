@@ -28,7 +28,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         String token = tokenProvider.resolveAccessToken(request);
 
-        System.out.println("token>>>"+token);
+        System.out.println(token);
         System.out.println(tokenProvider.validateToken(token));
 
         if (token != null && tokenProvider.validateToken(token) != null) {
@@ -59,16 +59,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
         String path = request.getRequestURI();
-        boolean shouldNotFilter = path.equals("/api/v1/auth/google") ||
-                path.equals("/api/v1/auth/token") ||
-                path.equals("/api/v1/auth/logout") ||
+        boolean shouldNotFilter = path.equals("/v1/auth/google") ||
+                path.equals("/v1/auth/token") ||
                 path.equals("/swagger-ui.html") ||
+                path.equals("/v1/auth/logout") ||
                 path.startsWith("/swagger-ui") ||
                 path.startsWith("/swagger-resources") ||
                 path.startsWith("/v2/api-docs") ||
                 path.startsWith("/v3/api-docs") ||
                 path.startsWith("/webjars") ||
-                path.startsWith("/api/v1/products"); // 수정된 부분
+                path.startsWith("/v1/products"); // 수정된 부분
 
         return shouldNotFilter;
     }
