@@ -9,7 +9,6 @@ import java.util.List;
 
 @Data
 public class PaymentSuccessRequest {
-    private Integer orderId;
     private String paymentKey;
     private Integer amount;
     private Integer userId;
