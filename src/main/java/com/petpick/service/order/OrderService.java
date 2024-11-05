@@ -18,6 +18,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -66,5 +67,24 @@ public class OrderService {
         }
 
         return new PageImpl<>(orderResponses, pageable, ordersPage.getTotalElements());
+    }
+
+    public List<OrderDetailResponse> getOrdersByOrdersSerialCode(Orders orders) {
+
+        List<OrderDetail> orderDetails = orderDetailRepository.findByOrders(orders);
+
+        return orderDetails.stream()
+                .map(orderDetail -> {
+                    String thumbnailUrl = productImgRepository.findThumbnailByProductId(orderDetail.getProduct().getProductId());
+                    return new OrderDetailResponse(orderDetail, thumbnailUrl);
+                })
+                .collect(Collectors.toList());
+    }
+
+    public Orders getOrders(Integer orderId){
+        Orders orders = ordersRepository.findById(orderId)
+                .orElseThrow(() -> new BaseException(OrderErrorCode.ORDER_NOT_FOUND));
+
+        return orders;
     }
 }
