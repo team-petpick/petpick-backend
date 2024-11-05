@@ -69,8 +69,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 path.startsWith("/webjars") ||
                 path.startsWith("/api/v1/products"); // 수정된 부분
 
-        System.out.println("shouldNotFilter called for URI: " + path + ", result: " + shouldNotFilter);
-
         return shouldNotFilter;
     }
 }
