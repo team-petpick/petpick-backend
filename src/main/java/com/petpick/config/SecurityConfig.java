@@ -29,7 +29,7 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(request -> {
                     CorsConfiguration config = new CorsConfiguration();
-                    config.setAllowedOriginPatterns(List.of("http://localhost:3000","https://back.petpick.store", "https://petpick.netlify.app", "http://localhost:8080")); // 프론트엔드 URL
+                    config.setAllowedOriginPatterns(List.of("http://localhost:3000","https://back.petpick.store", "https://petpick.netlify.app", "http://localhost:8080","https://petpick-dev.netlify.app")); // 프론트엔드 URL
                     config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
                     config.setAllowedHeaders(List.of("Authorization", "Content-Type", "Accept", "Origin"));
                     config.setAllowCredentials(true);
