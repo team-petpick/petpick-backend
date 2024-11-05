@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 
 @RestController
-@RequestMapping("v1/payment")
+@RequestMapping("/v1/payment")
 public class TossPaymentController {
 
     private final TossService tossService;
@@ -22,11 +22,10 @@ public class TossPaymentController {
     @PostMapping("/success")
     public ResponseEntity<String> paymentSuccess(@RequestBody PaymentSuccessRequest request, @RequestAttribute Integer userId) {
         // Log the received request for debugging
-        request.setUserId(userId);
         System.out.println("Received request: " + request);
 
-        boolean isConfirmed = tossService.confirmPayment(request);
-
+        boolean isConfirmed = tossService.confirmPayment(request, userId);
+//        boolean isConfirmed = true;
         if (isConfirmed) {
             return ResponseEntity.ok("Payment confirmed and order saved successfully.");
         } else {
@@ -35,20 +34,16 @@ public class TossPaymentController {
     }
 
     @PostMapping("/cancel")
-    public ResponseEntity<String> paymentCancel(@Valid @RequestBody PaymentCancelRequest request, @RequestAttribute Integer userId) {
-        // Log the received request for debugging
-        System.out.println("Received cancellation request: " + request);
-
-
-
-        boolean isCanceled = tossService.cancelPayment(request, userId);
-
-        if (isCanceled) {
-            return ResponseEntity.ok("Payment canceled successfully.");
+    public ResponseEntity<String> paymentCancel(@RequestBody PaymentCancelRequest request, @RequestAttribute Integer userId) {
+        boolean isCancelled = tossService.cancelPayment(request, userId);
+        if (isCancelled) {
+            return ResponseEntity.ok("Payment cancelled and order updated successfully.");
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Payment cancellation failed.");
         }
     }
+
+
 
     // Exception handler for deserialization errors
     @ExceptionHandler(HttpMessageNotReadableException.class)

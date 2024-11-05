@@ -11,12 +11,9 @@ import java.util.List;
 public class PaymentSuccessRequest {
     private String paymentKey;
     private Integer amount;
-    private Integer userId;
     private String orderRequest;
     private String orderSerialCode;
     private AddressRequest address;
-    @Setter
-    @Getter
-    private OrderStatus orderStatus;
-    private List<OrderDetailResponse> orderDetails;
+    private List<OrderDetailRequest> orderDetails;
 }
+

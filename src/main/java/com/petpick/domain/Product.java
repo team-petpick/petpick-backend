@@ -61,6 +61,15 @@ public class Product extends BaseTime {
             this.productLikesTotal--;
         }
     }
+    public void increaseProductCnt(int amount) {
+        if (this.productCnt == null) {
+            throw new IllegalStateException("Product count is not initialized.");
+        }
+        if (amount <= 0) {
+            throw new IllegalArgumentException("Amount to increase must be positive.");
+        }
+        this.productCnt += amount;
+    }
 
     public void setProductCnt(Integer productCnt) {
         this.productCnt = productCnt;
