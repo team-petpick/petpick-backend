@@ -62,6 +62,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         boolean shouldNotFilter = path.equals("/api/v1/auth/google") ||
                 path.equals("/api/v1/auth/token") ||
                 path.equals("/swagger-ui.html") ||
+                path.equals("/api/v1/auth/logout") ||
                 path.startsWith("/swagger-ui") ||
                 path.startsWith("/swagger-resources") ||
                 path.startsWith("/v2/api-docs") ||
