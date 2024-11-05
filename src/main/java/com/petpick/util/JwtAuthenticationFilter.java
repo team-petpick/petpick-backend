@@ -28,8 +28,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         String token = tokenProvider.resolveAccessToken(request);
 
-        System.out.println(token);
-        System.out.println(tokenProvider.validateToken(token));
+//        System.out.println(token);
+//        System.out.println(tokenProvider.validateToken(token));
 
         if (token != null && tokenProvider.validateToken(token) != null) {
             // 토큰 디코드하여 클레임 추출
