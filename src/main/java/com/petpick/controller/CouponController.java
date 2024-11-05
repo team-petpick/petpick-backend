@@ -8,14 +8,14 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/coupons")
+@RequestMapping("/v1/coupons")
 @RequiredArgsConstructor
 public class CouponController {
 
     private final CouponService couponService;
 
-    @GetMapping("/{userId}")
-    public List<CouponResponse> getCouponsByUserId(@PathVariable Integer userId) {
+    @GetMapping
+    public List<CouponResponse> getCouponsByUserId(@RequestAttribute Integer userId) {
         return couponService.getCouponsByUserId(userId);
     }
 }

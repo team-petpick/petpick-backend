@@ -61,4 +61,8 @@ public class Product extends BaseTime {
             this.productLikesTotal--;
         }
     }
+
+    public void setProductCnt(Integer productCnt) {
+        this.productCnt = productCnt;
+    }
 }

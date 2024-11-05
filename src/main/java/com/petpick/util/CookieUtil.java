@@ -11,13 +11,9 @@ import java.util.Optional;
 
 public class CookieUtil {
     public static void addCookie(HttpServletResponse response, String name, String value, int maxAge) {
-        Cookie cookie = new Cookie(name, value);
-        cookie.setPath("/");
-        cookie.setHttpOnly(false); // https 등록 시 true로 변경
-        cookie.setSecure(false);
-        cookie.setMaxAge(maxAge);
-
-        response.addCookie(cookie);
+        String cookieHeader = String.format("%s=%s; Path=%s; HttpOnly; Secure; Max-Age=%d; SameSite=None",
+                name, value, "/", maxAge);
+        response.addHeader("Set-Cookie", cookieHeader);
     }
 
     public static Optional<Cookie> getCookie(HttpServletRequest request, String name) {

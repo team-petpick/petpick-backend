@@ -86,26 +86,32 @@ public class PetService {
     }
 
     // Get pet by ID
-    public PetInfoResponse getPet(Integer petId) {
-        Pet pet = petRepository.findById(petId)
-                .orElseThrow(() -> new RuntimeException("Pet not found"));
+//    public PetInfoResponse getPet(Integer petId) {
+//        Pet pet = petRepository.findById(petId)
+//                .orElseThrow(() -> new RuntimeException("Pet not found"));
+//
+//        return new PetInfoResponse(pet);
+//    }
+    public PetInfoResponse getPetById(Integer userId) {
+        Pet pet = petRepository.findByUser_UserId(userId)
+                .orElseThrow(() -> new IllegalArgumentException("Pet not found for user ID: " + userId));
 
         return new PetInfoResponse(pet);
     }
 
     // Get all pets
-    public List<PetInfoResponse> getAllPets() {
-        List<Pet> pets = petRepository.findAll();
-        return pets.stream()
-                .map(PetInfoResponse::new)
-                .collect(Collectors.toList());
-    }
+//    public List<PetInfoResponse> getAllPets() {
+//        List<Pet> pets = petRepository.findAll();
+//        return pets.stream()
+//                .map(PetInfoResponse::new)
+//                .collect(Collectors.toList());
+//    }
 
     // Update pet
-    public PetInfoResponse updatePet(Integer petId, String petName,String petSpecies, PetKind petKind,
+    public PetInfoResponse updatePet(Integer userId, String petName,String petSpecies, PetKind petKind,
                                      Integer petAge, PetGender petGender, MultipartFile petImg) throws IOException {
 
-        Pet pet = petRepository.findById(petId)
+        Pet pet = petRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("Pet not found"));
 
         String newPetName = (petName != null) ? petName : pet.getPetName();
@@ -146,8 +152,8 @@ public class PetService {
     }
 
     // Delete pet
-    public void deletePet(Integer petId) {
-        Pet pet = petRepository.findById(petId)
+    public void deletePet(Integer userId) {
+        Pet pet = petRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("Pet not found"));
 
         // Delete pet image from S3 if exists
@@ -155,12 +161,12 @@ public class PetService {
             deleteImageFromS3(pet.getPetImg());
         }
 
-        petRepository.deleteById(petId);
+        petRepository.deleteById(userId);
     }
 
     // Update pet image only
-    public PetInfoResponse updatePetImage(Integer petId, MultipartFile petImg) throws IOException {
-        Pet pet = petRepository.findById(petId)
+    public PetInfoResponse updatePetImage(Integer userId, MultipartFile petImg) throws IOException {
+        Pet pet = petRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("Pet not found"));
 
         // Delete old image from S3 if exists
@@ -192,8 +198,8 @@ public class PetService {
     }
 
     // Delete pet image only
-    public void deletePetImage(Integer petId) {
-        Pet pet = petRepository.findById(petId)
+    public void deletePetImage(Integer userId) {
+        Pet pet = petRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("Pet not found"));
 
         if (pet.getPetImg() != null) {

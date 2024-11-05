@@ -1,6 +1,7 @@
 package com.petpick.model;
 
 import com.petpick.domain.OrderDetail;
+import com.petpick.domain.type.OrderDetailStatus;
 import lombok.Data;
 
 @Data
@@ -12,6 +13,7 @@ public class OrderDetailResponse {
     private Double orderDetailPrice;
     private Integer orderDetailCnt;
     private String productThumbnail;
+    private OrderDetailStatus orderDetailStatus;
 
     public OrderDetailResponse(OrderDetail orderDetail, String productThumbnail) {
         this.orderDetailId = orderDetail.getOrderDetailId();
@@ -21,5 +23,9 @@ public class OrderDetailResponse {
         this.orderDetailPrice = orderDetail.getOrderDetailPrice();
         this.orderDetailCnt = orderDetail.getOrderDetailCnt();
         this.productThumbnail = productThumbnail;
+        this.orderDetailStatus = orderDetail.getOrderDetailStatus();
     }
+    public OrderDetailResponse() {
+    }
+
 }
