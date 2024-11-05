@@ -10,6 +10,7 @@ public class CartItemResponse {
     private Integer cartCnt;
     private Integer productPrice;
     private String productThumbnail;
+    private Integer productSale;
 
     public CartItemResponse(Cart cart, String productThumbnail) {
         this.productId = cart.getProduct().getProductId();
@@ -17,5 +18,6 @@ public class CartItemResponse {
         this.cartCnt = cart.getCartCnt();
         this.productPrice = cart.getProduct().getProductPrice();
         this.productThumbnail = productThumbnail;
+        this.productSale = cart.getProduct().getProductSale();
     }
 }

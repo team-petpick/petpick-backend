@@ -20,6 +20,7 @@ import java.util.List;
 public class SecurityConfig {
 
     private final TokenProvider tokenProvider;
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
     @Bean
     public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
@@ -28,9 +29,9 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(request -> {
                     CorsConfiguration config = new CorsConfiguration();
-                    config.setAllowedOrigins(List.of("http://localhost:3000","https://back.petpick.store", "https://petpick.netlify.app")); // 프론트엔드 URL
-                    config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
-                    config.setAllowedHeaders(List.of("Authorization", "Content-Type"));
+                    config.setAllowedOrigins(List.of("http://localhost:3000","https://back.petpick.store", "https://petpick.netlify.app", "http://localhost:8080")); // 프론트엔드 URL
+                    config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+                    config.setAllowedHeaders(List.of("Authorization", "Content-Type", "Accept", "Origin"));
                     config.setAllowCredentials(true);
                     config.addExposedHeader("Cross-Origin-Opener-Policy");
                     config.addExposedHeader("Cross-Origin-Embedder-Policy");
@@ -46,11 +47,13 @@ public class SecurityConfig {
                                 "/swagger-resources/**",
                                 "/v2/api-docs/**",
                                 "/v3/api-docs/**",
-                                "/webjars/**"
+                                "/webjars/**",
+                                "/api/v1/products",
+                                "/api/v1/products/**"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
-                .addFilterBefore(new JwtAuthenticationFilter(tokenProvider),
+                .addFilterBefore(jwtAuthenticationFilter,
                         UsernamePasswordAuthenticationFilter.class)
                 ;
         return http.build();

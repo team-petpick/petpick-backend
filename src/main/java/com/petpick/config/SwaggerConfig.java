@@ -27,8 +27,8 @@ public class SwaggerConfig {
         );
 
         // Create Server object and set HTTPS URL
-        Server server = new Server();
-        server.setUrl("https://back.petpick.store"); // Replace with your actual domain
+//        Server server = new Server();
+//        server.setUrl("https://back.petpick.store"); // Replace with your actual domain
 
         Server localServer = new Server();
         localServer.setUrl("http://localhost:8080");
@@ -38,7 +38,7 @@ public class SwaggerConfig {
                 .components(components)
                 .info(apiInfo())
                 .addSecurityItem(securityRequirement)
-                .servers(List.of(server, localServer)); // Add the server here
+                .servers(List.of(localServer)); // Add the server here
     }
 
     private Info apiInfo() {
