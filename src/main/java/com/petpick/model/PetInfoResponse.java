@@ -8,7 +8,6 @@ import lombok.Data;
 @Data
 public class PetInfoResponse {
 
-    private Integer petId;
     private Integer userId;
     private String petName;
     private PetKind petKind;
@@ -17,7 +16,6 @@ public class PetInfoResponse {
     private PetGender petGender;
 
     public PetInfoResponse(Pet pet) {
-        this.petId = pet.getPetId();
         this.userId = pet.getUser().getUserId(); // Assuming User has getUserId()
         this.petName = pet.getPetName();
         this.petKind = pet.getPetKind();

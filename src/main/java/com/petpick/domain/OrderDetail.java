@@ -37,4 +37,8 @@ public class OrderDetail {
 
     @Column(name = "order_detail_cnt")
     private Integer orderDetailCnt;
+
+    public void setOrderDetailStatus(OrderDetailStatus orderDetailStatus) {
+        this.orderDetailStatus = orderDetailStatus;
+    }
 }
