@@ -31,4 +31,7 @@ public class OrderDetail {
 
     @Column(name = "order_detail_cnt")
     private Integer orderDetailCnt;
+
+    @Column(name = "order_detail_status")
+    private String orderDetailStatus;
 }

@@ -79,9 +79,9 @@ public class UserService {
         // 사용자에 대한 전체 좋아요 리스트 조회
         List<Likes> likesList = likesRepository.findByUser(user);
 
-        if (likesList.isEmpty()) {
-            throw new BaseException(ProductErrorCode.NO_PRODUCTS_AVAILABLE);
-        }
+//        if (likesList.isEmpty()) {
+//            throw new BaseException(ProductErrorCode.NO_PRODUCTS_AVAILABLE);
+//        }
 
         return likesList.stream()
                 .map(like -> {

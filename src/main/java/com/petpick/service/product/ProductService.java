@@ -106,10 +106,6 @@ public class ProductService {
             }
         }
 
-        if(!productsPage.hasContent()){
-            throw new BaseException(ProductErrorCode.NO_PRODUCTS_AVAILABLE);
-        }
-
         return productsPage.map(product -> {
             Integer productId = product.getProductId();
             String thumbnailUrl = productImgRepository.findThumbnailByProductId(productId);

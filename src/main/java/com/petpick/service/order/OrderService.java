@@ -62,10 +62,6 @@ public class OrderService {
             orderResponses.add(orderResponse);
         }
 
-        if(!ordersPage.hasContent()){
-            throw new BaseException(ProductErrorCode.NO_PRODUCTS_AVAILABLE);
-        }
-
         return new PageImpl<>(orderResponses, pageable, ordersPage.getTotalElements());
     }
 

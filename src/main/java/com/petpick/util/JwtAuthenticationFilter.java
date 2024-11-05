@@ -28,7 +28,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         String token = tokenProvider.resolveAccessToken(request);
 
-        System.out.println(token);
+        System.out.println("token>>>"+token);
         System.out.println(tokenProvider.validateToken(token));
 
         if (token != null && tokenProvider.validateToken(token) != null) {
@@ -61,6 +61,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String path = request.getRequestURI();
         boolean shouldNotFilter = path.equals("/api/v1/auth/google") ||
                 path.equals("/api/v1/auth/token") ||
+                path.equals("/api/v1/auth/logout") ||
                 path.equals("/swagger-ui.html") ||
                 path.startsWith("/swagger-ui") ||
                 path.startsWith("/swagger-resources") ||
