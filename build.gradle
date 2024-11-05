@@ -17,6 +17,7 @@ java {
 
 repositories {
     mavenCentral()
+    maven { url 'https://jitpack.io'}
 }
 
 dependencies {
@@ -62,6 +63,9 @@ dependencies {
 
     // Swagger
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0'
+
+    // Swaggy-Swagger
+    implementation 'com.github.Swaggy-Swagger:swagger-custom-java:1.0.0'
 }
 
 tasks.named('test') {

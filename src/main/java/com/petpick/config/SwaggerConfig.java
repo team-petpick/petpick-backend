@@ -6,13 +6,24 @@ import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
 import io.swagger.v3.oas.models.servers.Server; // Import Server
+import io.swaggy.swagger.customlib.config.SwaggyConfig;
+import io.swaggy.swagger.customlib.utils.OpenApiChangeTracker;
+import org.springdoc.core.customizers.OpenApiCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 
 import java.util.List; // Import List
 
 @Configuration
+@Import(SwaggyConfig.class)
 public class SwaggerConfig {
+
+    @Bean
+    public OpenApiCustomizer openApiCustomizer() {
+        return new OpenApiChangeTracker();
+    }
+
     @Bean
     public OpenAPI openAPI() {
         String jwt = "JWT";

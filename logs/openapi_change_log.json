@@ -1,0 +1,316 @@
+[ {
+  "schemaChanges" : [ {
+    "changeType" : "schemaAdded",
+    "schemaName" : "ProductImgResponse",
+    "pathInfo" : [ {
+      "path" : "/product-images/{id}",
+      "method" : "get"
+    }, {
+      "path" : "/product-images/{id}",
+      "method" : "put"
+    }, {
+      "path" : "/product-images/desc/{id}",
+      "method" : "get"
+    } ]
+  }, {
+    "changeType" : "schemaAdded",
+    "schemaName" : "PetInfoResponse",
+    "pathInfo" : [ {
+      "path" : "/pets",
+      "method" : "post"
+    }, {
+      "path" : "/pets/{petId}",
+      "method" : "get"
+    }, {
+      "path" : "/pets/{petId}",
+      "method" : "put"
+    }, {
+      "path" : "/pets/{petId}/image",
+      "method" : "put"
+    } ]
+  }, {
+    "changeType" : "schemaAdded",
+    "schemaName" : "AddressRequest"
+  }, {
+    "changeType" : "schemaAdded",
+    "schemaName" : "OrderDetailResponse"
+  }, {
+    "changeType" : "schemaAdded",
+    "schemaName" : "PaymentSuccessRequest",
+    "pathInfo" : [ {
+      "path" : "/payment/success",
+      "method" : "post"
+    } ]
+  }, {
+    "changeType" : "schemaAdded",
+    "schemaName" : "CartItemRequest",
+    "pathInfo" : [ {
+      "path" : "/api/v1/cart",
+      "method" : "post"
+    }, {
+      "path" : "/api/v1/cart",
+      "method" : "patch"
+    } ]
+  }, {
+    "changeType" : "schemaAdded",
+    "schemaName" : "AuthorizationCodeResponse",
+    "pathInfo" : [ {
+      "path" : "/api/v1/auth/google",
+      "method" : "post"
+    } ]
+  }, {
+    "changeType" : "schemaAdded",
+    "schemaName" : "CouponResponse"
+  }, {
+    "changeType" : "schemaAdded",
+    "schemaName" : "CategoryResponse"
+  }, {
+    "changeType" : "schemaAdded",
+    "schemaName" : "UserLikesProductListResponse"
+  }, {
+    "changeType" : "schemaAdded",
+    "schemaName" : "PageProductListResponse",
+    "pathInfo" : [ {
+      "path" : "/api/v1/products",
+      "method" : "get"
+    } ]
+  }, {
+    "changeType" : "schemaAdded",
+    "schemaName" : "PageableObject"
+  }, {
+    "changeType" : "schemaAdded",
+    "schemaName" : "ProductListResponse"
+  }, {
+    "changeType" : "schemaAdded",
+    "schemaName" : "SellerResponse"
+  }, {
+    "changeType" : "schemaAdded",
+    "schemaName" : "SortObject"
+  }, {
+    "changeType" : "schemaAdded",
+    "schemaName" : "ProductDetailResponse",
+    "pathInfo" : [ {
+      "path" : "/api/v1/products/{productId}",
+      "method" : "get"
+    } ]
+  }, {
+    "changeType" : "schemaAdded",
+    "schemaName" : "ProductLikesResponse"
+  }, {
+    "changeType" : "schemaAdded",
+    "schemaName" : "OrderResponse"
+  }, {
+    "changeType" : "schemaAdded",
+    "schemaName" : "PageOrderResponse",
+    "pathInfo" : [ {
+      "path" : "/api/v1/orders",
+      "method" : "get"
+    } ]
+  }, {
+    "changeType" : "schemaAdded",
+    "schemaName" : "CartItemResponse"
+  }, {
+    "changeType" : "schemaAdded",
+    "schemaName" : "ApplicationContext"
+  }, {
+    "changeType" : "schemaAdded",
+    "schemaName" : "AutowireCapableBeanFactory"
+  }, {
+    "changeType" : "schemaAdded",
+    "schemaName" : "BeanFactory"
+  }, {
+    "changeType" : "schemaAdded",
+    "schemaName" : "Environment"
+  }, {
+    "changeType" : "schemaAdded",
+    "schemaName" : "FilterRegistration"
+  }, {
+    "changeType" : "schemaAdded",
+    "schemaName" : "HttpStatusCode"
+  }, {
+    "changeType" : "schemaAdded",
+    "schemaName" : "JspConfigDescriptor"
+  }, {
+    "changeType" : "schemaAdded",
+    "schemaName" : "JspPropertyGroupDescriptor"
+  }, {
+    "changeType" : "schemaAdded",
+    "schemaName" : "RedirectView",
+    "pathInfo" : [ {
+      "path" : "/",
+      "method" : "get"
+    }, {
+      "path" : "/",
+      "method" : "put"
+    }, {
+      "path" : "/",
+      "method" : "post"
+    }, {
+      "path" : "/",
+      "method" : "delete"
+    }, {
+      "path" : "/",
+      "method" : "options"
+    }, {
+      "path" : "/",
+      "method" : "head"
+    }, {
+      "path" : "/",
+      "method" : "patch"
+    } ]
+  }, {
+    "changeType" : "schemaAdded",
+    "schemaName" : "ServletContext"
+  }, {
+    "changeType" : "schemaAdded",
+    "schemaName" : "ServletRegistration"
+  }, {
+    "changeType" : "schemaAdded",
+    "schemaName" : "SessionCookieConfig"
+  }, {
+    "changeType" : "schemaAdded",
+    "schemaName" : "TaglibDescriptor"
+  } ],
+  "version" : "2024-11-05 12:57:48",
+  "endpointChanges" : [ {
+    "endpoint" : "/api/v1/auth/google",
+    "method" : "post",
+    "changeType" : "endpointAdded"
+  }, {
+    "endpoint" : "/api/v1/auth/logout",
+    "method" : "post",
+    "changeType" : "endpointAdded"
+  }, {
+    "endpoint" : "/api/v1/auth/token",
+    "method" : "post",
+    "changeType" : "endpointAdded"
+  }, {
+    "endpoint" : "/api/v1/cart",
+    "method" : "get",
+    "changeType" : "endpointAdded"
+  }, {
+    "endpoint" : "/api/v1/cart",
+    "method" : "post",
+    "changeType" : "endpointAdded"
+  }, {
+    "endpoint" : "/api/v1/cart",
+    "method" : "patch",
+    "changeType" : "endpointAdded"
+  }, {
+    "endpoint" : "/api/v1/cart/{productId}",
+    "method" : "delete",
+    "changeType" : "endpointAdded"
+  }, {
+    "endpoint" : "/coupons/{userId}",
+    "method" : "get",
+    "changeType" : "endpointAdded"
+  }, {
+    "endpoint" : "/api/v1/orders",
+    "method" : "get",
+    "changeType" : "endpointAdded"
+  }, {
+    "endpoint" : "/api/v1/orders/{orderId}",
+    "method" : "get",
+    "changeType" : "endpointAdded"
+  }, {
+    "endpoint" : "/pets",
+    "method" : "get",
+    "changeType" : "endpointAdded"
+  }, {
+    "endpoint" : "/pets",
+    "method" : "post",
+    "changeType" : "endpointAdded"
+  }, {
+    "endpoint" : "/pets/{petId}",
+    "method" : "get",
+    "changeType" : "endpointAdded"
+  }, {
+    "endpoint" : "/pets/{petId}",
+    "method" : "put",
+    "changeType" : "endpointAdded"
+  }, {
+    "endpoint" : "/pets/{petId}",
+    "method" : "delete",
+    "changeType" : "endpointAdded"
+  }, {
+    "endpoint" : "/pets/{petId}/image",
+    "method" : "put",
+    "changeType" : "endpointAdded"
+  }, {
+    "endpoint" : "/pets/{petId}/image",
+    "method" : "delete",
+    "changeType" : "endpointAdded"
+  }, {
+    "endpoint" : "/api/v1/products",
+    "method" : "get",
+    "changeType" : "endpointAdded"
+  }, {
+    "endpoint" : "/api/v1/products/{productId}",
+    "method" : "get",
+    "changeType" : "endpointAdded"
+  }, {
+    "endpoint" : "/api/v1/products/{productId}/like",
+    "method" : "post",
+    "changeType" : "endpointAdded"
+  }, {
+    "endpoint" : "/product-images",
+    "method" : "post",
+    "changeType" : "endpointAdded"
+  }, {
+    "endpoint" : "/product-images/{id}",
+    "method" : "get",
+    "changeType" : "endpointAdded"
+  }, {
+    "endpoint" : "/product-images/{id}",
+    "method" : "put",
+    "changeType" : "endpointAdded"
+  }, {
+    "endpoint" : "/product-images/{id}",
+    "method" : "delete",
+    "changeType" : "endpointAdded"
+  }, {
+    "endpoint" : "/product-images/desc/{id}",
+    "method" : "get",
+    "changeType" : "endpointAdded"
+  }, {
+    "endpoint" : "/",
+    "method" : "get",
+    "changeType" : "endpointAdded"
+  }, {
+    "endpoint" : "/",
+    "method" : "put",
+    "changeType" : "endpointAdded"
+  }, {
+    "endpoint" : "/",
+    "method" : "post",
+    "changeType" : "endpointAdded"
+  }, {
+    "endpoint" : "/",
+    "method" : "delete",
+    "changeType" : "endpointAdded"
+  }, {
+    "endpoint" : "/",
+    "method" : "options",
+    "changeType" : "endpointAdded"
+  }, {
+    "endpoint" : "/",
+    "method" : "head",
+    "changeType" : "endpointAdded"
+  }, {
+    "endpoint" : "/",
+    "method" : "patch",
+    "changeType" : "endpointAdded"
+  }, {
+    "endpoint" : "/api/hello",
+    "method" : "get",
+    "changeType" : "endpointAdded"
+  }, {
+    "endpoint" : "/payment/success",
+    "method" : "post",
+    "changeType" : "endpointAdded"
+  }, {
+    "endpoint" : "/api/v1/user/likes",
+    "method" : "get",
+    "changeType" : "endpointAdded"
+  } ]
+} ]

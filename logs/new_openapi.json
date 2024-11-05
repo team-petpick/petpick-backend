@@ -1,0 +1,4561 @@
+{
+  "openapi" : "3.0.1",
+  "info" : {
+    "title" : "API Test",
+    "description" : "Swagger UI is on",
+    "version" : "1.0.0"
+  },
+  "servers" : [ {
+    "url" : "https://back.petpick.store"
+  } ],
+  "security" : [ {
+    "JWT" : [ ]
+  } ],
+  "paths" : {
+    "/api/v1/auth/google" : {
+      "post" : {
+        "tags" : [ "auth-controller" ],
+        "operationId" : "googleCallback",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/AuthorizationCodeResponse",
+                "exampleSetFlag" : false
+              },
+              "exampleSetFlag" : false
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "type" : "object",
+                  "exampleSetFlag" : false
+                },
+                "exampleSetFlag" : false
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/logout" : {
+      "post" : {
+        "tags" : [ "auth-controller" ],
+        "operationId" : "logout",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "type" : "object",
+                  "exampleSetFlag" : false
+                },
+                "exampleSetFlag" : false
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/token" : {
+      "post" : {
+        "tags" : [ "auth-controller" ],
+        "operationId" : "regenerateJWT",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "type" : "object",
+                  "exampleSetFlag" : false
+                },
+                "exampleSetFlag" : false
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/cart" : {
+      "get" : {
+        "tags" : [ "cart-controller" ],
+        "operationId" : "getCartItems",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "type" : "array",
+                  "exampleSetFlag" : false,
+                  "items" : {
+                    "$ref" : "#/components/schemas/CartItemResponse",
+                    "exampleSetFlag" : false
+                  },
+                  "types" : [ "array" ]
+                },
+                "exampleSetFlag" : false
+              }
+            }
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "cart-controller" ],
+        "operationId" : "addCartItem",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CartItemRequest",
+                "exampleSetFlag" : false
+              },
+              "exampleSetFlag" : false
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "type" : "string",
+                  "exampleSetFlag" : false,
+                  "types" : [ "string" ]
+                },
+                "exampleSetFlag" : false
+              }
+            }
+          }
+        }
+      },
+      "patch" : {
+        "tags" : [ "cart-controller" ],
+        "operationId" : "updateCartItem",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CartItemRequest",
+                "exampleSetFlag" : false
+              },
+              "exampleSetFlag" : false
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "type" : "string",
+                  "exampleSetFlag" : false,
+                  "types" : [ "string" ]
+                },
+                "exampleSetFlag" : false
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/cart/{productId}" : {
+      "delete" : {
+        "tags" : [ "cart-controller" ],
+        "operationId" : "removeCartItem",
+        "parameters" : [ {
+          "name" : "productId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "type" : "string",
+                  "exampleSetFlag" : false,
+                  "types" : [ "string" ]
+                },
+                "exampleSetFlag" : false
+              }
+            }
+          }
+        }
+      }
+    },
+    "/coupons/{userId}" : {
+      "get" : {
+        "tags" : [ "coupon-controller" ],
+        "operationId" : "getCouponsByUserId",
+        "parameters" : [ {
+          "name" : "userId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "type" : "array",
+                  "exampleSetFlag" : false,
+                  "items" : {
+                    "$ref" : "#/components/schemas/CouponResponse",
+                    "exampleSetFlag" : false
+                  },
+                  "types" : [ "array" ]
+                },
+                "exampleSetFlag" : false
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/orders" : {
+      "get" : {
+        "tags" : [ "order-controller" ],
+        "operationId" : "getOrderHistory",
+        "parameters" : [ {
+          "name" : "page",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ],
+            "default" : 0
+          }
+        }, {
+          "name" : "month",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ],
+            "default" : 3
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PageOrderResponse",
+                  "exampleSetFlag" : false
+                },
+                "exampleSetFlag" : false
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/orders/{orderId}" : {
+      "get" : {
+        "tags" : [ "order-controller" ],
+        "operationId" : "getOrder",
+        "parameters" : [ {
+          "name" : "orderId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "type" : "array",
+                  "exampleSetFlag" : false,
+                  "items" : {
+                    "$ref" : "#/components/schemas/OrderDetailResponse",
+                    "exampleSetFlag" : false
+                  },
+                  "types" : [ "array" ]
+                },
+                "exampleSetFlag" : false
+              }
+            }
+          }
+        }
+      }
+    },
+    "/pets" : {
+      "get" : {
+        "tags" : [ "pet-controller" ],
+        "operationId" : "getAllPets",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "type" : "array",
+                  "exampleSetFlag" : false,
+                  "items" : {
+                    "$ref" : "#/components/schemas/PetInfoResponse",
+                    "exampleSetFlag" : false
+                  },
+                  "types" : [ "array" ]
+                },
+                "exampleSetFlag" : false
+              }
+            }
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "pet-controller" ],
+        "operationId" : "createPet",
+        "parameters" : [ {
+          "name" : "petName",
+          "in" : "query",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          }
+        }, {
+          "name" : "petSpecies",
+          "in" : "query",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          }
+        }, {
+          "name" : "petKind",
+          "in" : "query",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ],
+            "enum" : [ "DOG", "CAT", "ETC" ]
+          }
+        }, {
+          "name" : "petAge",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          }
+        }, {
+          "name" : "petGender",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ],
+            "enum" : [ "MALE", "FEMALE", "OTHER" ]
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "multipart/form-data" : {
+              "schema" : {
+                "type" : "object",
+                "properties" : {
+                  "petImg" : {
+                    "type" : "string",
+                    "format" : "binary",
+                    "exampleSetFlag" : false,
+                    "types" : [ "string" ]
+                  }
+                },
+                "exampleSetFlag" : false,
+                "types" : [ "object" ]
+              },
+              "exampleSetFlag" : false
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PetInfoResponse",
+                  "exampleSetFlag" : false
+                },
+                "exampleSetFlag" : false
+              }
+            }
+          }
+        }
+      }
+    },
+    "/pets/{petId}" : {
+      "get" : {
+        "tags" : [ "pet-controller" ],
+        "operationId" : "getPet",
+        "parameters" : [ {
+          "name" : "petId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PetInfoResponse",
+                  "exampleSetFlag" : false
+                },
+                "exampleSetFlag" : false
+              }
+            }
+          }
+        }
+      },
+      "put" : {
+        "tags" : [ "pet-controller" ],
+        "operationId" : "updatePet",
+        "parameters" : [ {
+          "name" : "petId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          }
+        }, {
+          "name" : "petName",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          }
+        }, {
+          "name" : "petSpecies",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          }
+        }, {
+          "name" : "petKind",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ],
+            "enum" : [ "DOG", "CAT", "ETC" ]
+          }
+        }, {
+          "name" : "petAge",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          }
+        }, {
+          "name" : "petGender",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ],
+            "enum" : [ "MALE", "FEMALE", "OTHER" ]
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "multipart/form-data" : {
+              "schema" : {
+                "type" : "object",
+                "properties" : {
+                  "petImg" : {
+                    "type" : "string",
+                    "format" : "binary",
+                    "exampleSetFlag" : false,
+                    "types" : [ "string" ]
+                  }
+                },
+                "exampleSetFlag" : false,
+                "types" : [ "object" ]
+              },
+              "exampleSetFlag" : false
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PetInfoResponse",
+                  "exampleSetFlag" : false
+                },
+                "exampleSetFlag" : false
+              }
+            }
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "pet-controller" ],
+        "operationId" : "deletePet",
+        "parameters" : [ {
+          "name" : "petId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          }
+        }
+      }
+    },
+    "/pets/{petId}/image" : {
+      "put" : {
+        "tags" : [ "pet-controller" ],
+        "operationId" : "updatePetImage",
+        "parameters" : [ {
+          "name" : "petId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "multipart/form-data" : {
+              "schema" : {
+                "required" : [ "petImg" ],
+                "type" : "object",
+                "properties" : {
+                  "petImg" : {
+                    "type" : "string",
+                    "format" : "binary",
+                    "exampleSetFlag" : false,
+                    "types" : [ "string" ]
+                  }
+                },
+                "exampleSetFlag" : false,
+                "types" : [ "object" ]
+              },
+              "exampleSetFlag" : false
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PetInfoResponse",
+                  "exampleSetFlag" : false
+                },
+                "exampleSetFlag" : false
+              }
+            }
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "pet-controller" ],
+        "operationId" : "deletePetImage",
+        "parameters" : [ {
+          "name" : "petId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          }
+        }
+      }
+    },
+    "/api/v1/products" : {
+      "get" : {
+        "tags" : [ "product-controller" ],
+        "operationId" : "getProductsList",
+        "parameters" : [ {
+          "name" : "type",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          }
+        }, {
+          "name" : "category",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          }
+        }, {
+          "name" : "page",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ],
+            "default" : 0
+          }
+        }, {
+          "name" : "size",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ],
+            "default" : 12
+          }
+        }, {
+          "name" : "sort",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ],
+            "default" : "createAt_desc"
+          }
+        }, {
+          "name" : "search",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PageProductListResponse",
+                  "exampleSetFlag" : false
+                },
+                "exampleSetFlag" : false
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/products/{productId}" : {
+      "get" : {
+        "tags" : [ "product-controller" ],
+        "operationId" : "getProductById",
+        "parameters" : [ {
+          "name" : "productId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ProductDetailResponse",
+                  "exampleSetFlag" : false
+                },
+                "exampleSetFlag" : false
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/products/{productId}/like" : {
+      "post" : {
+        "tags" : [ "product-controller" ],
+        "operationId" : "toggleProductLike",
+        "parameters" : [ {
+          "name" : "productId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "type" : "string",
+                  "exampleSetFlag" : false,
+                  "types" : [ "string" ]
+                },
+                "exampleSetFlag" : false
+              }
+            }
+          }
+        }
+      }
+    },
+    "/product-images" : {
+      "post" : {
+        "tags" : [ "product-img-controller" ],
+        "operationId" : "uploadImages",
+        "parameters" : [ {
+          "name" : "productId",
+          "in" : "query",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          }
+        }, {
+          "name" : "thumbNails",
+          "in" : "query",
+          "required" : true,
+          "schema" : {
+            "type" : "array",
+            "exampleSetFlag" : false,
+            "items" : {
+              "type" : "integer",
+              "format" : "int32",
+              "exampleSetFlag" : false,
+              "types" : [ "integer" ]
+            },
+            "types" : [ "array" ]
+          }
+        }, {
+          "name" : "isDesc",
+          "in" : "query",
+          "required" : true,
+          "schema" : {
+            "type" : "array",
+            "exampleSetFlag" : false,
+            "items" : {
+              "type" : "integer",
+              "format" : "int32",
+              "exampleSetFlag" : false,
+              "types" : [ "integer" ]
+            },
+            "types" : [ "array" ]
+          }
+        }, {
+          "name" : "files",
+          "in" : "query",
+          "required" : true,
+          "schema" : {
+            "type" : "array",
+            "exampleSetFlag" : false,
+            "items" : {
+              "type" : "string",
+              "format" : "binary",
+              "exampleSetFlag" : false,
+              "types" : [ "string" ]
+            },
+            "types" : [ "array" ]
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "type" : "array",
+                  "exampleSetFlag" : false,
+                  "items" : {
+                    "$ref" : "#/components/schemas/ProductImgResponse",
+                    "exampleSetFlag" : false
+                  },
+                  "types" : [ "array" ]
+                },
+                "exampleSetFlag" : false
+              }
+            }
+          }
+        }
+      }
+    },
+    "/product-images/{id}" : {
+      "get" : {
+        "tags" : [ "product-img-controller" ],
+        "operationId" : "getImage",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ProductImgResponse",
+                  "exampleSetFlag" : false
+                },
+                "exampleSetFlag" : false
+              }
+            }
+          }
+        }
+      },
+      "put" : {
+        "tags" : [ "product-img-controller" ],
+        "operationId" : "updateImage",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          }
+        }, {
+          "name" : "thumbNail",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          }
+        }, {
+          "name" : "isDesc",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "multipart/form-data" : {
+              "schema" : {
+                "required" : [ "file" ],
+                "type" : "object",
+                "properties" : {
+                  "file" : {
+                    "type" : "string",
+                    "format" : "binary",
+                    "exampleSetFlag" : false,
+                    "types" : [ "string" ]
+                  }
+                },
+                "exampleSetFlag" : false,
+                "types" : [ "object" ]
+              },
+              "exampleSetFlag" : false
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ProductImgResponse",
+                  "exampleSetFlag" : false
+                },
+                "exampleSetFlag" : false
+              }
+            }
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "product-img-controller" ],
+        "operationId" : "deleteImage",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          }
+        }
+      }
+    },
+    "/product-images/desc/{id}" : {
+      "get" : {
+        "tags" : [ "product-img-controller" ],
+        "operationId" : "getDescImage",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ProductImgResponse",
+                  "exampleSetFlag" : false
+                },
+                "exampleSetFlag" : false
+              }
+            }
+          }
+        }
+      }
+    },
+    "/" : {
+      "get" : {
+        "tags" : [ "test-controller" ],
+        "operationId" : "redirectToHello",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RedirectView",
+                  "exampleSetFlag" : false
+                },
+                "exampleSetFlag" : false
+              }
+            }
+          }
+        }
+      },
+      "put" : {
+        "tags" : [ "test-controller" ],
+        "operationId" : "redirectToHello_3",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RedirectView",
+                  "exampleSetFlag" : false
+                },
+                "exampleSetFlag" : false
+              }
+            }
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "test-controller" ],
+        "operationId" : "redirectToHello_2",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RedirectView",
+                  "exampleSetFlag" : false
+                },
+                "exampleSetFlag" : false
+              }
+            }
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "test-controller" ],
+        "operationId" : "redirectToHello_5",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RedirectView",
+                  "exampleSetFlag" : false
+                },
+                "exampleSetFlag" : false
+              }
+            }
+          }
+        }
+      },
+      "options" : {
+        "tags" : [ "test-controller" ],
+        "operationId" : "redirectToHello_6",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RedirectView",
+                  "exampleSetFlag" : false
+                },
+                "exampleSetFlag" : false
+              }
+            }
+          }
+        }
+      },
+      "head" : {
+        "tags" : [ "test-controller" ],
+        "operationId" : "redirectToHello_1",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RedirectView",
+                  "exampleSetFlag" : false
+                },
+                "exampleSetFlag" : false
+              }
+            }
+          }
+        }
+      },
+      "patch" : {
+        "tags" : [ "test-controller" ],
+        "operationId" : "redirectToHello_4",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RedirectView",
+                  "exampleSetFlag" : false
+                },
+                "exampleSetFlag" : false
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/hello" : {
+      "get" : {
+        "tags" : [ "test-controller" ],
+        "operationId" : "helloApiInfo",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "type" : "object",
+                  "additionalProperties" : {
+                    "type" : "string",
+                    "exampleSetFlag" : false,
+                    "types" : [ "string" ]
+                  },
+                  "exampleSetFlag" : false,
+                  "types" : [ "object" ]
+                },
+                "exampleSetFlag" : false
+              }
+            }
+          }
+        }
+      }
+    },
+    "/payment/success" : {
+      "post" : {
+        "tags" : [ "toss-payment-controller" ],
+        "operationId" : "paymentSuccess",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/PaymentSuccessRequest",
+                "exampleSetFlag" : false
+              },
+              "exampleSetFlag" : false
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "type" : "string",
+                  "exampleSetFlag" : false,
+                  "types" : [ "string" ]
+                },
+                "exampleSetFlag" : false
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/user/likes" : {
+      "get" : {
+        "tags" : [ "user-controller" ],
+        "operationId" : "getProductLikes",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "type" : "array",
+                  "exampleSetFlag" : false,
+                  "items" : {
+                    "$ref" : "#/components/schemas/UserLikesProductListResponse",
+                    "exampleSetFlag" : false
+                  },
+                  "types" : [ "array" ]
+                },
+                "exampleSetFlag" : false
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components" : {
+    "schemas" : {
+      "ProductImgResponse" : {
+        "type" : "object",
+        "properties" : {
+          "productImgId" : {
+            "type" : "integer",
+            "format" : "int32",
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          },
+          "productImgThumb" : {
+            "type" : "integer",
+            "format" : "int32",
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          },
+          "descImgStatus" : {
+            "type" : "integer",
+            "format" : "int32",
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          },
+          "productImgUrl" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "productImgName" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          }
+        },
+        "exampleSetFlag" : false
+      },
+      "PetInfoResponse" : {
+        "type" : "object",
+        "properties" : {
+          "petId" : {
+            "type" : "integer",
+            "format" : "int32",
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          },
+          "userId" : {
+            "type" : "integer",
+            "format" : "int32",
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          },
+          "petName" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "petKind" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ],
+            "enum" : [ "DOG", "CAT", "ETC" ]
+          },
+          "petImg" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "petAge" : {
+            "type" : "integer",
+            "format" : "int32",
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          },
+          "petGender" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ],
+            "enum" : [ "MALE", "FEMALE", "OTHER" ]
+          }
+        },
+        "exampleSetFlag" : false
+      },
+      "AddressRequest" : {
+        "type" : "object",
+        "properties" : {
+          "addressId" : {
+            "type" : "integer",
+            "format" : "int32",
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          },
+          "userId" : {
+            "type" : "integer",
+            "format" : "int32",
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          },
+          "addressName" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "addressZipcode" : {
+            "type" : "integer",
+            "format" : "int32",
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          },
+          "addressAddr" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "addressAddrDetail" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "addressTel" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "addressRequest" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "addressDefault" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ],
+            "enum" : [ "YES", "NO" ]
+          }
+        },
+        "exampleSetFlag" : false
+      },
+      "OrderDetailResponse" : {
+        "type" : "object",
+        "properties" : {
+          "orderDetailId" : {
+            "type" : "integer",
+            "format" : "int32",
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          },
+          "productId" : {
+            "type" : "integer",
+            "format" : "int32",
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          },
+          "productName" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "sellerStoreName" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "orderDetailPrice" : {
+            "type" : "number",
+            "format" : "double",
+            "exampleSetFlag" : false,
+            "types" : [ "number" ]
+          },
+          "orderDetailCnt" : {
+            "type" : "integer",
+            "format" : "int32",
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          },
+          "productThumbnail" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          }
+        },
+        "exampleSetFlag" : false
+      },
+      "PaymentSuccessRequest" : {
+        "type" : "object",
+        "properties" : {
+          "orderId" : {
+            "type" : "integer",
+            "format" : "int32",
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          },
+          "paymentKey" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "amount" : {
+            "type" : "integer",
+            "format" : "int32",
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          },
+          "userId" : {
+            "type" : "integer",
+            "format" : "int32",
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          },
+          "orderRequest" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "orderSerialCode" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "address" : {
+            "$ref" : "#/components/schemas/AddressRequest",
+            "exampleSetFlag" : false
+          },
+          "orderStatus" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ],
+            "enum" : [ "ORDER_CONFIRM", "ORDER_CANCEL", "SHIPPING", "SHIPPED" ]
+          },
+          "orderDetails" : {
+            "type" : "array",
+            "exampleSetFlag" : false,
+            "items" : {
+              "$ref" : "#/components/schemas/OrderDetailResponse",
+              "exampleSetFlag" : false
+            },
+            "types" : [ "array" ]
+          }
+        },
+        "exampleSetFlag" : false
+      },
+      "CartItemRequest" : {
+        "type" : "object",
+        "properties" : {
+          "productId" : {
+            "type" : "integer",
+            "format" : "int32",
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          },
+          "cartCnt" : {
+            "type" : "integer",
+            "format" : "int32",
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          }
+        },
+        "exampleSetFlag" : false
+      },
+      "AuthorizationCodeResponse" : {
+        "type" : "object",
+        "properties" : {
+          "code" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          }
+        },
+        "exampleSetFlag" : false
+      },
+      "CouponResponse" : {
+        "type" : "object",
+        "properties" : {
+          "couponId" : {
+            "type" : "integer",
+            "format" : "int32",
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          },
+          "couponCategoryName" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "couponStatus" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ],
+            "enum" : [ "YES", "NO" ]
+          }
+        },
+        "exampleSetFlag" : false
+      },
+      "CategoryResponse" : {
+        "type" : "object",
+        "properties" : {
+          "categoryId" : {
+            "type" : "integer",
+            "format" : "int32",
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          },
+          "categoryName" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          }
+        },
+        "exampleSetFlag" : false
+      },
+      "UserLikesProductListResponse" : {
+        "type" : "object",
+        "properties" : {
+          "productId" : {
+            "type" : "integer",
+            "format" : "int32",
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          },
+          "category" : {
+            "$ref" : "#/components/schemas/CategoryResponse",
+            "exampleSetFlag" : false
+          },
+          "productName" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "productStatus" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ],
+            "enum" : [ "ON", "OFF", "SOLDOUT" ]
+          },
+          "productPrice" : {
+            "type" : "integer",
+            "format" : "int32",
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          },
+          "productSale" : {
+            "type" : "integer",
+            "format" : "int32",
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          },
+          "productCnt" : {
+            "type" : "integer",
+            "format" : "int32",
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          },
+          "productImg" : {
+            "type" : "array",
+            "exampleSetFlag" : false,
+            "items" : {
+              "$ref" : "#/components/schemas/ProductImgResponse",
+              "exampleSetFlag" : false
+            },
+            "types" : [ "array" ]
+          }
+        },
+        "exampleSetFlag" : false
+      },
+      "PageProductListResponse" : {
+        "type" : "object",
+        "properties" : {
+          "totalElements" : {
+            "type" : "integer",
+            "format" : "int64",
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          },
+          "totalPages" : {
+            "type" : "integer",
+            "format" : "int32",
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          },
+          "size" : {
+            "type" : "integer",
+            "format" : "int32",
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          },
+          "content" : {
+            "type" : "array",
+            "exampleSetFlag" : false,
+            "items" : {
+              "$ref" : "#/components/schemas/ProductListResponse",
+              "exampleSetFlag" : false
+            },
+            "types" : [ "array" ]
+          },
+          "number" : {
+            "type" : "integer",
+            "format" : "int32",
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          },
+          "sort" : {
+            "$ref" : "#/components/schemas/SortObject",
+            "exampleSetFlag" : false
+          },
+          "first" : {
+            "type" : "boolean",
+            "exampleSetFlag" : false,
+            "types" : [ "boolean" ]
+          },
+          "last" : {
+            "type" : "boolean",
+            "exampleSetFlag" : false,
+            "types" : [ "boolean" ]
+          },
+          "numberOfElements" : {
+            "type" : "integer",
+            "format" : "int32",
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          },
+          "pageable" : {
+            "$ref" : "#/components/schemas/PageableObject",
+            "exampleSetFlag" : false
+          },
+          "empty" : {
+            "type" : "boolean",
+            "exampleSetFlag" : false,
+            "types" : [ "boolean" ]
+          }
+        },
+        "exampleSetFlag" : false
+      },
+      "PageableObject" : {
+        "type" : "object",
+        "properties" : {
+          "offset" : {
+            "type" : "integer",
+            "format" : "int64",
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          },
+          "sort" : {
+            "$ref" : "#/components/schemas/SortObject",
+            "exampleSetFlag" : false
+          },
+          "paged" : {
+            "type" : "boolean",
+            "exampleSetFlag" : false,
+            "types" : [ "boolean" ]
+          },
+          "pageNumber" : {
+            "type" : "integer",
+            "format" : "int32",
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          },
+          "pageSize" : {
+            "type" : "integer",
+            "format" : "int32",
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          },
+          "unpaged" : {
+            "type" : "boolean",
+            "exampleSetFlag" : false,
+            "types" : [ "boolean" ]
+          }
+        },
+        "exampleSetFlag" : false
+      },
+      "ProductListResponse" : {
+        "type" : "object",
+        "properties" : {
+          "productId" : {
+            "type" : "integer",
+            "format" : "int32",
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          },
+          "category" : {
+            "$ref" : "#/components/schemas/CategoryResponse",
+            "exampleSetFlag" : false
+          },
+          "productName" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "seller" : {
+            "$ref" : "#/components/schemas/SellerResponse",
+            "exampleSetFlag" : false
+          },
+          "productStatus" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ],
+            "enum" : [ "ON", "OFF", "SOLDOUT" ]
+          },
+          "productPrice" : {
+            "type" : "integer",
+            "format" : "int32",
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          },
+          "productSale" : {
+            "type" : "integer",
+            "format" : "int32",
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          },
+          "productCnt" : {
+            "type" : "integer",
+            "format" : "int32",
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          },
+          "productThumbnail" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          }
+        },
+        "exampleSetFlag" : false
+      },
+      "SellerResponse" : {
+        "type" : "object",
+        "properties" : {
+          "sellerId" : {
+            "type" : "integer",
+            "format" : "int32",
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          },
+          "sellerStoreName" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "sellerNumber" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "sellerAddr" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "sellerAddrDetail" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          }
+        },
+        "exampleSetFlag" : false
+      },
+      "SortObject" : {
+        "type" : "object",
+        "properties" : {
+          "empty" : {
+            "type" : "boolean",
+            "exampleSetFlag" : false,
+            "types" : [ "boolean" ]
+          },
+          "sorted" : {
+            "type" : "boolean",
+            "exampleSetFlag" : false,
+            "types" : [ "boolean" ]
+          },
+          "unsorted" : {
+            "type" : "boolean",
+            "exampleSetFlag" : false,
+            "types" : [ "boolean" ]
+          }
+        },
+        "exampleSetFlag" : false
+      },
+      "ProductDetailResponse" : {
+        "type" : "object",
+        "properties" : {
+          "productId" : {
+            "type" : "integer",
+            "format" : "int32",
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          },
+          "category" : {
+            "$ref" : "#/components/schemas/CategoryResponse",
+            "exampleSetFlag" : false
+          },
+          "productName" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "seller" : {
+            "$ref" : "#/components/schemas/SellerResponse",
+            "exampleSetFlag" : false
+          },
+          "productStatus" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ],
+            "enum" : [ "ON", "OFF", "SOLDOUT" ]
+          },
+          "likes" : {
+            "$ref" : "#/components/schemas/ProductLikesResponse",
+            "exampleSetFlag" : false
+          },
+          "productPrice" : {
+            "type" : "integer",
+            "format" : "int32",
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          },
+          "productShare" : {
+            "type" : "integer",
+            "format" : "int32",
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          },
+          "productSale" : {
+            "type" : "integer",
+            "format" : "int32",
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          },
+          "productCnt" : {
+            "type" : "integer",
+            "format" : "int32",
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          },
+          "productImg" : {
+            "type" : "array",
+            "exampleSetFlag" : false,
+            "items" : {
+              "$ref" : "#/components/schemas/ProductImgResponse",
+              "exampleSetFlag" : false
+            },
+            "types" : [ "array" ]
+          }
+        },
+        "exampleSetFlag" : false
+      },
+      "ProductLikesResponse" : {
+        "type" : "object",
+        "properties" : {
+          "likesCount" : {
+            "type" : "integer",
+            "format" : "int32",
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          }
+        },
+        "exampleSetFlag" : false
+      },
+      "OrderResponse" : {
+        "type" : "object",
+        "properties" : {
+          "ordersId" : {
+            "type" : "integer",
+            "format" : "int32",
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          },
+          "ordersPrice" : {
+            "type" : "integer",
+            "format" : "int32",
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          },
+          "orderCreateAt" : {
+            "type" : "string",
+            "format" : "date-time",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "ordersStatus" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "orderDetails" : {
+            "type" : "array",
+            "exampleSetFlag" : false,
+            "items" : {
+              "$ref" : "#/components/schemas/OrderDetailResponse",
+              "exampleSetFlag" : false
+            },
+            "types" : [ "array" ]
+          }
+        },
+        "exampleSetFlag" : false
+      },
+      "PageOrderResponse" : {
+        "type" : "object",
+        "properties" : {
+          "totalElements" : {
+            "type" : "integer",
+            "format" : "int64",
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          },
+          "totalPages" : {
+            "type" : "integer",
+            "format" : "int32",
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          },
+          "size" : {
+            "type" : "integer",
+            "format" : "int32",
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          },
+          "content" : {
+            "type" : "array",
+            "exampleSetFlag" : false,
+            "items" : {
+              "$ref" : "#/components/schemas/OrderResponse",
+              "exampleSetFlag" : false
+            },
+            "types" : [ "array" ]
+          },
+          "number" : {
+            "type" : "integer",
+            "format" : "int32",
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          },
+          "sort" : {
+            "$ref" : "#/components/schemas/SortObject",
+            "exampleSetFlag" : false
+          },
+          "first" : {
+            "type" : "boolean",
+            "exampleSetFlag" : false,
+            "types" : [ "boolean" ]
+          },
+          "last" : {
+            "type" : "boolean",
+            "exampleSetFlag" : false,
+            "types" : [ "boolean" ]
+          },
+          "numberOfElements" : {
+            "type" : "integer",
+            "format" : "int32",
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          },
+          "pageable" : {
+            "$ref" : "#/components/schemas/PageableObject",
+            "exampleSetFlag" : false
+          },
+          "empty" : {
+            "type" : "boolean",
+            "exampleSetFlag" : false,
+            "types" : [ "boolean" ]
+          }
+        },
+        "exampleSetFlag" : false
+      },
+      "CartItemResponse" : {
+        "type" : "object",
+        "properties" : {
+          "productId" : {
+            "type" : "integer",
+            "format" : "int32",
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          },
+          "productName" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "cartCnt" : {
+            "type" : "integer",
+            "format" : "int32",
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          },
+          "productPrice" : {
+            "type" : "integer",
+            "format" : "int32",
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          },
+          "productThumbnail" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "productSale" : {
+            "type" : "integer",
+            "format" : "int32",
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          }
+        },
+        "exampleSetFlag" : false
+      },
+      "ApplicationContext" : {
+        "type" : "object",
+        "properties" : {
+          "parent" : {
+            "$ref" : "#/components/schemas/ApplicationContext",
+            "exampleSetFlag" : false
+          },
+          "id" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "displayName" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "autowireCapableBeanFactory" : {
+            "$ref" : "#/components/schemas/AutowireCapableBeanFactory",
+            "exampleSetFlag" : false
+          },
+          "applicationName" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "startupDate" : {
+            "type" : "integer",
+            "format" : "int64",
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          },
+          "environment" : {
+            "$ref" : "#/components/schemas/Environment",
+            "exampleSetFlag" : false
+          },
+          "beanDefinitionCount" : {
+            "type" : "integer",
+            "format" : "int32",
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          },
+          "beanDefinitionNames" : {
+            "type" : "array",
+            "exampleSetFlag" : false,
+            "items" : {
+              "type" : "string",
+              "exampleSetFlag" : false,
+              "types" : [ "string" ]
+            },
+            "types" : [ "array" ]
+          },
+          "parentBeanFactory" : {
+            "$ref" : "#/components/schemas/BeanFactory",
+            "exampleSetFlag" : false
+          },
+          "classLoader" : {
+            "type" : "object",
+            "properties" : {
+              "name" : {
+                "type" : "string",
+                "exampleSetFlag" : false,
+                "types" : [ "string" ]
+              },
+              "registeredAsParallelCapable" : {
+                "type" : "boolean",
+                "exampleSetFlag" : false,
+                "types" : [ "boolean" ]
+              },
+              "parent" : {
+                "type" : "object",
+                "properties" : {
+                  "name" : {
+                    "type" : "string",
+                    "exampleSetFlag" : false,
+                    "types" : [ "string" ]
+                  },
+                  "registeredAsParallelCapable" : {
+                    "type" : "boolean",
+                    "exampleSetFlag" : false,
+                    "types" : [ "boolean" ]
+                  },
+                  "unnamedModule" : {
+                    "type" : "object",
+                    "properties" : {
+                      "name" : {
+                        "type" : "string",
+                        "exampleSetFlag" : false,
+                        "types" : [ "string" ]
+                      },
+                      "classLoader" : {
+                        "type" : "object",
+                        "properties" : {
+                          "name" : {
+                            "type" : "string",
+                            "exampleSetFlag" : false,
+                            "types" : [ "string" ]
+                          },
+                          "registeredAsParallelCapable" : {
+                            "type" : "boolean",
+                            "exampleSetFlag" : false,
+                            "types" : [ "boolean" ]
+                          },
+                          "definedPackages" : {
+                            "type" : "array",
+                            "exampleSetFlag" : false,
+                            "items" : {
+                              "type" : "object",
+                              "properties" : {
+                                "name" : {
+                                  "type" : "string",
+                                  "exampleSetFlag" : false,
+                                  "types" : [ "string" ]
+                                },
+                                "annotations" : {
+                                  "type" : "array",
+                                  "exampleSetFlag" : false,
+                                  "items" : {
+                                    "type" : "object",
+                                    "exampleSetFlag" : false,
+                                    "types" : [ "object" ],
+                                    "jsonSchema" : {
+                                      "type" : "object"
+                                    }
+                                  },
+                                  "types" : [ "array" ]
+                                },
+                                "declaredAnnotations" : {
+                                  "type" : "array",
+                                  "exampleSetFlag" : false,
+                                  "items" : {
+                                    "type" : "object",
+                                    "exampleSetFlag" : false,
+                                    "types" : [ "object" ],
+                                    "jsonSchema" : {
+                                      "type" : "object"
+                                    }
+                                  },
+                                  "types" : [ "array" ]
+                                },
+                                "sealed" : {
+                                  "type" : "boolean",
+                                  "exampleSetFlag" : false,
+                                  "types" : [ "boolean" ]
+                                },
+                                "specificationTitle" : {
+                                  "type" : "string",
+                                  "exampleSetFlag" : false,
+                                  "types" : [ "string" ]
+                                },
+                                "specificationVersion" : {
+                                  "type" : "string",
+                                  "exampleSetFlag" : false,
+                                  "types" : [ "string" ]
+                                },
+                                "specificationVendor" : {
+                                  "type" : "string",
+                                  "exampleSetFlag" : false,
+                                  "types" : [ "string" ]
+                                },
+                                "implementationTitle" : {
+                                  "type" : "string",
+                                  "exampleSetFlag" : false,
+                                  "types" : [ "string" ]
+                                },
+                                "implementationVersion" : {
+                                  "type" : "string",
+                                  "exampleSetFlag" : false,
+                                  "types" : [ "string" ]
+                                },
+                                "implementationVendor" : {
+                                  "type" : "string",
+                                  "exampleSetFlag" : false,
+                                  "types" : [ "string" ]
+                                }
+                              },
+                              "exampleSetFlag" : false,
+                              "types" : [ "object" ],
+                              "jsonSchema" : {
+                                "type" : "object",
+                                "properties" : {
+                                  "name" : {
+                                    "type" : "string"
+                                  },
+                                  "annotations" : {
+                                    "type" : "array",
+                                    "items" : {
+                                      "type" : "object"
+                                    }
+                                  },
+                                  "declaredAnnotations" : {
+                                    "type" : "array",
+                                    "items" : {
+                                      "type" : "object"
+                                    }
+                                  },
+                                  "sealed" : {
+                                    "type" : "boolean"
+                                  },
+                                  "specificationTitle" : {
+                                    "type" : "string"
+                                  },
+                                  "specificationVersion" : {
+                                    "type" : "string"
+                                  },
+                                  "specificationVendor" : {
+                                    "type" : "string"
+                                  },
+                                  "implementationTitle" : {
+                                    "type" : "string"
+                                  },
+                                  "implementationVersion" : {
+                                    "type" : "string"
+                                  },
+                                  "implementationVendor" : {
+                                    "type" : "string"
+                                  }
+                                }
+                              }
+                            },
+                            "types" : [ "array" ]
+                          },
+                          "defaultAssertionStatus" : {
+                            "type" : "boolean",
+                            "writeOnly" : true,
+                            "exampleSetFlag" : false,
+                            "types" : [ "boolean" ]
+                          }
+                        },
+                        "exampleSetFlag" : false,
+                        "types" : [ "object" ],
+                        "jsonSchema" : {
+                          "type" : "object",
+                          "properties" : {
+                            "name" : {
+                              "type" : "string"
+                            },
+                            "registeredAsParallelCapable" : {
+                              "type" : "boolean"
+                            },
+                            "definedPackages" : {
+                              "type" : "array",
+                              "items" : {
+                                "type" : "object",
+                                "properties" : {
+                                  "name" : {
+                                    "type" : "string"
+                                  },
+                                  "annotations" : {
+                                    "type" : "array",
+                                    "items" : {
+                                      "type" : "object"
+                                    }
+                                  },
+                                  "declaredAnnotations" : {
+                                    "type" : "array",
+                                    "items" : {
+                                      "type" : "object"
+                                    }
+                                  },
+                                  "sealed" : {
+                                    "type" : "boolean"
+                                  },
+                                  "specificationTitle" : {
+                                    "type" : "string"
+                                  },
+                                  "specificationVersion" : {
+                                    "type" : "string"
+                                  },
+                                  "specificationVendor" : {
+                                    "type" : "string"
+                                  },
+                                  "implementationTitle" : {
+                                    "type" : "string"
+                                  },
+                                  "implementationVersion" : {
+                                    "type" : "string"
+                                  },
+                                  "implementationVendor" : {
+                                    "type" : "string"
+                                  }
+                                }
+                              }
+                            },
+                            "defaultAssertionStatus" : {
+                              "type" : "boolean",
+                              "writeOnly" : true
+                            }
+                          }
+                        }
+                      },
+                      "descriptor" : {
+                        "type" : "object",
+                        "properties" : {
+                          "open" : {
+                            "type" : "boolean",
+                            "exampleSetFlag" : false,
+                            "types" : [ "boolean" ]
+                          },
+                          "automatic" : {
+                            "type" : "boolean",
+                            "exampleSetFlag" : false,
+                            "types" : [ "boolean" ]
+                          }
+                        },
+                        "exampleSetFlag" : false,
+                        "types" : [ "object" ],
+                        "jsonSchema" : {
+                          "type" : "object",
+                          "properties" : {
+                            "open" : {
+                              "type" : "boolean"
+                            },
+                            "automatic" : {
+                              "type" : "boolean"
+                            }
+                          }
+                        }
+                      },
+                      "named" : {
+                        "type" : "boolean",
+                        "exampleSetFlag" : false,
+                        "types" : [ "boolean" ]
+                      },
+                      "annotations" : {
+                        "type" : "array",
+                        "exampleSetFlag" : false,
+                        "items" : {
+                          "type" : "object",
+                          "exampleSetFlag" : false,
+                          "types" : [ "object" ],
+                          "jsonSchema" : {
+                            "type" : "object"
+                          }
+                        },
+                        "types" : [ "array" ]
+                      },
+                      "declaredAnnotations" : {
+                        "type" : "array",
+                        "exampleSetFlag" : false,
+                        "items" : {
+                          "type" : "object",
+                          "exampleSetFlag" : false,
+                          "types" : [ "object" ],
+                          "jsonSchema" : {
+                            "type" : "object"
+                          }
+                        },
+                        "types" : [ "array" ]
+                      },
+                      "packages" : {
+                        "uniqueItems" : true,
+                        "type" : "array",
+                        "exampleSetFlag" : false,
+                        "items" : {
+                          "type" : "string",
+                          "exampleSetFlag" : false,
+                          "types" : [ "string" ]
+                        },
+                        "types" : [ "array" ]
+                      },
+                      "nativeAccessEnabled" : {
+                        "type" : "boolean",
+                        "exampleSetFlag" : false,
+                        "types" : [ "boolean" ]
+                      },
+                      "layer" : {
+                        "type" : "object",
+                        "exampleSetFlag" : false,
+                        "types" : [ "object" ],
+                        "jsonSchema" : {
+                          "type" : "object"
+                        }
+                      }
+                    },
+                    "exampleSetFlag" : false,
+                    "types" : [ "object" ],
+                    "jsonSchema" : {
+                      "type" : "object",
+                      "properties" : {
+                        "name" : {
+                          "type" : "string"
+                        },
+                        "classLoader" : {
+                          "type" : "object",
+                          "properties" : {
+                            "name" : {
+                              "type" : "string"
+                            },
+                            "registeredAsParallelCapable" : {
+                              "type" : "boolean"
+                            },
+                            "definedPackages" : {
+                              "type" : "array",
+                              "items" : {
+                                "type" : "object",
+                                "properties" : {
+                                  "name" : {
+                                    "type" : "string"
+                                  },
+                                  "annotations" : {
+                                    "type" : "array",
+                                    "items" : {
+                                      "type" : "object"
+                                    }
+                                  },
+                                  "declaredAnnotations" : {
+                                    "type" : "array",
+                                    "items" : {
+                                      "type" : "object"
+                                    }
+                                  },
+                                  "sealed" : {
+                                    "type" : "boolean"
+                                  },
+                                  "specificationTitle" : {
+                                    "type" : "string"
+                                  },
+                                  "specificationVersion" : {
+                                    "type" : "string"
+                                  },
+                                  "specificationVendor" : {
+                                    "type" : "string"
+                                  },
+                                  "implementationTitle" : {
+                                    "type" : "string"
+                                  },
+                                  "implementationVersion" : {
+                                    "type" : "string"
+                                  },
+                                  "implementationVendor" : {
+                                    "type" : "string"
+                                  }
+                                }
+                              }
+                            },
+                            "defaultAssertionStatus" : {
+                              "type" : "boolean",
+                              "writeOnly" : true
+                            }
+                          }
+                        },
+                        "descriptor" : {
+                          "type" : "object",
+                          "properties" : {
+                            "open" : {
+                              "type" : "boolean"
+                            },
+                            "automatic" : {
+                              "type" : "boolean"
+                            }
+                          }
+                        },
+                        "named" : {
+                          "type" : "boolean"
+                        },
+                        "annotations" : {
+                          "type" : "array",
+                          "items" : {
+                            "type" : "object"
+                          }
+                        },
+                        "declaredAnnotations" : {
+                          "type" : "array",
+                          "items" : {
+                            "type" : "object"
+                          }
+                        },
+                        "packages" : {
+                          "uniqueItems" : true,
+                          "type" : "array",
+                          "items" : {
+                            "type" : "string"
+                          }
+                        },
+                        "nativeAccessEnabled" : {
+                          "type" : "boolean"
+                        },
+                        "layer" : {
+                          "type" : "object"
+                        }
+                      }
+                    }
+                  },
+                  "definedPackages" : {
+                    "type" : "array",
+                    "exampleSetFlag" : false,
+                    "items" : {
+                      "type" : "object",
+                      "properties" : {
+                        "name" : {
+                          "type" : "string",
+                          "exampleSetFlag" : false,
+                          "types" : [ "string" ]
+                        },
+                        "annotations" : {
+                          "type" : "array",
+                          "exampleSetFlag" : false,
+                          "items" : {
+                            "type" : "object",
+                            "exampleSetFlag" : false,
+                            "types" : [ "object" ],
+                            "jsonSchema" : {
+                              "type" : "object"
+                            }
+                          },
+                          "types" : [ "array" ]
+                        },
+                        "declaredAnnotations" : {
+                          "type" : "array",
+                          "exampleSetFlag" : false,
+                          "items" : {
+                            "type" : "object",
+                            "exampleSetFlag" : false,
+                            "types" : [ "object" ],
+                            "jsonSchema" : {
+                              "type" : "object"
+                            }
+                          },
+                          "types" : [ "array" ]
+                        },
+                        "sealed" : {
+                          "type" : "boolean",
+                          "exampleSetFlag" : false,
+                          "types" : [ "boolean" ]
+                        },
+                        "specificationTitle" : {
+                          "type" : "string",
+                          "exampleSetFlag" : false,
+                          "types" : [ "string" ]
+                        },
+                        "specificationVersion" : {
+                          "type" : "string",
+                          "exampleSetFlag" : false,
+                          "types" : [ "string" ]
+                        },
+                        "specificationVendor" : {
+                          "type" : "string",
+                          "exampleSetFlag" : false,
+                          "types" : [ "string" ]
+                        },
+                        "implementationTitle" : {
+                          "type" : "string",
+                          "exampleSetFlag" : false,
+                          "types" : [ "string" ]
+                        },
+                        "implementationVersion" : {
+                          "type" : "string",
+                          "exampleSetFlag" : false,
+                          "types" : [ "string" ]
+                        },
+                        "implementationVendor" : {
+                          "type" : "string",
+                          "exampleSetFlag" : false,
+                          "types" : [ "string" ]
+                        }
+                      },
+                      "exampleSetFlag" : false,
+                      "types" : [ "object" ],
+                      "jsonSchema" : {
+                        "type" : "object",
+                        "properties" : {
+                          "name" : {
+                            "type" : "string"
+                          },
+                          "annotations" : {
+                            "type" : "array",
+                            "items" : {
+                              "type" : "object"
+                            }
+                          },
+                          "declaredAnnotations" : {
+                            "type" : "array",
+                            "items" : {
+                              "type" : "object"
+                            }
+                          },
+                          "sealed" : {
+                            "type" : "boolean"
+                          },
+                          "specificationTitle" : {
+                            "type" : "string"
+                          },
+                          "specificationVersion" : {
+                            "type" : "string"
+                          },
+                          "specificationVendor" : {
+                            "type" : "string"
+                          },
+                          "implementationTitle" : {
+                            "type" : "string"
+                          },
+                          "implementationVersion" : {
+                            "type" : "string"
+                          },
+                          "implementationVendor" : {
+                            "type" : "string"
+                          }
+                        }
+                      }
+                    },
+                    "types" : [ "array" ]
+                  },
+                  "defaultAssertionStatus" : {
+                    "type" : "boolean",
+                    "writeOnly" : true,
+                    "exampleSetFlag" : false,
+                    "types" : [ "boolean" ]
+                  }
+                },
+                "exampleSetFlag" : false,
+                "types" : [ "object" ],
+                "jsonSchema" : {
+                  "type" : "object",
+                  "properties" : {
+                    "name" : {
+                      "type" : "string"
+                    },
+                    "registeredAsParallelCapable" : {
+                      "type" : "boolean"
+                    },
+                    "unnamedModule" : {
+                      "type" : "object",
+                      "properties" : {
+                        "name" : {
+                          "type" : "string"
+                        },
+                        "classLoader" : {
+                          "type" : "object",
+                          "properties" : {
+                            "name" : {
+                              "type" : "string"
+                            },
+                            "registeredAsParallelCapable" : {
+                              "type" : "boolean"
+                            },
+                            "definedPackages" : {
+                              "type" : "array",
+                              "items" : {
+                                "type" : "object",
+                                "properties" : {
+                                  "name" : {
+                                    "type" : "string"
+                                  },
+                                  "annotations" : {
+                                    "type" : "array",
+                                    "items" : {
+                                      "type" : "object"
+                                    }
+                                  },
+                                  "declaredAnnotations" : {
+                                    "type" : "array",
+                                    "items" : {
+                                      "type" : "object"
+                                    }
+                                  },
+                                  "sealed" : {
+                                    "type" : "boolean"
+                                  },
+                                  "specificationTitle" : {
+                                    "type" : "string"
+                                  },
+                                  "specificationVersion" : {
+                                    "type" : "string"
+                                  },
+                                  "specificationVendor" : {
+                                    "type" : "string"
+                                  },
+                                  "implementationTitle" : {
+                                    "type" : "string"
+                                  },
+                                  "implementationVersion" : {
+                                    "type" : "string"
+                                  },
+                                  "implementationVendor" : {
+                                    "type" : "string"
+                                  }
+                                }
+                              }
+                            },
+                            "defaultAssertionStatus" : {
+                              "type" : "boolean",
+                              "writeOnly" : true
+                            }
+                          }
+                        },
+                        "descriptor" : {
+                          "type" : "object",
+                          "properties" : {
+                            "open" : {
+                              "type" : "boolean"
+                            },
+                            "automatic" : {
+                              "type" : "boolean"
+                            }
+                          }
+                        },
+                        "named" : {
+                          "type" : "boolean"
+                        },
+                        "annotations" : {
+                          "type" : "array",
+                          "items" : {
+                            "type" : "object"
+                          }
+                        },
+                        "declaredAnnotations" : {
+                          "type" : "array",
+                          "items" : {
+                            "type" : "object"
+                          }
+                        },
+                        "packages" : {
+                          "uniqueItems" : true,
+                          "type" : "array",
+                          "items" : {
+                            "type" : "string"
+                          }
+                        },
+                        "nativeAccessEnabled" : {
+                          "type" : "boolean"
+                        },
+                        "layer" : {
+                          "type" : "object"
+                        }
+                      }
+                    },
+                    "definedPackages" : {
+                      "type" : "array",
+                      "items" : {
+                        "type" : "object",
+                        "properties" : {
+                          "name" : {
+                            "type" : "string"
+                          },
+                          "annotations" : {
+                            "type" : "array",
+                            "items" : {
+                              "type" : "object"
+                            }
+                          },
+                          "declaredAnnotations" : {
+                            "type" : "array",
+                            "items" : {
+                              "type" : "object"
+                            }
+                          },
+                          "sealed" : {
+                            "type" : "boolean"
+                          },
+                          "specificationTitle" : {
+                            "type" : "string"
+                          },
+                          "specificationVersion" : {
+                            "type" : "string"
+                          },
+                          "specificationVendor" : {
+                            "type" : "string"
+                          },
+                          "implementationTitle" : {
+                            "type" : "string"
+                          },
+                          "implementationVersion" : {
+                            "type" : "string"
+                          },
+                          "implementationVendor" : {
+                            "type" : "string"
+                          }
+                        }
+                      }
+                    },
+                    "defaultAssertionStatus" : {
+                      "type" : "boolean",
+                      "writeOnly" : true
+                    }
+                  }
+                }
+              },
+              "unnamedModule" : {
+                "type" : "object",
+                "properties" : {
+                  "name" : {
+                    "type" : "string",
+                    "exampleSetFlag" : false,
+                    "types" : [ "string" ]
+                  },
+                  "classLoader" : {
+                    "type" : "object",
+                    "properties" : {
+                      "name" : {
+                        "type" : "string",
+                        "exampleSetFlag" : false,
+                        "types" : [ "string" ]
+                      },
+                      "registeredAsParallelCapable" : {
+                        "type" : "boolean",
+                        "exampleSetFlag" : false,
+                        "types" : [ "boolean" ]
+                      },
+                      "definedPackages" : {
+                        "type" : "array",
+                        "exampleSetFlag" : false,
+                        "items" : {
+                          "type" : "object",
+                          "properties" : {
+                            "name" : {
+                              "type" : "string",
+                              "exampleSetFlag" : false,
+                              "types" : [ "string" ]
+                            },
+                            "annotations" : {
+                              "type" : "array",
+                              "exampleSetFlag" : false,
+                              "items" : {
+                                "type" : "object",
+                                "exampleSetFlag" : false,
+                                "types" : [ "object" ],
+                                "jsonSchema" : {
+                                  "type" : "object"
+                                }
+                              },
+                              "types" : [ "array" ]
+                            },
+                            "declaredAnnotations" : {
+                              "type" : "array",
+                              "exampleSetFlag" : false,
+                              "items" : {
+                                "type" : "object",
+                                "exampleSetFlag" : false,
+                                "types" : [ "object" ],
+                                "jsonSchema" : {
+                                  "type" : "object"
+                                }
+                              },
+                              "types" : [ "array" ]
+                            },
+                            "sealed" : {
+                              "type" : "boolean",
+                              "exampleSetFlag" : false,
+                              "types" : [ "boolean" ]
+                            },
+                            "specificationTitle" : {
+                              "type" : "string",
+                              "exampleSetFlag" : false,
+                              "types" : [ "string" ]
+                            },
+                            "specificationVersion" : {
+                              "type" : "string",
+                              "exampleSetFlag" : false,
+                              "types" : [ "string" ]
+                            },
+                            "specificationVendor" : {
+                              "type" : "string",
+                              "exampleSetFlag" : false,
+                              "types" : [ "string" ]
+                            },
+                            "implementationTitle" : {
+                              "type" : "string",
+                              "exampleSetFlag" : false,
+                              "types" : [ "string" ]
+                            },
+                            "implementationVersion" : {
+                              "type" : "string",
+                              "exampleSetFlag" : false,
+                              "types" : [ "string" ]
+                            },
+                            "implementationVendor" : {
+                              "type" : "string",
+                              "exampleSetFlag" : false,
+                              "types" : [ "string" ]
+                            }
+                          },
+                          "exampleSetFlag" : false,
+                          "types" : [ "object" ],
+                          "jsonSchema" : {
+                            "type" : "object",
+                            "properties" : {
+                              "name" : {
+                                "type" : "string"
+                              },
+                              "annotations" : {
+                                "type" : "array",
+                                "items" : {
+                                  "type" : "object"
+                                }
+                              },
+                              "declaredAnnotations" : {
+                                "type" : "array",
+                                "items" : {
+                                  "type" : "object"
+                                }
+                              },
+                              "sealed" : {
+                                "type" : "boolean"
+                              },
+                              "specificationTitle" : {
+                                "type" : "string"
+                              },
+                              "specificationVersion" : {
+                                "type" : "string"
+                              },
+                              "specificationVendor" : {
+                                "type" : "string"
+                              },
+                              "implementationTitle" : {
+                                "type" : "string"
+                              },
+                              "implementationVersion" : {
+                                "type" : "string"
+                              },
+                              "implementationVendor" : {
+                                "type" : "string"
+                              }
+                            }
+                          }
+                        },
+                        "types" : [ "array" ]
+                      },
+                      "defaultAssertionStatus" : {
+                        "type" : "boolean",
+                        "writeOnly" : true,
+                        "exampleSetFlag" : false,
+                        "types" : [ "boolean" ]
+                      }
+                    },
+                    "exampleSetFlag" : false,
+                    "types" : [ "object" ],
+                    "jsonSchema" : {
+                      "type" : "object",
+                      "properties" : {
+                        "name" : {
+                          "type" : "string"
+                        },
+                        "registeredAsParallelCapable" : {
+                          "type" : "boolean"
+                        },
+                        "definedPackages" : {
+                          "type" : "array",
+                          "items" : {
+                            "type" : "object",
+                            "properties" : {
+                              "name" : {
+                                "type" : "string"
+                              },
+                              "annotations" : {
+                                "type" : "array",
+                                "items" : {
+                                  "type" : "object"
+                                }
+                              },
+                              "declaredAnnotations" : {
+                                "type" : "array",
+                                "items" : {
+                                  "type" : "object"
+                                }
+                              },
+                              "sealed" : {
+                                "type" : "boolean"
+                              },
+                              "specificationTitle" : {
+                                "type" : "string"
+                              },
+                              "specificationVersion" : {
+                                "type" : "string"
+                              },
+                              "specificationVendor" : {
+                                "type" : "string"
+                              },
+                              "implementationTitle" : {
+                                "type" : "string"
+                              },
+                              "implementationVersion" : {
+                                "type" : "string"
+                              },
+                              "implementationVendor" : {
+                                "type" : "string"
+                              }
+                            }
+                          }
+                        },
+                        "defaultAssertionStatus" : {
+                          "type" : "boolean",
+                          "writeOnly" : true
+                        }
+                      }
+                    }
+                  },
+                  "descriptor" : {
+                    "type" : "object",
+                    "properties" : {
+                      "open" : {
+                        "type" : "boolean",
+                        "exampleSetFlag" : false,
+                        "types" : [ "boolean" ]
+                      },
+                      "automatic" : {
+                        "type" : "boolean",
+                        "exampleSetFlag" : false,
+                        "types" : [ "boolean" ]
+                      }
+                    },
+                    "exampleSetFlag" : false,
+                    "types" : [ "object" ],
+                    "jsonSchema" : {
+                      "type" : "object",
+                      "properties" : {
+                        "open" : {
+                          "type" : "boolean"
+                        },
+                        "automatic" : {
+                          "type" : "boolean"
+                        }
+                      }
+                    }
+                  },
+                  "named" : {
+                    "type" : "boolean",
+                    "exampleSetFlag" : false,
+                    "types" : [ "boolean" ]
+                  },
+                  "annotations" : {
+                    "type" : "array",
+                    "exampleSetFlag" : false,
+                    "items" : {
+                      "type" : "object",
+                      "exampleSetFlag" : false,
+                      "types" : [ "object" ],
+                      "jsonSchema" : {
+                        "type" : "object"
+                      }
+                    },
+                    "types" : [ "array" ]
+                  },
+                  "declaredAnnotations" : {
+                    "type" : "array",
+                    "exampleSetFlag" : false,
+                    "items" : {
+                      "type" : "object",
+                      "exampleSetFlag" : false,
+                      "types" : [ "object" ],
+                      "jsonSchema" : {
+                        "type" : "object"
+                      }
+                    },
+                    "types" : [ "array" ]
+                  },
+                  "packages" : {
+                    "uniqueItems" : true,
+                    "type" : "array",
+                    "exampleSetFlag" : false,
+                    "items" : {
+                      "type" : "string",
+                      "exampleSetFlag" : false,
+                      "types" : [ "string" ]
+                    },
+                    "types" : [ "array" ]
+                  },
+                  "nativeAccessEnabled" : {
+                    "type" : "boolean",
+                    "exampleSetFlag" : false,
+                    "types" : [ "boolean" ]
+                  },
+                  "layer" : {
+                    "type" : "object",
+                    "exampleSetFlag" : false,
+                    "types" : [ "object" ],
+                    "jsonSchema" : {
+                      "type" : "object"
+                    }
+                  }
+                },
+                "exampleSetFlag" : false,
+                "types" : [ "object" ],
+                "jsonSchema" : {
+                  "type" : "object",
+                  "properties" : {
+                    "name" : {
+                      "type" : "string"
+                    },
+                    "classLoader" : {
+                      "type" : "object",
+                      "properties" : {
+                        "name" : {
+                          "type" : "string"
+                        },
+                        "registeredAsParallelCapable" : {
+                          "type" : "boolean"
+                        },
+                        "definedPackages" : {
+                          "type" : "array",
+                          "items" : {
+                            "type" : "object",
+                            "properties" : {
+                              "name" : {
+                                "type" : "string"
+                              },
+                              "annotations" : {
+                                "type" : "array",
+                                "items" : {
+                                  "type" : "object"
+                                }
+                              },
+                              "declaredAnnotations" : {
+                                "type" : "array",
+                                "items" : {
+                                  "type" : "object"
+                                }
+                              },
+                              "sealed" : {
+                                "type" : "boolean"
+                              },
+                              "specificationTitle" : {
+                                "type" : "string"
+                              },
+                              "specificationVersion" : {
+                                "type" : "string"
+                              },
+                              "specificationVendor" : {
+                                "type" : "string"
+                              },
+                              "implementationTitle" : {
+                                "type" : "string"
+                              },
+                              "implementationVersion" : {
+                                "type" : "string"
+                              },
+                              "implementationVendor" : {
+                                "type" : "string"
+                              }
+                            }
+                          }
+                        },
+                        "defaultAssertionStatus" : {
+                          "type" : "boolean",
+                          "writeOnly" : true
+                        }
+                      }
+                    },
+                    "descriptor" : {
+                      "type" : "object",
+                      "properties" : {
+                        "open" : {
+                          "type" : "boolean"
+                        },
+                        "automatic" : {
+                          "type" : "boolean"
+                        }
+                      }
+                    },
+                    "named" : {
+                      "type" : "boolean"
+                    },
+                    "annotations" : {
+                      "type" : "array",
+                      "items" : {
+                        "type" : "object"
+                      }
+                    },
+                    "declaredAnnotations" : {
+                      "type" : "array",
+                      "items" : {
+                        "type" : "object"
+                      }
+                    },
+                    "packages" : {
+                      "uniqueItems" : true,
+                      "type" : "array",
+                      "items" : {
+                        "type" : "string"
+                      }
+                    },
+                    "nativeAccessEnabled" : {
+                      "type" : "boolean"
+                    },
+                    "layer" : {
+                      "type" : "object"
+                    }
+                  }
+                }
+              },
+              "definedPackages" : {
+                "type" : "array",
+                "exampleSetFlag" : false,
+                "items" : {
+                  "type" : "object",
+                  "properties" : {
+                    "name" : {
+                      "type" : "string",
+                      "exampleSetFlag" : false,
+                      "types" : [ "string" ]
+                    },
+                    "annotations" : {
+                      "type" : "array",
+                      "exampleSetFlag" : false,
+                      "items" : {
+                        "type" : "object",
+                        "exampleSetFlag" : false,
+                        "types" : [ "object" ],
+                        "jsonSchema" : {
+                          "type" : "object"
+                        }
+                      },
+                      "types" : [ "array" ]
+                    },
+                    "declaredAnnotations" : {
+                      "type" : "array",
+                      "exampleSetFlag" : false,
+                      "items" : {
+                        "type" : "object",
+                        "exampleSetFlag" : false,
+                        "types" : [ "object" ],
+                        "jsonSchema" : {
+                          "type" : "object"
+                        }
+                      },
+                      "types" : [ "array" ]
+                    },
+                    "sealed" : {
+                      "type" : "boolean",
+                      "exampleSetFlag" : false,
+                      "types" : [ "boolean" ]
+                    },
+                    "specificationTitle" : {
+                      "type" : "string",
+                      "exampleSetFlag" : false,
+                      "types" : [ "string" ]
+                    },
+                    "specificationVersion" : {
+                      "type" : "string",
+                      "exampleSetFlag" : false,
+                      "types" : [ "string" ]
+                    },
+                    "specificationVendor" : {
+                      "type" : "string",
+                      "exampleSetFlag" : false,
+                      "types" : [ "string" ]
+                    },
+                    "implementationTitle" : {
+                      "type" : "string",
+                      "exampleSetFlag" : false,
+                      "types" : [ "string" ]
+                    },
+                    "implementationVersion" : {
+                      "type" : "string",
+                      "exampleSetFlag" : false,
+                      "types" : [ "string" ]
+                    },
+                    "implementationVendor" : {
+                      "type" : "string",
+                      "exampleSetFlag" : false,
+                      "types" : [ "string" ]
+                    }
+                  },
+                  "exampleSetFlag" : false,
+                  "types" : [ "object" ],
+                  "jsonSchema" : {
+                    "type" : "object",
+                    "properties" : {
+                      "name" : {
+                        "type" : "string"
+                      },
+                      "annotations" : {
+                        "type" : "array",
+                        "items" : {
+                          "type" : "object"
+                        }
+                      },
+                      "declaredAnnotations" : {
+                        "type" : "array",
+                        "items" : {
+                          "type" : "object"
+                        }
+                      },
+                      "sealed" : {
+                        "type" : "boolean"
+                      },
+                      "specificationTitle" : {
+                        "type" : "string"
+                      },
+                      "specificationVersion" : {
+                        "type" : "string"
+                      },
+                      "specificationVendor" : {
+                        "type" : "string"
+                      },
+                      "implementationTitle" : {
+                        "type" : "string"
+                      },
+                      "implementationVersion" : {
+                        "type" : "string"
+                      },
+                      "implementationVendor" : {
+                        "type" : "string"
+                      }
+                    }
+                  }
+                },
+                "types" : [ "array" ]
+              },
+              "defaultAssertionStatus" : {
+                "type" : "boolean",
+                "writeOnly" : true,
+                "exampleSetFlag" : false,
+                "types" : [ "boolean" ]
+              }
+            },
+            "exampleSetFlag" : false,
+            "types" : [ "object" ],
+            "jsonSchema" : {
+              "type" : "object",
+              "properties" : {
+                "name" : {
+                  "type" : "string"
+                },
+                "registeredAsParallelCapable" : {
+                  "type" : "boolean"
+                },
+                "parent" : {
+                  "type" : "object",
+                  "properties" : {
+                    "name" : {
+                      "type" : "string"
+                    },
+                    "registeredAsParallelCapable" : {
+                      "type" : "boolean"
+                    },
+                    "unnamedModule" : {
+                      "type" : "object",
+                      "properties" : {
+                        "name" : {
+                          "type" : "string"
+                        },
+                        "classLoader" : {
+                          "type" : "object",
+                          "properties" : {
+                            "name" : {
+                              "type" : "string"
+                            },
+                            "registeredAsParallelCapable" : {
+                              "type" : "boolean"
+                            },
+                            "definedPackages" : {
+                              "type" : "array",
+                              "items" : {
+                                "type" : "object",
+                                "properties" : {
+                                  "name" : {
+                                    "type" : "string"
+                                  },
+                                  "annotations" : {
+                                    "type" : "array",
+                                    "items" : {
+                                      "type" : "object"
+                                    }
+                                  },
+                                  "declaredAnnotations" : {
+                                    "type" : "array",
+                                    "items" : {
+                                      "type" : "object"
+                                    }
+                                  },
+                                  "sealed" : {
+                                    "type" : "boolean"
+                                  },
+                                  "specificationTitle" : {
+                                    "type" : "string"
+                                  },
+                                  "specificationVersion" : {
+                                    "type" : "string"
+                                  },
+                                  "specificationVendor" : {
+                                    "type" : "string"
+                                  },
+                                  "implementationTitle" : {
+                                    "type" : "string"
+                                  },
+                                  "implementationVersion" : {
+                                    "type" : "string"
+                                  },
+                                  "implementationVendor" : {
+                                    "type" : "string"
+                                  }
+                                }
+                              }
+                            },
+                            "defaultAssertionStatus" : {
+                              "type" : "boolean",
+                              "writeOnly" : true
+                            }
+                          }
+                        },
+                        "descriptor" : {
+                          "type" : "object",
+                          "properties" : {
+                            "open" : {
+                              "type" : "boolean"
+                            },
+                            "automatic" : {
+                              "type" : "boolean"
+                            }
+                          }
+                        },
+                        "named" : {
+                          "type" : "boolean"
+                        },
+                        "annotations" : {
+                          "type" : "array",
+                          "items" : {
+                            "type" : "object"
+                          }
+                        },
+                        "declaredAnnotations" : {
+                          "type" : "array",
+                          "items" : {
+                            "type" : "object"
+                          }
+                        },
+                        "packages" : {
+                          "uniqueItems" : true,
+                          "type" : "array",
+                          "items" : {
+                            "type" : "string"
+                          }
+                        },
+                        "nativeAccessEnabled" : {
+                          "type" : "boolean"
+                        },
+                        "layer" : {
+                          "type" : "object"
+                        }
+                      }
+                    },
+                    "definedPackages" : {
+                      "type" : "array",
+                      "items" : {
+                        "type" : "object",
+                        "properties" : {
+                          "name" : {
+                            "type" : "string"
+                          },
+                          "annotations" : {
+                            "type" : "array",
+                            "items" : {
+                              "type" : "object"
+                            }
+                          },
+                          "declaredAnnotations" : {
+                            "type" : "array",
+                            "items" : {
+                              "type" : "object"
+                            }
+                          },
+                          "sealed" : {
+                            "type" : "boolean"
+                          },
+                          "specificationTitle" : {
+                            "type" : "string"
+                          },
+                          "specificationVersion" : {
+                            "type" : "string"
+                          },
+                          "specificationVendor" : {
+                            "type" : "string"
+                          },
+                          "implementationTitle" : {
+                            "type" : "string"
+                          },
+                          "implementationVersion" : {
+                            "type" : "string"
+                          },
+                          "implementationVendor" : {
+                            "type" : "string"
+                          }
+                        }
+                      }
+                    },
+                    "defaultAssertionStatus" : {
+                      "type" : "boolean",
+                      "writeOnly" : true
+                    }
+                  }
+                },
+                "unnamedModule" : {
+                  "type" : "object",
+                  "properties" : {
+                    "name" : {
+                      "type" : "string"
+                    },
+                    "classLoader" : {
+                      "type" : "object",
+                      "properties" : {
+                        "name" : {
+                          "type" : "string"
+                        },
+                        "registeredAsParallelCapable" : {
+                          "type" : "boolean"
+                        },
+                        "definedPackages" : {
+                          "type" : "array",
+                          "items" : {
+                            "type" : "object",
+                            "properties" : {
+                              "name" : {
+                                "type" : "string"
+                              },
+                              "annotations" : {
+                                "type" : "array",
+                                "items" : {
+                                  "type" : "object"
+                                }
+                              },
+                              "declaredAnnotations" : {
+                                "type" : "array",
+                                "items" : {
+                                  "type" : "object"
+                                }
+                              },
+                              "sealed" : {
+                                "type" : "boolean"
+                              },
+                              "specificationTitle" : {
+                                "type" : "string"
+                              },
+                              "specificationVersion" : {
+                                "type" : "string"
+                              },
+                              "specificationVendor" : {
+                                "type" : "string"
+                              },
+                              "implementationTitle" : {
+                                "type" : "string"
+                              },
+                              "implementationVersion" : {
+                                "type" : "string"
+                              },
+                              "implementationVendor" : {
+                                "type" : "string"
+                              }
+                            }
+                          }
+                        },
+                        "defaultAssertionStatus" : {
+                          "type" : "boolean",
+                          "writeOnly" : true
+                        }
+                      }
+                    },
+                    "descriptor" : {
+                      "type" : "object",
+                      "properties" : {
+                        "open" : {
+                          "type" : "boolean"
+                        },
+                        "automatic" : {
+                          "type" : "boolean"
+                        }
+                      }
+                    },
+                    "named" : {
+                      "type" : "boolean"
+                    },
+                    "annotations" : {
+                      "type" : "array",
+                      "items" : {
+                        "type" : "object"
+                      }
+                    },
+                    "declaredAnnotations" : {
+                      "type" : "array",
+                      "items" : {
+                        "type" : "object"
+                      }
+                    },
+                    "packages" : {
+                      "uniqueItems" : true,
+                      "type" : "array",
+                      "items" : {
+                        "type" : "string"
+                      }
+                    },
+                    "nativeAccessEnabled" : {
+                      "type" : "boolean"
+                    },
+                    "layer" : {
+                      "type" : "object"
+                    }
+                  }
+                },
+                "definedPackages" : {
+                  "type" : "array",
+                  "items" : {
+                    "type" : "object",
+                    "properties" : {
+                      "name" : {
+                        "type" : "string"
+                      },
+                      "annotations" : {
+                        "type" : "array",
+                        "items" : {
+                          "type" : "object"
+                        }
+                      },
+                      "declaredAnnotations" : {
+                        "type" : "array",
+                        "items" : {
+                          "type" : "object"
+                        }
+                      },
+                      "sealed" : {
+                        "type" : "boolean"
+                      },
+                      "specificationTitle" : {
+                        "type" : "string"
+                      },
+                      "specificationVersion" : {
+                        "type" : "string"
+                      },
+                      "specificationVendor" : {
+                        "type" : "string"
+                      },
+                      "implementationTitle" : {
+                        "type" : "string"
+                      },
+                      "implementationVersion" : {
+                        "type" : "string"
+                      },
+                      "implementationVendor" : {
+                        "type" : "string"
+                      }
+                    }
+                  }
+                },
+                "defaultAssertionStatus" : {
+                  "type" : "boolean",
+                  "writeOnly" : true
+                }
+              }
+            }
+          }
+        },
+        "exampleSetFlag" : false
+      },
+      "AutowireCapableBeanFactory" : {
+        "type" : "object",
+        "exampleSetFlag" : false
+      },
+      "BeanFactory" : {
+        "type" : "object",
+        "exampleSetFlag" : false
+      },
+      "Environment" : {
+        "type" : "object",
+        "properties" : {
+          "activeProfiles" : {
+            "type" : "array",
+            "exampleSetFlag" : false,
+            "items" : {
+              "type" : "string",
+              "exampleSetFlag" : false,
+              "types" : [ "string" ]
+            },
+            "types" : [ "array" ]
+          },
+          "defaultProfiles" : {
+            "type" : "array",
+            "exampleSetFlag" : false,
+            "items" : {
+              "type" : "string",
+              "exampleSetFlag" : false,
+              "types" : [ "string" ]
+            },
+            "types" : [ "array" ]
+          }
+        },
+        "exampleSetFlag" : false
+      },
+      "FilterRegistration" : {
+        "type" : "object",
+        "properties" : {
+          "servletNameMappings" : {
+            "type" : "array",
+            "exampleSetFlag" : false,
+            "items" : {
+              "type" : "string",
+              "exampleSetFlag" : false,
+              "types" : [ "string" ]
+            },
+            "types" : [ "array" ]
+          },
+          "urlPatternMappings" : {
+            "type" : "array",
+            "exampleSetFlag" : false,
+            "items" : {
+              "type" : "string",
+              "exampleSetFlag" : false,
+              "types" : [ "string" ]
+            },
+            "types" : [ "array" ]
+          },
+          "name" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "className" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "initParameters" : {
+            "type" : "object",
+            "additionalProperties" : {
+              "type" : "string",
+              "exampleSetFlag" : false,
+              "types" : [ "string" ]
+            },
+            "exampleSetFlag" : false,
+            "types" : [ "object" ],
+            "jsonSchema" : {
+              "type" : "object"
+            }
+          }
+        },
+        "exampleSetFlag" : false
+      },
+      "HttpStatusCode" : {
+        "type" : "object",
+        "properties" : {
+          "error" : {
+            "type" : "boolean",
+            "exampleSetFlag" : false,
+            "types" : [ "boolean" ]
+          },
+          "is5xxServerError" : {
+            "type" : "boolean",
+            "exampleSetFlag" : false,
+            "types" : [ "boolean" ]
+          },
+          "is4xxClientError" : {
+            "type" : "boolean",
+            "exampleSetFlag" : false,
+            "types" : [ "boolean" ]
+          },
+          "is3xxRedirection" : {
+            "type" : "boolean",
+            "exampleSetFlag" : false,
+            "types" : [ "boolean" ]
+          },
+          "is1xxInformational" : {
+            "type" : "boolean",
+            "exampleSetFlag" : false,
+            "types" : [ "boolean" ]
+          },
+          "is2xxSuccessful" : {
+            "type" : "boolean",
+            "exampleSetFlag" : false,
+            "types" : [ "boolean" ]
+          }
+        },
+        "exampleSetFlag" : false
+      },
+      "JspConfigDescriptor" : {
+        "type" : "object",
+        "properties" : {
+          "jspPropertyGroups" : {
+            "type" : "array",
+            "exampleSetFlag" : false,
+            "items" : {
+              "$ref" : "#/components/schemas/JspPropertyGroupDescriptor",
+              "exampleSetFlag" : false
+            },
+            "types" : [ "array" ]
+          },
+          "taglibs" : {
+            "type" : "array",
+            "exampleSetFlag" : false,
+            "items" : {
+              "$ref" : "#/components/schemas/TaglibDescriptor",
+              "exampleSetFlag" : false
+            },
+            "types" : [ "array" ]
+          }
+        },
+        "exampleSetFlag" : false
+      },
+      "JspPropertyGroupDescriptor" : {
+        "type" : "object",
+        "properties" : {
+          "buffer" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "defaultContentType" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "urlPatterns" : {
+            "type" : "array",
+            "exampleSetFlag" : false,
+            "items" : {
+              "type" : "string",
+              "exampleSetFlag" : false,
+              "types" : [ "string" ]
+            },
+            "types" : [ "array" ]
+          },
+          "isXml" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "elIgnored" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "includeCodas" : {
+            "type" : "array",
+            "exampleSetFlag" : false,
+            "items" : {
+              "type" : "string",
+              "exampleSetFlag" : false,
+              "types" : [ "string" ]
+            },
+            "types" : [ "array" ]
+          },
+          "pageEncoding" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "includePreludes" : {
+            "type" : "array",
+            "exampleSetFlag" : false,
+            "items" : {
+              "type" : "string",
+              "exampleSetFlag" : false,
+              "types" : [ "string" ]
+            },
+            "types" : [ "array" ]
+          },
+          "errorOnELNotFound" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "scriptingInvalid" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "trimDirectiveWhitespaces" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "errorOnUndeclaredNamespace" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "deferredSyntaxAllowedAsLiteral" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          }
+        },
+        "exampleSetFlag" : false
+      },
+      "RedirectView" : {
+        "type" : "object",
+        "properties" : {
+          "applicationContext" : {
+            "$ref" : "#/components/schemas/ApplicationContext",
+            "exampleSetFlag" : false
+          },
+          "servletContext" : {
+            "$ref" : "#/components/schemas/ServletContext",
+            "exampleSetFlag" : false
+          },
+          "contentType" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "requestContextAttribute" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "staticAttributes" : {
+            "type" : "object",
+            "additionalProperties" : {
+              "type" : "object",
+              "exampleSetFlag" : false,
+              "types" : [ "object" ],
+              "jsonSchema" : {
+                "type" : "object"
+              }
+            },
+            "exampleSetFlag" : false,
+            "types" : [ "object" ],
+            "jsonSchema" : {
+              "type" : "object"
+            }
+          },
+          "exposePathVariables" : {
+            "type" : "boolean",
+            "exampleSetFlag" : false,
+            "types" : [ "boolean" ]
+          },
+          "exposeContextBeansAsAttributes" : {
+            "type" : "boolean",
+            "writeOnly" : true,
+            "exampleSetFlag" : false,
+            "types" : [ "boolean" ]
+          },
+          "exposedContextBeanNames" : {
+            "type" : "array",
+            "writeOnly" : true,
+            "exampleSetFlag" : false,
+            "items" : {
+              "type" : "string",
+              "exampleSetFlag" : false,
+              "types" : [ "string" ]
+            },
+            "types" : [ "array" ]
+          },
+          "beanName" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "url" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "contextRelative" : {
+            "type" : "boolean",
+            "writeOnly" : true,
+            "exampleSetFlag" : false,
+            "types" : [ "boolean" ]
+          },
+          "http10Compatible" : {
+            "type" : "boolean",
+            "writeOnly" : true,
+            "exampleSetFlag" : false,
+            "types" : [ "boolean" ]
+          },
+          "exposeModelAttributes" : {
+            "type" : "boolean",
+            "writeOnly" : true,
+            "exampleSetFlag" : false,
+            "types" : [ "boolean" ]
+          },
+          "encodingScheme" : {
+            "type" : "string",
+            "writeOnly" : true,
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "statusCode" : {
+            "$ref" : "#/components/schemas/HttpStatusCode",
+            "exampleSetFlag" : false
+          },
+          "expandUriTemplateVariables" : {
+            "type" : "boolean",
+            "writeOnly" : true,
+            "exampleSetFlag" : false,
+            "types" : [ "boolean" ]
+          },
+          "propagateQueryParams" : {
+            "type" : "boolean",
+            "writeOnly" : true,
+            "exampleSetFlag" : false,
+            "types" : [ "boolean" ]
+          },
+          "hosts" : {
+            "type" : "array",
+            "exampleSetFlag" : false,
+            "items" : {
+              "type" : "string",
+              "exampleSetFlag" : false,
+              "types" : [ "string" ]
+            },
+            "types" : [ "array" ]
+          },
+          "redirectView" : {
+            "type" : "boolean",
+            "exampleSetFlag" : false,
+            "types" : [ "boolean" ]
+          },
+          "propagateQueryProperties" : {
+            "type" : "boolean",
+            "exampleSetFlag" : false,
+            "types" : [ "boolean" ]
+          },
+          "attributes" : {
+            "type" : "object",
+            "additionalProperties" : {
+              "type" : "string",
+              "exampleSetFlag" : false,
+              "types" : [ "string" ]
+            },
+            "writeOnly" : true,
+            "exampleSetFlag" : false,
+            "types" : [ "object" ],
+            "jsonSchema" : {
+              "type" : "object"
+            }
+          },
+          "attributesMap" : {
+            "type" : "object",
+            "additionalProperties" : {
+              "type" : "object",
+              "exampleSetFlag" : false,
+              "types" : [ "object" ],
+              "jsonSchema" : {
+                "type" : "object"
+              }
+            },
+            "exampleSetFlag" : false,
+            "types" : [ "object" ],
+            "jsonSchema" : {
+              "type" : "object"
+            }
+          },
+          "attributesCSV" : {
+            "type" : "string",
+            "writeOnly" : true,
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          }
+        },
+        "exampleSetFlag" : false
+      },
+      "ServletContext" : {
+        "type" : "object",
+        "properties" : {
+          "classLoader" : {
+            "type" : "object",
+            "properties" : {
+              "name" : {
+                "type" : "string",
+                "exampleSetFlag" : false,
+                "types" : [ "string" ]
+              },
+              "registeredAsParallelCapable" : {
+                "type" : "boolean",
+                "exampleSetFlag" : false,
+                "types" : [ "boolean" ]
+              },
+              "definedPackages" : {
+                "type" : "array",
+                "exampleSetFlag" : false,
+                "items" : {
+                  "type" : "object",
+                  "properties" : {
+                    "name" : {
+                      "type" : "string",
+                      "exampleSetFlag" : false,
+                      "types" : [ "string" ]
+                    },
+                    "annotations" : {
+                      "type" : "array",
+                      "exampleSetFlag" : false,
+                      "items" : {
+                        "type" : "object",
+                        "exampleSetFlag" : false,
+                        "types" : [ "object" ],
+                        "jsonSchema" : {
+                          "type" : "object"
+                        }
+                      },
+                      "types" : [ "array" ]
+                    },
+                    "declaredAnnotations" : {
+                      "type" : "array",
+                      "exampleSetFlag" : false,
+                      "items" : {
+                        "type" : "object",
+                        "exampleSetFlag" : false,
+                        "types" : [ "object" ],
+                        "jsonSchema" : {
+                          "type" : "object"
+                        }
+                      },
+                      "types" : [ "array" ]
+                    },
+                    "sealed" : {
+                      "type" : "boolean",
+                      "exampleSetFlag" : false,
+                      "types" : [ "boolean" ]
+                    },
+                    "specificationTitle" : {
+                      "type" : "string",
+                      "exampleSetFlag" : false,
+                      "types" : [ "string" ]
+                    },
+                    "specificationVersion" : {
+                      "type" : "string",
+                      "exampleSetFlag" : false,
+                      "types" : [ "string" ]
+                    },
+                    "specificationVendor" : {
+                      "type" : "string",
+                      "exampleSetFlag" : false,
+                      "types" : [ "string" ]
+                    },
+                    "implementationTitle" : {
+                      "type" : "string",
+                      "exampleSetFlag" : false,
+                      "types" : [ "string" ]
+                    },
+                    "implementationVersion" : {
+                      "type" : "string",
+                      "exampleSetFlag" : false,
+                      "types" : [ "string" ]
+                    },
+                    "implementationVendor" : {
+                      "type" : "string",
+                      "exampleSetFlag" : false,
+                      "types" : [ "string" ]
+                    }
+                  },
+                  "exampleSetFlag" : false,
+                  "types" : [ "object" ],
+                  "jsonSchema" : {
+                    "type" : "object",
+                    "properties" : {
+                      "name" : {
+                        "type" : "string"
+                      },
+                      "annotations" : {
+                        "type" : "array",
+                        "items" : {
+                          "type" : "object"
+                        }
+                      },
+                      "declaredAnnotations" : {
+                        "type" : "array",
+                        "items" : {
+                          "type" : "object"
+                        }
+                      },
+                      "sealed" : {
+                        "type" : "boolean"
+                      },
+                      "specificationTitle" : {
+                        "type" : "string"
+                      },
+                      "specificationVersion" : {
+                        "type" : "string"
+                      },
+                      "specificationVendor" : {
+                        "type" : "string"
+                      },
+                      "implementationTitle" : {
+                        "type" : "string"
+                      },
+                      "implementationVersion" : {
+                        "type" : "string"
+                      },
+                      "implementationVendor" : {
+                        "type" : "string"
+                      }
+                    }
+                  }
+                },
+                "types" : [ "array" ]
+              },
+              "defaultAssertionStatus" : {
+                "type" : "boolean",
+                "writeOnly" : true,
+                "exampleSetFlag" : false,
+                "types" : [ "boolean" ]
+              }
+            },
+            "exampleSetFlag" : false,
+            "types" : [ "object" ],
+            "jsonSchema" : {
+              "type" : "object",
+              "properties" : {
+                "name" : {
+                  "type" : "string"
+                },
+                "registeredAsParallelCapable" : {
+                  "type" : "boolean"
+                },
+                "definedPackages" : {
+                  "type" : "array",
+                  "items" : {
+                    "type" : "object",
+                    "properties" : {
+                      "name" : {
+                        "type" : "string"
+                      },
+                      "annotations" : {
+                        "type" : "array",
+                        "items" : {
+                          "type" : "object"
+                        }
+                      },
+                      "declaredAnnotations" : {
+                        "type" : "array",
+                        "items" : {
+                          "type" : "object"
+                        }
+                      },
+                      "sealed" : {
+                        "type" : "boolean"
+                      },
+                      "specificationTitle" : {
+                        "type" : "string"
+                      },
+                      "specificationVersion" : {
+                        "type" : "string"
+                      },
+                      "specificationVendor" : {
+                        "type" : "string"
+                      },
+                      "implementationTitle" : {
+                        "type" : "string"
+                      },
+                      "implementationVersion" : {
+                        "type" : "string"
+                      },
+                      "implementationVendor" : {
+                        "type" : "string"
+                      }
+                    }
+                  }
+                },
+                "defaultAssertionStatus" : {
+                  "type" : "boolean",
+                  "writeOnly" : true
+                }
+              }
+            }
+          },
+          "majorVersion" : {
+            "type" : "integer",
+            "format" : "int32",
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          },
+          "minorVersion" : {
+            "type" : "integer",
+            "format" : "int32",
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          },
+          "attributeNames" : {
+            "type" : "object",
+            "exampleSetFlag" : false,
+            "types" : [ "object" ],
+            "jsonSchema" : {
+              "type" : "object"
+            }
+          },
+          "contextPath" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "initParameterNames" : {
+            "type" : "object",
+            "exampleSetFlag" : false,
+            "types" : [ "object" ],
+            "jsonSchema" : {
+              "type" : "object"
+            }
+          },
+          "sessionCookieConfig" : {
+            "$ref" : "#/components/schemas/SessionCookieConfig",
+            "exampleSetFlag" : false
+          },
+          "virtualServerName" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "sessionTrackingModes" : {
+            "uniqueItems" : true,
+            "type" : "array",
+            "writeOnly" : true,
+            "exampleSetFlag" : false,
+            "items" : {
+              "type" : "string",
+              "exampleSetFlag" : false,
+              "types" : [ "string" ],
+              "enum" : [ "COOKIE", "URL", "SSL" ]
+            },
+            "types" : [ "array" ]
+          },
+          "requestCharacterEncoding" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "defaultSessionTrackingModes" : {
+            "uniqueItems" : true,
+            "type" : "array",
+            "exampleSetFlag" : false,
+            "items" : {
+              "type" : "string",
+              "exampleSetFlag" : false,
+              "types" : [ "string" ],
+              "enum" : [ "COOKIE", "URL", "SSL" ]
+            },
+            "types" : [ "array" ]
+          },
+          "effectiveSessionTrackingModes" : {
+            "uniqueItems" : true,
+            "type" : "array",
+            "exampleSetFlag" : false,
+            "items" : {
+              "type" : "string",
+              "exampleSetFlag" : false,
+              "types" : [ "string" ],
+              "enum" : [ "COOKIE", "URL", "SSL" ]
+            },
+            "types" : [ "array" ]
+          },
+          "responseCharacterEncoding" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "sessionTimeout" : {
+            "type" : "integer",
+            "format" : "int32",
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          },
+          "servletRegistrations" : {
+            "type" : "object",
+            "additionalProperties" : {
+              "$ref" : "#/components/schemas/ServletRegistration",
+              "exampleSetFlag" : false
+            },
+            "exampleSetFlag" : false,
+            "types" : [ "object" ],
+            "jsonSchema" : {
+              "type" : "object"
+            }
+          },
+          "serverInfo" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "effectiveMinorVersion" : {
+            "type" : "integer",
+            "format" : "int32",
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          },
+          "filterRegistrations" : {
+            "type" : "object",
+            "additionalProperties" : {
+              "$ref" : "#/components/schemas/FilterRegistration",
+              "exampleSetFlag" : false
+            },
+            "exampleSetFlag" : false,
+            "types" : [ "object" ],
+            "jsonSchema" : {
+              "type" : "object"
+            }
+          },
+          "servletContextName" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "effectiveMajorVersion" : {
+            "type" : "integer",
+            "format" : "int32",
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          },
+          "jspConfigDescriptor" : {
+            "$ref" : "#/components/schemas/JspConfigDescriptor",
+            "exampleSetFlag" : false
+          }
+        },
+        "exampleSetFlag" : false
+      },
+      "ServletRegistration" : {
+        "type" : "object",
+        "properties" : {
+          "mappings" : {
+            "type" : "array",
+            "exampleSetFlag" : false,
+            "items" : {
+              "type" : "string",
+              "exampleSetFlag" : false,
+              "types" : [ "string" ]
+            },
+            "types" : [ "array" ]
+          },
+          "runAsRole" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "name" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "className" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "initParameters" : {
+            "type" : "object",
+            "additionalProperties" : {
+              "type" : "string",
+              "exampleSetFlag" : false,
+              "types" : [ "string" ]
+            },
+            "exampleSetFlag" : false,
+            "types" : [ "object" ],
+            "jsonSchema" : {
+              "type" : "object"
+            }
+          }
+        },
+        "exampleSetFlag" : false
+      },
+      "SessionCookieConfig" : {
+        "type" : "object",
+        "properties" : {
+          "name" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "path" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "attributes" : {
+            "type" : "object",
+            "additionalProperties" : {
+              "type" : "string",
+              "exampleSetFlag" : false,
+              "types" : [ "string" ]
+            },
+            "exampleSetFlag" : false,
+            "types" : [ "object" ],
+            "jsonSchema" : {
+              "type" : "object"
+            }
+          },
+          "comment" : {
+            "type" : "string",
+            "deprecated" : true,
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "domain" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "maxAge" : {
+            "type" : "integer",
+            "format" : "int32",
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          },
+          "secure" : {
+            "type" : "boolean",
+            "exampleSetFlag" : false,
+            "types" : [ "boolean" ]
+          },
+          "httpOnly" : {
+            "type" : "boolean",
+            "exampleSetFlag" : false,
+            "types" : [ "boolean" ]
+          }
+        },
+        "exampleSetFlag" : false
+      },
+      "TaglibDescriptor" : {
+        "type" : "object",
+        "properties" : {
+          "taglibLocation" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "taglibURI" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          }
+        },
+        "exampleSetFlag" : false
+      }
+    },
+    "securitySchemes" : {
+      "JWT" : {
+        "type" : "HTTP",
+        "scheme" : "bearer",
+        "bearerFormat" : "JWT"
+      }
+    }
+  }
+}
