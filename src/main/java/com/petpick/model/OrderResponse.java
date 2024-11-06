@@ -13,6 +13,7 @@ public class OrderResponse {
     private LocalDateTime orderCreateAt;
     private String ordersStatus;
     private String paymentKey;
+    private String ordersRequest;
     private List<OrderDetailResponse> orderDetails;
 
     public OrderResponse(Orders order, List<OrderDetailResponse> orderDetails) {
@@ -22,5 +23,6 @@ public class OrderResponse {
         this.ordersStatus = order.getOrdersStatus().name();
         this.orderDetails = orderDetails;
         this.paymentKey = order.getPaymentKey();
+        this.ordersRequest = order.getOrdersRequest();
     }
 }
