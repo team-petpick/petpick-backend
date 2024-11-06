@@ -37,7 +37,7 @@ public class PetController {
     @GetMapping
     public PetInfoResponse getPet(
             @RequestAttribute Integer userId) {
-        return petService.getPetById(userId);
+        return petService.getPetById(userId).getBody();
     }
 
 //    // Get all pets
