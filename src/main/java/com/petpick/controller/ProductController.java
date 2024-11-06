@@ -42,7 +42,7 @@ public class ProductController {
     }
 
 
-    @PostMapping("/products/{productId}/like")
+    @PostMapping("/like/{productId}")
     public ResponseEntity<String> toggleProductLike(
             @PathVariable String productId,
             @RequestAttribute Integer userId
