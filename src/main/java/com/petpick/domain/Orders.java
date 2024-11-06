@@ -59,8 +59,4 @@ public class Orders extends BaseTime{
         this.ordersPrice -= amount;
     }
 
-    //fix this!!!!!!!!!
-    public LocalDateTime getCreateAt() {
-        return null;
-    }
 }
