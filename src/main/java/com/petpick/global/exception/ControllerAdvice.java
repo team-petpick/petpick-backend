@@ -1,6 +1,9 @@
 package com.petpick.global.exception;
 
 import com.petpick.global.exception.errorCode.GlobalErrorCode;
+import io.sentry.Sentry;
+import io.sentry.SentryLevel;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -8,6 +11,7 @@ import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
@@ -15,6 +19,12 @@ import java.util.List;
 
 @RestControllerAdvice
 public class ControllerAdvice {
+
+    private final HttpServletRequest request;
+
+    public ControllerAdvice(HttpServletRequest request) {
+        this.request = request;
+    }
 
     /**
      * 미리 지정해놓은 에러 e 발생 시 ExceptionResponse 로 반환
@@ -58,9 +68,23 @@ public class ControllerAdvice {
     /**
      * CASE: 서버 내부 에러
      */
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<ExceptionResponse> handleRuntimeException(RuntimeException e) {
         System.out.println(e);
+
+        Sentry.withScope(scope -> {
+            scope.setTag("error_type", "RuntimeException");
+            scope.setLevel(SentryLevel.ERROR);
+
+            // Add request details as extra context
+            scope.setExtra("request_uri", request.getRequestURI());
+            scope.setExtra("request_method", request.getMethod());
+            scope.setExtra("query_params", request.getQueryString());
+
+            Sentry.captureException(e);
+        });
+
         return convert(GlobalErrorCode.SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
