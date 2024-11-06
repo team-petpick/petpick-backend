@@ -31,7 +31,6 @@ public class Pet extends BaseTime {
     @Column(name = "pet_species")
     private String petSpecies;
 
-
     @Enumerated(EnumType.STRING)
     @Column(name = "pet_kind")
     private PetKind petKind;

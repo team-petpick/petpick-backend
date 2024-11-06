@@ -13,6 +13,7 @@ public class PetInfoResponse {
     private String petName;
     private PetKind petKind;
     private String petImg;
+    private String petSpecies;
     private Integer petAge;
     private PetGender petGender;
 
@@ -22,6 +23,7 @@ public class PetInfoResponse {
         this.petName = pet.getPetName();
         this.petKind = pet.getPetKind();
         this.petImg = pet.getPetImg();
+        this.petSpecies = pet.getPetSpecies();
         this.petAge = pet.getPetAge();
         this.petGender = pet.getPetGender();
     }
