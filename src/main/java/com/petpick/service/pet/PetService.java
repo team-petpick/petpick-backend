@@ -111,8 +111,8 @@ public class PetService {
     public PetInfoResponse updatePet(Integer userId, String petName,String petSpecies, PetKind petKind,
                                      Integer petAge, PetGender petGender, MultipartFile petImg) throws IOException {
 
-        Pet pet = petRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("Pet not found"));
+        Pet pet = petRepository.findByUserUserId(userId)
+                .orElseThrow(() -> new RuntimeException("No pet associated with this user"));
 
         String newPetName = (petName != null) ? petName : pet.getPetName();
         String newPetSpecies = (petSpecies != null) ? petSpecies : pet.getPetSpecies();
