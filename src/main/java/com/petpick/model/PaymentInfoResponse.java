@@ -8,7 +8,6 @@ import java.time.LocalDateTime;
 @Setter
 @Getter
 public class PaymentInfoResponse {
-    // Getters and Setters
     private String paymentKey;
     private int orderId;
     private String status;
@@ -16,8 +15,6 @@ public class PaymentInfoResponse {
     private int totalAmount;
     private LocalDateTime requestedAt;
     private LocalDateTime approvedAt;
-    // Add other necessary fields based on Toss API response
 
-    // Add other getters and setters as needed
 }
 
