@@ -14,6 +14,7 @@ public class OrderDetailResponse {
     private Integer orderDetailCnt;
     private String productThumbnail;
     private OrderDetailStatus orderDetailStatus;
+    private Integer productSale;
 
     public OrderDetailResponse(OrderDetail orderDetail, String productThumbnail) {
         this.orderDetailId = orderDetail.getOrderDetailId();
@@ -24,6 +25,7 @@ public class OrderDetailResponse {
         this.orderDetailCnt = orderDetail.getOrderDetailCnt();
         this.productThumbnail = productThumbnail;
         this.orderDetailStatus = orderDetail.getOrderDetailStatus();
+        this.productSale = orderDetail.getProduct().getProductSale();
     }
     public OrderDetailResponse() {
     }
