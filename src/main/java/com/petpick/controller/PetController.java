@@ -61,9 +61,9 @@ public class PetController {
     }
 
     // Delete pet
-    @DeleteMapping("/{petId}")
-    public void deletePet(@PathVariable Integer petId) {
-        petService.deletePet(petId);
+    @DeleteMapping
+    public void deletePet(@RequestAttribute Integer userId) {
+        petService.deletePet(userId);
     }
 
     // Update pet image only

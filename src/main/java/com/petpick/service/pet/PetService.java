@@ -160,7 +160,7 @@ public class PetService {
 
     // Delete pet
     public void deletePet(Integer userId) {
-        Pet pet = petRepository.findById(userId)
+        Pet pet = petRepository.findByUserUserId(userId)
                 .orElseThrow(() -> new RuntimeException("Pet not found"));
 
         // Delete pet image from S3 if exists
@@ -168,7 +168,7 @@ public class PetService {
             deleteImageFromS3(pet.getPetImg());
         }
 
-        petRepository.deleteById(userId);
+        petRepository.deleteByUserUserId(userId);
     }
 
     // Update pet image only
