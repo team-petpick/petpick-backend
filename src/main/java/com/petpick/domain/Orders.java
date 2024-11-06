@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "orders")
-public class Orders {
+public class Orders extends BaseTime{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "orders_id")
@@ -59,8 +59,4 @@ public class Orders {
         this.ordersPrice -= amount;
     }
 
-    //fix this!!!!!!!!!
-    public LocalDateTime getCreateAt() {
-        return null;
-    }
 }

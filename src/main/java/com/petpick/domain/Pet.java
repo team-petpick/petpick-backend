@@ -21,7 +21,7 @@ public class Pet extends BaseTime {
     @Column(name = "pet_id")
     private Integer petId;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "user_id")
     private User user;
 
