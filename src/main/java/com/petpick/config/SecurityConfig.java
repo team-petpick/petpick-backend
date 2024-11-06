@@ -30,7 +30,7 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(request -> {
                     CorsConfiguration config = new CorsConfiguration();
                     config.setAllowedOriginPatterns(List.of("http://localhost:3000","https://back.petpick.store", "https://petpick.netlify.app", "http://localhost:8080","https://petpick-dev.netlify.app")); // 프론트엔드 URL
-                    config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+                    config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
                     config.setAllowedHeaders(List.of("Authorization", "Content-Type", "Accept", "Origin"));
                     config.setAllowCredentials(true);
                     config.addExposedHeader("Cross-Origin-Opener-Policy");
@@ -50,7 +50,7 @@ public class SecurityConfig {
                                 "/v3/api-docs/**",
                                 "/webjars/**",
                                 "/v1/products",
-                                "/v1/products/**"
+                                "/v1/products/{productId}"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
