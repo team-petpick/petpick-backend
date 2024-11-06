@@ -9,6 +9,8 @@ import com.petpick.repository.PetRepository;
 import com.petpick.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.core.sync.RequestBody;
@@ -20,6 +22,7 @@ import software.amazon.awssdk.services.s3.model.*;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -92,11 +95,15 @@ public class PetService {
 //
 //        return new PetInfoResponse(pet);
 //    }
-    public PetInfoResponse getPetById(Integer userId) {
-        Pet pet = petRepository.findByUserUserId(userId)
-                .orElseThrow(() -> new RuntimeException("Pet not found"));
+    public ResponseEntity<PetInfoResponse> getPetById(Integer userId) {
+        Optional<Pet> optionalPet = petRepository.findByUserUserId(userId);
+        if (optionalPet.isEmpty()) {
+            // Return 404 status code if there's no pet associated with the user
+            return ResponseEntity.status(HttpStatus.CREATED).body(null);
+        }
 
-        return new PetInfoResponse(pet);
+        Pet pet = optionalPet.get();
+        return ResponseEntity.ok(new PetInfoResponse(pet));
     }
 
     // Get all pets
@@ -153,7 +160,7 @@ public class PetService {
 
     // Delete pet
     public void deletePet(Integer userId) {
-        Pet pet = petRepository.findById(userId)
+        Pet pet = petRepository.findByUserUserId(userId)
                 .orElseThrow(() -> new RuntimeException("Pet not found"));
 
         // Delete pet image from S3 if exists
@@ -161,7 +168,7 @@ public class PetService {
             deleteImageFromS3(pet.getPetImg());
         }
 
-        petRepository.deleteById(userId);
+        petRepository.deleteByUserUserId(userId);
     }
 
     // Update pet image only

@@ -22,4 +22,9 @@ public interface PetRepository extends JpaRepository<Pet, Integer> {
     int updatePetImageByUserId(@Param("userId") Integer userId, @Param("petImg") String petImg);
     List<Pet> findByPetName(String petName);
 
+    @Modifying
+    @Transactional
+    @Query("DELETE FROM Pet p WHERE p.user.userId = :userId")
+    int deleteByUserUserId(@Param("userId") Integer userId);
+
 }
