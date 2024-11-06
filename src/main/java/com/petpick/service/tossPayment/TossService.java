@@ -1,5 +1,7 @@
 package com.petpick.service.tossPayment;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.petpick.domain.*;
 import com.petpick.domain.type.OrderDetailStatus;
 import com.petpick.domain.type.OrderStatus;
@@ -21,6 +23,7 @@ public class TossService {
     @Value("${payment.toss.test_secret_api_key}")
     private String tossSecretKey;
 
+
     private static final String CONFIRM_URL = "https://api.tosspayments.com/v1/payments/confirm";
     private static final String CANCEL_URL_TEMPLATE = "https://api.tosspayments.com/v1/payments/%s/cancel";
 
@@ -40,30 +43,51 @@ public class TossService {
     }
 
     @Transactional
-    public boolean confirmPayment(PaymentSuccessRequest request) {
+    public boolean confirmPayment(PaymentSuccessRequest request, Integer userId) {
         RestTemplate restTemplate = new RestTemplate();
 
+        // Encode the secret key to Base64, appending ':' to represent empty password
         String encodedSecretKey = Base64.getEncoder()
                 .encodeToString((tossSecretKey + ":").getBytes(StandardCharsets.UTF_8));
+
+        // Log the encoded secret key for verification
+        System.out.println("Encoded Secret Key: " + encodedSecretKey);
 
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", "Basic " + encodedSecretKey);
         headers.setContentType(MediaType.APPLICATION_JSON);
 
-        String jsonPayload = String.format(
-                "{\"paymentKey\":\"%s\",\"amount\":%d,\"orderId\":\"%s\"}",
+        // Prepare the request payload
+        TossPaymentConfirmRequest tossRequest = new TossPaymentConfirmRequest(
                 request.getPaymentKey(),
-                request.getAmount(),
-                request.getOrderSerialCode()
+                request.getOrderSerialCode(),
+                request.getAmount()
         );
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        String jsonPayload;
+        try {
+            jsonPayload = objectMapper.writeValueAsString(tossRequest);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        // Log for debugging
+        System.out.println("Confirmation URL: " + CONFIRM_URL);
+        System.out.println("JSON Payload: " + jsonPayload);
+        System.out.println("Headers: " + headers);
 
         HttpEntity<String> entity = new HttpEntity<>(jsonPayload, headers);
 
         try {
             ResponseEntity<String> response = restTemplate.postForEntity(CONFIRM_URL, entity, String.class);
 
+            System.out.println("Response Status Code: " + response.getStatusCode());
+            System.out.println("Response Body: " + response.getBody());
+
             if (response.getStatusCode() == HttpStatus.OK) {
-                // Payment confirmed, save to the database
+                // Payment confirmed, proceed with order processing
 
                 // Process Address
                 AddressRequest addressRequest = request.getAddress();
@@ -78,7 +102,7 @@ public class TossService {
                     address = optionalAddress.get();
                 } else {
                     address = Address.builder()
-                            .user(User.builder().userId(addressRequest.getUserId()).build())
+                            .user(User.builder().userId(userId).build())
                             .addressName(addressRequest.getAddressName())
                             .addressZipcode(addressRequest.getAddressZipcode())
                             .addressAddr(addressRequest.getAddressAddr())
@@ -91,7 +115,7 @@ public class TossService {
                 }
 
                 Orders order = Orders.builder()
-                        .user(User.builder().userId(request.getUserId()).build())
+                        .user(User.builder().userId(userId).build())
                         .address(address)
                         .ordersPrice(request.getAmount())
                         .paymentKey(request.getPaymentKey())
@@ -102,21 +126,21 @@ public class TossService {
 
                 ordersRepository.save(order);
 
-                List<OrderDetailResponse> orderDetailResponses = request.getOrderDetails();
+                List<OrderDetailRequest> orderDetailRequests = request.getOrderDetails();
                 List<OrderDetail> orderDetails = new ArrayList<>();
 
-                for (OrderDetailResponse detailResponse : orderDetailResponses) {
-                    Optional<Product> optionalProduct = productRepository.findById(detailResponse.getProductId());
+                for (OrderDetailRequest detailRequest : orderDetailRequests) {
+                    Optional<Product> optionalProduct = productRepository.findById(detailRequest.getProductId());
                     if (!optionalProduct.isPresent()) {
-                        throw new RuntimeException("Product not found with ID: " + detailResponse.getProductId());
+                        throw new RuntimeException("Product not found with ID: " + detailRequest.getProductId());
                     }
                     Product product = optionalProduct.get();
 
                     OrderDetail orderDetail = OrderDetail.builder()
                             .orders(order)
                             .product(product)
-                            .orderDetailPrice(detailResponse.getOrderDetailPrice())
-                            .orderDetailCnt(detailResponse.getOrderDetailCnt())
+                            .orderDetailPrice(detailRequest.getOrderDetailPrice())
+                            .orderDetailCnt(detailRequest.getOrderDetailCnt())
                             .orderDetailStatus(OrderDetailStatus.PAY_CONFIRM)
                             .build();
 
@@ -150,57 +174,80 @@ public class TossService {
         String encodedSecretKey = Base64.getEncoder()
                 .encodeToString((tossSecretKey + ":").getBytes(StandardCharsets.UTF_8));
 
-        // Set up headers
+        // Log the encoded secret key for verification
+        System.out.println("Encoded Secret Key: " + encodedSecretKey);
+
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", "Basic " + encodedSecretKey);
         headers.setContentType(MediaType.APPLICATION_JSON);
 
-        // Calculate total cancellation amount (optional, based on your requirements)
-        double totalCancelAmount = 0.0;
-        for (OrderDetailCancelRequest detail : request.getOrderDetails()) {
-            totalCancelAmount += detail.getAmount() * detail.getPrice();
+        // Retrieve the order detail to cancel
+        Optional<OrderDetail> optionalOrderDetail = orderDetailRepository.findById(request.getOrderDetailId());
+        if (!optionalOrderDetail.isPresent()) {
+            throw new RuntimeException("Order Detail not found with ID: " + request.getOrderDetailId());
+        }
+        OrderDetail orderDetail = optionalOrderDetail.get();
+
+        // Verify that the order detail belongs to the user
+        if (!orderDetail.getOrders().getUser().getUserId().equals(userId)) {
+            throw new RuntimeException("Order Detail does not belong to the user.");
         }
 
-        // Prepare the JSON payload for cancellation
-        String jsonPayload = String.format(
-                "{\"cancelReason\":\"%s\"}",
-                request.getCancelReason()
-        );
+        // Retrieve the order
+        Orders order = orderDetail.getOrders();
+
+        // Calculate the cancel amount
+        int cancelAmount = orderDetail.getOrderDetailPrice() * request.getOrderDetailCnt();
 
         // Construct the cancellation URL
-        String cancelUrl = String.format(CANCEL_URL_TEMPLATE, request.getPaymentKey());
+        String cancelUrl = String.format("https://api.tosspayments.com/v1/payments/%s/cancel", order.getPaymentKey());
+
+        // Prepare the JSON payload for cancellation, including cancelAmount
+        Map<String, Object> cancelRequestMap = new HashMap<>();
+        cancelRequestMap.put("cancelReason", request.getCancelReason());
+        cancelRequestMap.put("cancelAmount", cancelAmount);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        String jsonPayload;
+        try {
+            jsonPayload = objectMapper.writeValueAsString(cancelRequestMap);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        // Log for debugging
+        System.out.println("Cancellation URL: " + cancelUrl);
+        System.out.println("JSON Payload: " + jsonPayload);
+        System.out.println("Headers: " + headers);
 
         HttpEntity<String> entity = new HttpEntity<>(jsonPayload, headers);
 
         try {
             ResponseEntity<String> response = restTemplate.postForEntity(cancelUrl, entity, String.class);
 
+            System.out.println("Response Status Code: " + response.getStatusCode());
+            System.out.println("Response Body: " + response.getBody());
+
             if (response.getStatusCode() == HttpStatus.OK) {
-                // Payment canceled successfully
 
-                // Process each order detail
-                for (OrderDetailCancelRequest detailRequest : request.getOrderDetails()) {
-                    Optional<OrderDetail> optionalOrderDetail = orderDetailRepository.findById(detailRequest.getOrderDetailId());
-                    if (!optionalOrderDetail.isPresent()) {
-                        throw new RuntimeException("Order Detail not found with ID: " + detailRequest.getOrderDetailId());
-                    }
-
-                    OrderDetail orderDetail = optionalOrderDetail.get();
-
-                    // Verify that the order detail is in a cancelable state
-                    if (orderDetail.getOrderDetailStatus() != OrderDetailStatus.PAY_CONFIRM) {
-                        throw new RuntimeException("Order Detail with ID " + detailRequest.getOrderDetailId() + " cannot be canceled.");
-                    }
-
-                    // Update the order detail status
-                    orderDetail.setOrderDetailStatus(OrderDetailStatus.PAY_CANCEL);
+                // Update the order detail count
+                orderDetail.decreaseOrderDetailCnt(request.getOrderDetailCnt());
+                if (orderDetail.isOrderDetailCntZero()) {
+                    // Delete the order detail if count is zero
+                    orderDetailRepository.delete(orderDetail);
+                } else {
                     orderDetailRepository.save(orderDetail);
-
-                    // Adjust product inventory
-                    Product product = orderDetail.getProduct();
-                    product.setProductCnt(product.getProductCnt() + detailRequest.getAmount());
-                    productRepository.save(product);
                 }
+
+                // Update the orders_price in the Orders table
+                order.decreaseOrdersPrice(cancelAmount);
+                ordersRepository.save(order);
+
+                // Optionally, update the product inventory
+                Product product = orderDetail.getProduct();
+                product.increaseProductCnt(request.getOrderDetailCnt());
+                productRepository.save(product);
 
                 return true;
             } else {

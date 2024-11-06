@@ -42,10 +42,6 @@ public class OrderService {
 
         Page<Orders> ordersPage = ordersRepository.findByUserUserIdAndCreateAtBetween(userId, startDate, endDate, pageable);
 
-        if(ordersPage.isEmpty()){
-            throw new BaseException(ProductErrorCode.INVALID_PAGE_PARAMETER);
-        }
-
         List<OrderResponse> orderResponses = new ArrayList<>();
         for (Orders order : ordersPage.getContent()) {
             List<OrderDetail> orderDetails = orderDetailRepository.findByOrdersOrdersId(order.getOrdersId());

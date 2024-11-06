@@ -29,7 +29,7 @@ public class OrderDetail {
     private Product product;
 
     @Column(name = "order_detail_price")
-    private Double orderDetailPrice;
+    private Integer orderDetailPrice;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "order_detail_status")
@@ -38,7 +38,26 @@ public class OrderDetail {
     @Column(name = "order_detail_cnt")
     private Integer orderDetailCnt;
 
+    // Existing setter for orderDetailStatus
     public void setOrderDetailStatus(OrderDetailStatus orderDetailStatus) {
         this.orderDetailStatus = orderDetailStatus;
+    }
+
+    public void decreaseOrderDetailCnt(int amount) {
+        if (this.orderDetailCnt == null) {
+            throw new IllegalStateException("Order detail count is not initialized.");
+        }
+        if (amount <= 0) {
+            throw new IllegalArgumentException("Amount to decrease must be positive.");
+        }
+        if (this.orderDetailCnt < amount) {
+            throw new IllegalArgumentException("Cannot decrease by more than the current count.");
+        }
+        this.orderDetailCnt -= amount;
+    }
+
+    // Method to check if orderDetailCnt is zero
+    public boolean isOrderDetailCntZero() {
+        return this.orderDetailCnt != null && this.orderDetailCnt == 0;
     }
 }

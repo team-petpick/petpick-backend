@@ -10,7 +10,7 @@ public class OrderDetailResponse {
     private Integer productId;
     private String productName;
     private String sellerStoreName;
-    private Double orderDetailPrice;
+    private Integer orderDetailPrice;
     private Integer orderDetailCnt;
     private String productThumbnail;
     private OrderDetailStatus orderDetailStatus;

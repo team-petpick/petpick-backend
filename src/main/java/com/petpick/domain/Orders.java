@@ -8,31 +8,32 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Builder
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "orders")
-public class Orders extends BaseTime {
+public class Orders extends BaseTime{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "orders_id")
-    private int ordersId;
+    private Integer ordersId;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
-
-    @ManyToOne
-    @JoinColumn(name = "address_id")
-    private Address address;
 
     @Column(name = "orders_price")
     private Integer ordersPrice;
 
     @Column(name = "payment_key")
     private String paymentKey;
+
+    @Column(name = "orders_request")
+    private String ordersRequest;
 
     @Column(name = "orders_serial_code")
     private String ordersSerialCode;
@@ -41,7 +42,25 @@ public class Orders extends BaseTime {
     @Column(name = "orders_status")
     private OrderStatus ordersStatus;
 
-    @Column(name = "orders_request")
-    private String ordersRequest;
+    @ManyToOne
+    @JoinColumn(name = "address_id")
+    private Address address;
 
+    public void decreaseOrdersPrice(int amount) {
+        if (this.ordersPrice == null) {
+            throw new IllegalStateException("Order price is not initialized.");
+        }
+        if (amount <= 0) {
+            throw new IllegalArgumentException("Amount to decrease must be positive.");
+        }
+        if (this.ordersPrice < amount) {
+            throw new IllegalArgumentException("Cannot decrease by more than the current order price.");
+        }
+        this.ordersPrice -= amount;
+    }
+
+    //fix this!!!!!!!!!
+    public LocalDateTime getCreateAt() {
+        return null;
+    }
 }
