@@ -93,8 +93,8 @@ public class PetService {
 //        return new PetInfoResponse(pet);
 //    }
     public PetInfoResponse getPetById(Integer userId) {
-        Pet pet = petRepository.findByUser_UserId(userId)
-                .orElseThrow(() -> new IllegalArgumentException("Pet not found for user ID: " + userId));
+        Pet pet = petRepository.findByUserUserId(userId)
+                .orElseThrow(() -> new RuntimeException("Pet not found"));
 
         return new PetInfoResponse(pet);
     }
@@ -166,12 +166,17 @@ public class PetService {
 
     // Update pet image only
     public PetInfoResponse updatePetImage(Integer userId, MultipartFile petImg) throws IOException {
-        Pet pet = petRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("Pet not found"));
+        System.out.println("hello" + userId);
+
+        // Retrieve the pet associated with the userId
+        Pet pet = petRepository.findByUserUserId(userId)
+                .orElseThrow(() -> new RuntimeException("No pet associated with this user"));
+
+        String oldPetImgUrl = pet.getPetImg();
 
         // Delete old image from S3 if exists
-        if (pet.getPetImg() != null) {
-            deleteImageFromS3(pet.getPetImg());
+        if (oldPetImgUrl != null) {
+            deleteImageFromS3(oldPetImgUrl);
         }
 
         // Upload new image
@@ -191,11 +196,20 @@ public class PetService {
         String petImgUrl = getFileUrl(bucketName, s3Key);
 
         // Update pet with new image
-        Pet updatedPet = pet.withUpdatedFields(pet.getPetName(), pet.getPetSpecies(), pet.getPetKind(), pet.getPetAge(), pet.getPetGender(), petImgUrl);
+        Pet updatedPet = pet.withUpdatedFields(
+                pet.getPetName(),
+                pet.getPetSpecies(),
+                pet.getPetKind(),
+                pet.getPetAge(),
+                pet.getPetGender(),
+                petImgUrl
+        );
+
         updatedPet = petRepository.save(updatedPet);
 
         return new PetInfoResponse(updatedPet);
     }
+
 
     // Delete pet image only
     public void deletePetImage(Integer userId) {

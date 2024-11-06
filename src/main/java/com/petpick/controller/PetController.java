@@ -67,12 +67,12 @@ public class PetController {
     }
 
     // Update pet image only
-    @PutMapping(value = "/{petId}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PutMapping(value = "/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public PetInfoResponse updatePetImage(
-            @PathVariable Integer petId,
+            @RequestAttribute Integer userId,
             @RequestParam("petImg") MultipartFile petImg) throws IOException {
-
-        return petService.updatePetImage(petId, petImg);
+        System.out.println("유저스: " + userId);
+        return petService.updatePetImage(userId, petImg);
     }
 
     // Delete pet image only
