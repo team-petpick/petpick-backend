@@ -249,6 +249,13 @@ public class TossService {
                 product.increaseProductCnt(request.getOrderDetailCnt());
                 productRepository.save(product);
 
+                // New Condition: Check if there are no remaining OrderDetails or if ordersPrice is zero
+                List<OrderDetail> remainingOrderDetails = orderDetailRepository.findByOrders(order);
+                if (remainingOrderDetails.isEmpty() || order.getOrdersPrice() == 0) {
+                    // Delete the Orders entry
+                    ordersRepository.delete(order);
+                }
+
                 return true;
             } else {
                 System.out.println("Payment cancellation failed with status code: " + response.getStatusCode());
@@ -266,4 +273,5 @@ public class TossService {
             return false;
         }
     }
+
 }
