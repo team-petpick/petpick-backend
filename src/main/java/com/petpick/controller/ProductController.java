@@ -44,11 +44,11 @@ public class ProductController {
 
     @PostMapping("/products/{productId}/like")
     public ResponseEntity<String> toggleProductLike(
-            @PathVariable Integer productId,
+            @PathVariable String productId,
             @RequestAttribute Integer userId
         ) {
-
-        boolean isLiked = likesService.toggleLike(productId, userId);
+        Integer convertedProductId = Integer.parseInt(productId);
+        boolean isLiked = likesService.toggleLike(convertedProductId, userId);
 
         String message = isLiked ? "Successfully added like to the product" : "Successfully removed like from the product";
         return ResponseEntity.ok(message);

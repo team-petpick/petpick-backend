@@ -230,7 +230,6 @@ public class TossService {
             System.out.println("Response Body: " + response.getBody());
 
             if (response.getStatusCode() == HttpStatus.OK) {
-                // Payment canceled successfully
 
                 // Update the order detail count
                 orderDetail.decreaseOrderDetailCnt(request.getOrderDetailCnt());
