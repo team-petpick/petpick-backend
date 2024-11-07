@@ -34,10 +34,11 @@ public class TossPaymentController {
             Sentry.captureMessage("Payment check requested for user: " + userId + ", Order Serial Code: " + request.getOrderSerialCode());
         });
 
-        boolean isConfirmed = tossService.confirmPayment(request, userId);
+        int isConfirmed = tossService.confirmPayment(request, userId);
 //        boolean isConfirmed = true;
-        if (isConfirmed) {
-            return ResponseEntity.ok("Payment confirmed and order saved successfully.");
+        if (isConfirmed != 0) {
+
+            return ResponseEntity.ok(String.valueOf(isConfirmed));
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Payment confirmation failed.");
         }

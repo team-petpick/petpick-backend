@@ -43,7 +43,7 @@ public class TossService {
     }
 
     @Transactional
-    public boolean confirmPayment(PaymentSuccessRequest request, Integer userId) {
+    public int confirmPayment(PaymentSuccessRequest request, Integer userId) {
         RestTemplate restTemplate = new RestTemplate();
 
         // Encode the secret key to Base64, appending ':' to represent empty password
@@ -70,7 +70,7 @@ public class TossService {
             jsonPayload = objectMapper.writeValueAsString(tossRequest);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
-            return false;
+            return 0;
         }
 
         // Log for debugging
@@ -149,20 +149,20 @@ public class TossService {
 
                 orderDetailRepository.saveAll(orderDetails);
 
-                return true;
+                return order.getOrdersId();
             } else {
                 System.out.println("Payment confirmation failed with status code: " + response.getStatusCode());
-                return false;
+                return 0;
             }
         } catch (HttpClientErrorException e) {
             System.out.println("HttpClientErrorException caught");
             System.out.println("Status code: " + e.getStatusCode());
             System.out.println("Response body: " + e.getResponseBodyAsString());
             e.printStackTrace();
-            return false;
+            return 0;
         } catch (Exception e) {
             e.printStackTrace();
-            return false;
+            return 0;
         }
     }
 
