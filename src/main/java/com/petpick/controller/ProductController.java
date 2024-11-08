@@ -17,9 +17,6 @@ import org.springframework.web.bind.annotation.*;
 public class ProductController {
 
     private final ProductService productService;
-    private final TokenProvider tokenProvider;
-    private final LikesService likesService;
-
 
     @GetMapping("/products")
     public ResponseEntity<Page<ProductListResponse>> getProductsList(
@@ -39,18 +36,5 @@ public class ProductController {
     public ResponseEntity<ProductDetailResponse> getProductById(@PathVariable Integer productId) {
         ProductDetailResponse productDetailResponse = productService.getProductById(productId);
         return ResponseEntity.ok(productDetailResponse);
-    }
-
-
-    @PostMapping("/like/{productId}")
-    public ResponseEntity<String> toggleProductLike(
-            @PathVariable String productId,
-            @RequestAttribute Integer userId
-        ) {
-        Integer convertedProductId = Integer.parseInt(productId);
-        boolean isLiked = likesService.toggleLike(convertedProductId, userId);
-
-        String message = isLiked ? "Successfully added like to the product" : "Successfully removed like from the product";
-        return ResponseEntity.ok(message);
     }
 }
