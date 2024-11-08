@@ -23,7 +23,7 @@ public class ProductController {
             @RequestParam(required = false) String type,
             @RequestParam(name = "category", required = false) Integer categoryId,
             @RequestParam(defaultValue = "0") Integer page,
-            @RequestParam(defaultValue = "12") Integer size,
+            @RequestParam(defaultValue = "30") Integer size,
             @RequestParam(defaultValue = "createAt_desc") String sort,
             @RequestParam(required = false) String search
     ) {
