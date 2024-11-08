@@ -42,12 +42,10 @@ public class ProductImgService {
 
         List<ProductImgResponse> responses = new ArrayList<>();
 
-        // Validate that the number of thumbnail and description flags matches the number of files
         if (thumbNails.size() != files.length || isDesc.size() != files.length) {
             throw new IllegalArgumentException("Number of thumbNails and isDesc flags must match number of files");
         }
 
-        // Retrieve the Product
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new RuntimeException("Product not found"));
 
@@ -62,7 +60,6 @@ public class ProductImgService {
             boolean isThumbnail = thumbNailFlag != null && thumbNailFlag == 1;
             boolean isDescription = isDescFlag != null && isDescFlag == 1;
 
-            // Upload file to S3
             PutObjectRequest putObjectRequest = PutObjectRequest.builder()
                     .bucket(bucketName)
                     .key(s3Key)
@@ -71,7 +68,6 @@ public class ProductImgService {
 
             s3Client.putObject(putObjectRequest, RequestBody.fromInputStream(file.getInputStream(), file.getSize()));
 
-            // Save info in database
             String fileUrl = getFileUrl(bucketName, s3Key);
 
             if (isThumbnail) {
@@ -80,7 +76,6 @@ public class ProductImgService {
             }
 
             if (isDescription) {
-                // Unset existing description images if only one is allowed
                 unsetExistingDescriptionImages(product);
             }
 
@@ -105,10 +100,8 @@ public class ProductImgService {
     }
 
     public List<ProductImgResponse> getImagesByProductId(Integer productId) {
-        // Fetch the images from the repository
         List<ProductImg> images = productImgRepository.findAllByProduct_productId(productId);
 
-        // Convert the list of ProductImg to ProductImgResponse
         return images.stream()
                 .map(ProductImgResponse::new)
                 .collect(Collectors.toList());
@@ -126,10 +119,8 @@ public class ProductImgService {
         ProductImg productImg = productImgRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Image not found"));
 
-        // Delete old image from S3
         deleteImageFromS3(productImg.getProductImgUrl());
 
-        // Upload new image to S3
         String newFileName = generateFileName(file);
         String newS3Key = newFileName;
 
@@ -153,10 +144,8 @@ public class ProductImgService {
             unsetExistingDescriptionImages(productImg.getProduct());
         }
 
-        // Update image URL and thumbnail/description flags
         String fileUrl = getFileUrl(bucketName, newS3Key);
 
-        // Create a new ProductImg instance with updated values
         ProductImg updatedProductImg = productImg.withUpdatedFields(fileUrl,
                 isThumbnail ? 1 : productImg.getProductImgThumb(),
                 isDescription ? 1 : productImg.getDescImgStatus());
@@ -170,7 +159,6 @@ public class ProductImgService {
         ProductImg productImg = productImgRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Image not found"));
 
-        // Delete image from S3
         deleteImageFromS3(productImg.getProductImgUrl());
 
         // Delete record from database

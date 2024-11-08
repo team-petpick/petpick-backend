@@ -51,7 +51,10 @@ public class SecurityConfig {
                                 "/webjars/**",
                                 "/v1/products",
                                 "/v1/products/{productId}",
-                                "/v1/like/{productId}"
+                                "/v1/like/{productId}",
+                                "/v1/product-images/{id}",
+                                "/v1/product-images/product/{productId}",
+                                "/v1/product-images/desc/{id}"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
