@@ -9,6 +9,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 
+import io.sentry.Sentry;
+
+
+
 @RestController
 @RequestMapping("/v1/payment")
 public class TossPaymentController {
@@ -23,6 +27,12 @@ public class TossPaymentController {
     public ResponseEntity<String> paymentSuccess(@RequestBody PaymentSuccessRequest request, @RequestAttribute Integer userId) {
         // Log the received request for debugging
         System.out.println("Received request: " + request);
+
+        Sentry.withScope(scope -> {
+            scope.setTag("user_id", String.valueOf(userId));
+            scope.setTag("order_serial_code", request.getOrderSerialCode());
+            Sentry.captureMessage("Payment check requested for user: " + userId + ", Order Serial Code: " + request.getOrderSerialCode());
+        });
 
         boolean isConfirmed = tossService.confirmPayment(request, userId);
 //        boolean isConfirmed = true;
