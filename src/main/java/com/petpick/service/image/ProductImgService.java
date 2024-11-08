@@ -16,6 +16,7 @@ import software.amazon.awssdk.services.s3.model.*;
 import java.io.IOException;
 import java.net.URL;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class ProductImgService {
@@ -101,6 +102,16 @@ public class ProductImgService {
     public Optional<ProductImgResponse> getImage(Integer id) {
         return productImgRepository.findById(id)
                 .map(ProductImgResponse::new);
+    }
+
+    public List<ProductImgResponse> getImagesByProductId(Integer productId) {
+        // Fetch the images from the repository
+        List<ProductImg> images = productImgRepository.findAllByProduct_productId(productId);
+
+        // Convert the list of ProductImg to ProductImgResponse
+        return images.stream()
+                .map(ProductImgResponse::new)
+                .collect(Collectors.toList());
     }
 
     public Optional<ProductImgResponse> getDescImage(Integer id) {

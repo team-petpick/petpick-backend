@@ -34,6 +34,11 @@ public class ProductImgController {
                 .orElseThrow(() -> new RuntimeException("Image not found"));
     }
 
+    @GetMapping("/product/{productId}")
+    public List<ProductImgResponse> getImagesByProductId(@PathVariable Integer productId) {
+        return productImgService.getImagesByProductId(productId);
+    }
+
     @GetMapping("/desc/{id}")
     public ProductImgResponse getDescImage(@PathVariable Integer id) {
         return productImgService.getDescImage(id)
